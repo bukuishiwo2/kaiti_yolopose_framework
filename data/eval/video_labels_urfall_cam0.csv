@@ -1,0 +1,71 @@
+video_id,video_path,fall_segments,notes
+fall-01,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-01-cam0.mp4,2.733-5.300,urfall auto-generated from urfall-cam0-falls.csv
+fall-02,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-02-cam0.mp4,1.300-3.633,urfall auto-generated from urfall-cam0-falls.csv
+fall-03,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-03-cam0.mp4,4.900-7.133,urfall auto-generated from urfall-cam0-falls.csv
+fall-04,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-04-cam0.mp4,0.433-3.167,urfall auto-generated from urfall-cam0-falls.csv
+fall-05,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-05-cam0.mp4,2.600-5.000,urfall auto-generated from urfall-cam0-falls.csv
+fall-06,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-06-cam0.mp4,0.333-3.300,urfall auto-generated from urfall-cam0-falls.csv
+fall-07,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-07-cam0.mp4,2.800-5.167,urfall auto-generated from urfall-cam0-falls.csv
+fall-08,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-08-cam0.mp4,0.967-3.000,urfall auto-generated from urfall-cam0-falls.csv
+fall-09,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-09-cam0.mp4,4.000-6.133,urfall auto-generated from urfall-cam0-falls.csv
+fall-10,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-10-cam0.mp4,1.300-4.300,urfall auto-generated from urfall-cam0-falls.csv
+fall-11,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-11-cam0.mp4,1.600-4.300,urfall auto-generated from urfall-cam0-falls.csv
+fall-12,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-12-cam0.mp4,0.800-3.633,urfall auto-generated from urfall-cam0-falls.csv
+fall-13,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-13-cam0.mp4,1.433-2.800,urfall auto-generated from urfall-cam0-falls.csv
+fall-14,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-14-cam0.mp4,0.500-2.000,urfall auto-generated from urfall-cam0-falls.csv
+fall-15,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-15-cam0.mp4,0.900-2.333,urfall auto-generated from urfall-cam0-falls.csv
+fall-16,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-16-cam0.mp4,0.533-1.800,urfall auto-generated from urfall-cam0-falls.csv
+fall-17,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-17-cam0.mp4,1.933-3.133,urfall auto-generated from urfall-cam0-falls.csv
+fall-18,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-18-cam0.mp4,0.500-2.133,urfall auto-generated from urfall-cam0-falls.csv
+fall-19,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-19-cam0.mp4,0.800-3.300,urfall auto-generated from urfall-cam0-falls.csv
+fall-20,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-20-cam0.mp4,0.567-3.633,urfall auto-generated from urfall-cam0-falls.csv
+fall-21,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-21-cam0.mp4,0.667-1.800,urfall auto-generated from urfall-cam0-falls.csv
+fall-22,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-22-cam0.mp4,0.100-1.833,urfall auto-generated from urfall-cam0-falls.csv
+fall-23,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-23-cam0.mp4,0.867-2.467,urfall auto-generated from urfall-cam0-falls.csv
+fall-24,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-24-cam0.mp4,0.367-1.967,urfall auto-generated from urfall-cam0-falls.csv
+fall-25,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-25-cam0.mp4,1.467-2.800,urfall auto-generated from urfall-cam0-falls.csv
+fall-26,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-26-cam0.mp4,0.400-2.000,urfall auto-generated from urfall-cam0-falls.csv
+fall-27,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-27-cam0.mp4,1.667-3.033,urfall auto-generated from urfall-cam0-falls.csv
+fall-28,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-28-cam0.mp4,0.867-2.167,urfall auto-generated from urfall-cam0-falls.csv
+fall-29,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-29-cam0.mp4,1.600-3.267,urfall auto-generated from urfall-cam0-falls.csv
+fall-30,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/fall-30-cam0.mp4,0.800-2.300,urfall auto-generated from urfall-cam0-falls.csv
+adl-01,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-01-cam0.mp4,,urfall adl sequence
+adl-02,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-02-cam0.mp4,,urfall adl sequence
+adl-03,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-03-cam0.mp4,,urfall adl sequence
+adl-04,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-04-cam0.mp4,,urfall adl sequence
+adl-05,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-05-cam0.mp4,,urfall adl sequence
+adl-06,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-06-cam0.mp4,,urfall adl sequence
+adl-07,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-07-cam0.mp4,,urfall adl sequence
+adl-08,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-08-cam0.mp4,,urfall adl sequence
+adl-09,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-09-cam0.mp4,,urfall adl sequence
+adl-10,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-10-cam0.mp4,,urfall adl sequence
+adl-11,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-11-cam0.mp4,,urfall adl sequence
+adl-12,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-12-cam0.mp4,,urfall adl sequence
+adl-13,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-13-cam0.mp4,,urfall adl sequence
+adl-14,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-14-cam0.mp4,,urfall adl sequence
+adl-15,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-15-cam0.mp4,,urfall adl sequence
+adl-16,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-16-cam0.mp4,,urfall adl sequence
+adl-17,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-17-cam0.mp4,,urfall adl sequence
+adl-18,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-18-cam0.mp4,,urfall adl sequence
+adl-19,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-19-cam0.mp4,,urfall adl sequence
+adl-20,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-20-cam0.mp4,,urfall adl sequence
+adl-21,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-21-cam0.mp4,,urfall adl sequence
+adl-22,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-22-cam0.mp4,,urfall adl sequence
+adl-23,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-23-cam0.mp4,,urfall adl sequence
+adl-24,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-24-cam0.mp4,,urfall adl sequence
+adl-25,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-25-cam0.mp4,,urfall adl sequence
+adl-26,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-26-cam0.mp4,,urfall adl sequence
+adl-27,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-27-cam0.mp4,,urfall adl sequence
+adl-28,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-28-cam0.mp4,,urfall adl sequence
+adl-29,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-29-cam0.mp4,,urfall adl sequence
+adl-30,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-30-cam0.mp4,,urfall adl sequence
+adl-31,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-31-cam0.mp4,,urfall adl sequence
+adl-32,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-32-cam0.mp4,,urfall adl sequence
+adl-33,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-33-cam0.mp4,,urfall adl sequence
+adl-34,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-34-cam0.mp4,,urfall adl sequence
+adl-35,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-35-cam0.mp4,,urfall adl sequence
+adl-36,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-36-cam0.mp4,,urfall adl sequence
+adl-37,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-37-cam0.mp4,,urfall adl sequence
+adl-38,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-38-cam0.mp4,,urfall adl sequence
+adl-39,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-39-cam0.mp4,,urfall adl sequence
+adl-40,/home/yhc/kaiti_yolopose_framework/data/urfall/cam0_mp4/adl-40-cam0.mp4,,urfall adl sequence

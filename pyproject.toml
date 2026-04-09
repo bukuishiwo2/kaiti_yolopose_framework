@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kaiti-yolopose-framework"
+version = "0.1.0"
+description = "YOLOPose-based pose inference and fall-detection research framework"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+  { name = "yhc" }
+]
+keywords = ["pose", "fall-detection", "yolo", "research"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Operating System :: POSIX :: Linux"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.yaml", "*.yml"]

@@ -1,0 +1,1 @@
+"""YOLO pose starter package."""

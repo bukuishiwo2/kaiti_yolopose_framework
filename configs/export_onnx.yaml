@@ -1,0 +1,6 @@
+weights: outputs/train/yolopose_baseline/weights/best.pt
+format: onnx
+imgsz: 640
+half: false
+dynamic: true
+simplify: true

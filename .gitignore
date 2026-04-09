@@ -1,0 +1,59 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage*
+htmlcov/
+
+# Packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+
+# IDE / editor
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Local weights and model artifacts
+*.pt
+models/*.json
+!models/.gitkeep
+!models/README.md
+
+# Downloaded datasets and processed data
+data/processed/
+data/urfall/
+data/samples/*.mp4
+!data/samples/.gitkeep
+
+# Runtime outputs
+outputs/*
+!outputs/.gitkeep
+!outputs/README.md
+
+# ROS2 local build artifacts
+ros2_ws/build/
+ros2_ws/install/
+ros2_ws/log/
+
+# Local benchmark/eval scratch directories if recreated elsewhere
+outputs/pose_events.jsonl
+
+# Downloaded Ultralytics weight at repo root
+/yolo11n-pose.pt

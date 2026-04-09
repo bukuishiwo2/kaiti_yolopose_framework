@@ -1,0 +1,11 @@
+--index-url https://download.pytorch.org/whl/cu121
+--extra-index-url https://pypi.org/simple
+
+torch==2.5.1+cu121
+torchvision==0.20.1+cu121
+
+ultralytics>=8.3.0
+opencv-python>=4.8.0
+numpy>=1.24.0
+PyYAML>=6.0
+lap>=0.5.12

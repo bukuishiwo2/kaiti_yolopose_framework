@@ -1,0 +1,45 @@
+model: yolo11n-pose.pt
+mode: predict           # predict | track
+source: 0              # image/video path, rtsp url, webcam index, or *.streams file
+imgsz: 640
+conf: 0.25
+iou: 0.7
+device: null           # e.g. cpu, 0, cuda:0
+half: false
+classes: [0]           # person class only
+vid_stride: 1
+stream_buffer: false
+show: false
+save_visualization: true
+output_dir: outputs/vis
+save_jsonl: outputs/pose_events.jsonl
+tracker: bytetrack.yaml
+
+stabilizer:
+  min_true_frames: 3
+  min_false_frames: 5
+  min_persons: 1
+
+fall_detector:
+  enabled: true
+  keypoint_conf_threshold: 0.3
+  bbox_aspect_ratio_threshold: 1.2
+  torso_vertical_ratio_threshold: 0.22
+  hip_to_ankle_vertical_ratio_threshold: 0.38
+  min_signals_to_fall: 2
+  min_true_frames: 5
+  min_false_frames: 8
+  use_track_stabilization: true
+  track_ttl_frames: 45
+
+sequence_fall_detector:
+  enabled: true
+  model_path: models/fall_sequence_lstm.pt
+  device: null
+  seq_len: 32
+  score_threshold: 0.5
+  keypoint_conf_threshold: 0.3
+  min_true_frames: 3
+  min_false_frames: 5
+  use_track_sequences: true
+  track_ttl_frames: 45

@@ -1,0 +1,8 @@
+# Track-mode tuning grid for fall_detector.
+# Start with this compact grid, then expand if needed.
+fall_detector:
+  keypoint_conf_threshold: [0.2, 0.3]
+  min_signals_to_fall: [2, 3]
+  min_true_frames: [3, 5]
+  min_false_frames: [8, 12]
+  track_ttl_frames: [20, 45]

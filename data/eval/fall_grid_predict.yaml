@@ -1,0 +1,9 @@
+# Predict-mode tuning grid for fall_detector.
+# This grid focuses on recall-sensitive parameters first.
+fall_detector:
+  keypoint_conf_threshold: [0.2, 0.3]
+  torso_vertical_ratio_threshold: [0.22, 0.26]
+  hip_to_ankle_vertical_ratio_threshold: [0.38, 0.45]
+  min_signals_to_fall: [2]
+  min_true_frames: [3, 5]
+  min_false_frames: [8]
