@@ -1,0 +1,4 @@
+sequence_fall_detector:
+  score_threshold: [0.58, 0.6, 0.62, 0.64]
+  min_true_frames: [3, 4]
+  min_false_frames: [5, 7]

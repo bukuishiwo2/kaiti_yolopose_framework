@@ -1,0 +1,5 @@
+video_id,video_path,fall_segments,category,priority,notes
+hn_lie_01,/absolute/path/to/lie_down_01.mp4,,lie_down,high,deliberately lying down on floor
+hn_sit_01,/absolute/path/to/sit_down_01.mp4,,sit_down,high,fast sit-down motion onto chair
+hn_bend_01,/absolute/path/to/bend_over_01.mp4,,bend_over,high,bending to pick object from floor
+hn_floor_01,/absolute/path/to/floor_activity_01.mp4,,floor_activity,medium,non-fall activity performed on floor

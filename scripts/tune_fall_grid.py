@@ -27,6 +27,14 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--out-dir", default="outputs/tune_fall_grid", help="Output directory")
     parser.add_argument("--max-combinations", type=int, default=None, help="Only run first N combos")
     parser.add_argument("--max-videos", type=int, default=None, help="Only run first N videos from labels")
+    parser.add_argument(
+        "--target-detector",
+        choices=["fall_detector", "sequence_fall_detector"],
+        default=None,
+        help="Config section to tune. When omitted, infer from grid YAML root key.",
+    )
+    parser.add_argument("--raw-key", default="raw_fall_detected", help="JSONL raw fall field to evaluate.")
+    parser.add_argument("--stable-key", default="stable_fall_detected", help="JSONL stable fall field to evaluate.")
     return parser.parse_args()
 
 
@@ -35,12 +43,26 @@ def load_yaml(path: Path) -> dict[str, Any]:
         return yaml.safe_load(f)
 
 
-def expand_grid(grid_cfg: dict[str, Any]) -> list[dict[str, Any]]:
-    if "fall_detector" not in grid_cfg or not isinstance(grid_cfg["fall_detector"], dict):
-        raise ValueError("Grid YAML must contain 'fall_detector' mapping")
+def resolve_target_detector(grid_cfg: dict[str, Any], explicit: str | None) -> str:
+    if explicit:
+        return explicit
+
+    candidates = ["sequence_fall_detector", "fall_detector"]
+    hits = [name for name in candidates if isinstance(grid_cfg.get(name), dict)]
+    if len(hits) != 1:
+        raise ValueError(
+            "Grid YAML must contain exactly one supported detector root "
+            "('fall_detector' or 'sequence_fall_detector') unless --target-detector is set"
+        )
+    return hits[0]
+
+
+def expand_grid(grid_cfg: dict[str, Any], target_detector: str) -> list[dict[str, Any]]:
+    if target_detector not in grid_cfg or not isinstance(grid_cfg[target_detector], dict):
+        raise ValueError(f"Grid YAML must contain '{target_detector}' mapping")
 
     items: list[tuple[str, list[Any]]] = []
-    for k, v in grid_cfg["fall_detector"].items():
+    for k, v in grid_cfg[target_detector].items():
         if isinstance(v, list):
             values = v
         else:
@@ -75,12 +97,12 @@ def maybe_subset_labels(labels_path: Path, out_dir: Path, max_videos: int | None
     return target
 
 
-def write_cfg(base_cfg: dict[str, Any], combo: dict[str, Any], path: Path) -> None:
+def write_cfg(base_cfg: dict[str, Any], combo: dict[str, Any], path: Path, target_detector: str) -> None:
     cfg = json.loads(json.dumps(base_cfg))
-    fall = dict(cfg.get("fall_detector", {}))
+    detector_cfg = dict(cfg.get(target_detector, {}))
     for k, v in combo.items():
-        fall[k] = v
-    cfg["fall_detector"] = fall
+        detector_cfg[k] = v
+    cfg[target_detector] = detector_cfg
     with path.open("w", encoding="utf-8") as f:
         yaml.safe_dump(cfg, f, sort_keys=False, allow_unicode=False)
 
@@ -160,6 +182,8 @@ def run_combo(
     tracker: str,
     device: str,
     model: str | None,
+    raw_key: str,
+    stable_key: str,
 ) -> tuple[bool, str, Path]:
     run_dir = out_root / f"run_{combo_id:03d}"
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -178,6 +202,10 @@ def run_combo(
         str(device),
         "--out-dir",
         str(run_dir),
+        "--raw-key",
+        raw_key,
+        "--stable-key",
+        stable_key,
     ]
     if model:
         cmd.extend(["--model", model])
@@ -209,13 +237,16 @@ def main() -> None:
 
     base_cfg = load_yaml(base_cfg_path)
     grid_cfg = load_yaml(grid_path)
-    combos = expand_grid(grid_cfg)
+    target_detector = resolve_target_detector(grid_cfg, args.target_detector)
+    combos = expand_grid(grid_cfg, target_detector)
     if args.max_combinations is not None:
         combos = combos[: max(0, args.max_combinations)]
 
     labels_used = maybe_subset_labels(labels_path, out_dir, args.max_videos)
 
     print(f"[tune] labels={labels_used}")
+    print(f"[tune] detector={target_detector}")
+    print(f"[tune] keys raw={args.raw_key} stable={args.stable_key}")
     print(f"[tune] combos={len(combos)}")
 
     leaderboard: list[dict[str, Any]] = []
@@ -223,7 +254,7 @@ def main() -> None:
     for idx, combo in enumerate(combos, start=1):
         combo_tag = f"c{idx:03d}"
         combo_cfg_path = cfg_out / f"{combo_tag}.yaml"
-        write_cfg(base_cfg, combo, combo_cfg_path)
+        write_cfg(base_cfg, combo, combo_cfg_path, target_detector)
 
         print(f"[run] {combo_tag} {combo}")
         ok, status, run_dir = run_combo(
@@ -236,6 +267,8 @@ def main() -> None:
             tracker=args.tracker,
             device=args.device,
             model=args.model,
+            raw_key=args.raw_key,
+            stable_key=args.stable_key,
         )
 
         row: dict[str, Any] = {
@@ -295,11 +328,11 @@ def main() -> None:
     best = next((r for r in leaderboard if str(r.get("status", "")).startswith("ok")), None)
     if best is not None:
         best_cfg = json.loads(json.dumps(base_cfg))
-        best_fall = dict(best_cfg.get("fall_detector", {}))
+        best_detector_cfg = dict(best_cfg.get(target_detector, {}))
         for k, v in best.items():
             if k.startswith("param."):
-                best_fall[k.split(".", 1)[1]] = v
-        best_cfg["fall_detector"] = best_fall
+                best_detector_cfg[k.split(".", 1)[1]] = v
+        best_cfg[target_detector] = best_detector_cfg
         with (out_dir / "best_config.yaml").open("w", encoding="utf-8") as f:
             yaml.safe_dump(best_cfg, f, sort_keys=False, allow_unicode=False)
 
@@ -308,6 +341,9 @@ def main() -> None:
             "status": best.get("status"),
             "rank": best.get("rank"),
             "run_dir": best.get("run_dir"),
+            "target_detector": target_detector,
+            "raw_key": args.raw_key,
+            "stable_key": args.stable_key,
             "metrics": {
                 "all_f1": best.get("all_f1"),
                 "fall_recall": best.get("fall_recall"),

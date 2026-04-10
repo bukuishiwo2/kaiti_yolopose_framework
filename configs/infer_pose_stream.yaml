@@ -37,7 +37,7 @@ sequence_fall_detector:
   model_path: models/fall_sequence_lstm.pt
   device: null
   seq_len: 32
-  score_threshold: 0.5
+  score_threshold: 0.6
   keypoint_conf_threshold: 0.3
   min_true_frames: 3
   min_false_frames: 5

@@ -1,0 +1,11 @@
+video_id,video_path,fall_segments,category,priority,notes
+seed_lie_down_floor,/replace/with/your/local/path/lie_down_floor.mp4,,lie_down,high,stand to lying-down transition on floor
+seed_lie_down_bedside,/replace/with/your/local/path/lie_down_bedside.mp4,,lie_down,high,sit to lying transition near bed
+seed_sit_down_fast,/replace/with/your/local/path/sit_down_fast.mp4,,sit_down,high,fast sit-down with large torso angle change
+seed_sit_down_sofa,/replace/with/your/local/path/sit_down_sofa.mp4,,sit_down,medium,sit onto sofa with side view
+seed_bend_pickup,/replace/with/your/local/path/bend_pickup.mp4,,bend_over,high,bending to pick up object
+seed_bend_tie_shoe,/replace/with/your/local/path/bend_tie_shoe.mp4,,bend_over,medium,bending and staying low briefly
+seed_kneel_down,/replace/with/your/local/path/kneel_down.mp4,,kneel_or_crouch,medium,transition to one-knee posture
+seed_floor_reach,/replace/with/your/local/path/floor_reach.mp4,,floor_activity,high,ground-level reaching without fall
+seed_floor_roll,/replace/with/your/local/path/floor_roll.mp4,,floor_activity,medium,rolling or repositioning on floor
+seed_transition_sit_to_lie,/replace/with/your/local/path/sit_to_lie.mp4,,transition_motion,high,sit down then lie down without fall

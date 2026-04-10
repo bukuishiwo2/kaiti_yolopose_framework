@@ -79,9 +79,78 @@
 - 后续主线应切换到“学习型模型降误报优化”
 - 规则法保留为 baseline / 对照组
 
-## 6. Next Step
+## 6. LSTM Tuning Result
 
-1. 继续调 `sequence_fall_detector.score_threshold`
-2. 调整 `min_true_frames / min_false_frames`
-3. 重新评估 ADL 误报
-4. 如有必要，再扩展到 `TCN` 或 `ST-GCN`
+在 `outputs/tune_fall_grid_sequence/` 与 `outputs/tune_fall_grid_sequence_refine/` 上，已完成两轮基于阈值和稳定参数的调参。
+
+### 6.1 当前综合主配置
+
+当前推荐的学习型默认配置为：
+- `score_threshold = 0.6`
+- `min_true_frames = 3`
+- `min_false_frames = 5`
+
+该配置对应第一轮调参中的 `c019`，也是第二轮精调后仍然保留下来的综合最优点。
+
+相对学习型原始基线（`0.5 / 3 / 5`）：
+- `stable F1: 0.7883 -> 0.7970`
+- `adl_fp_segments: 21 -> 14`
+- `stable_false_alarm_per_min: 4.675 -> 3.109`
+
+### 6.2 低误报备选配置
+
+若当前阶段更重视误报控制，可使用备选：
+- `score_threshold = 0.62`
+- `min_true_frames = 3`
+- `min_false_frames = 5`
+
+特点：
+- `adl_fp_segments: 14 -> 12`
+- 综合 F1 仅小幅低于当前主配置
+
+### 6.3 调参结论
+
+两轮调参已经说明：
+- `score_threshold` 是最关键的参数
+- `min_true_frames = 3` 在当前数据上优于 `4/5`
+- `min_false_frames` 影响较小
+- 小范围继续微调的收益已经明显下降
+
+因此，当前 LSTM 主线已接近“参数调优上限”，后续若要继续提升，重点不应再放在阈值微调，而应转向：
+- 更强的负样本
+- 更好的时序模型
+- 更针对性的动作区分设计
+
+## 7. FallVision-Only LSTM Result
+
+评估目录：
+- `outputs/eval_urfall_sequence_fallvision/`
+
+对应模型：
+- `models/fall_sequence_lstm_fallvision.pt`
+
+稳定结果：
+- Precision: `0.3329`
+- Recall: `0.7238`
+- F1: `0.4561`
+
+与当前主学习型模型（`models/fall_sequence_lstm.pt`）相比：
+- Precision: `0.7769 -> 0.3329`
+- Recall: `0.8000 -> 0.7238`
+- F1: `0.7883 -> 0.4561`
+
+观察：
+- `stable_fp_frames` 从 `410` 激增到 `2589`
+- 主要退化来自 ADL 误报爆炸，而不是召回提升
+- 因此，FallVision 目前不适合直接作为单独训练集替换当前主模型
+
+结论：
+- FallVision 更适合作为补充训练源或 hard negative 来源
+- 不应采用“FallVision-only 训练后直接替换默认推理模型”的方案
+
+## 8. Next Step
+
+1. 保留当前 LSTM 主配置作为正式 baseline
+2. 收集或构造更多 hard negative（躺下、坐下、弯腰、地面动作）
+3. 在现有关键点序列框架上继续研究更合适的时序模型
+4. 优先考虑 `TCN`，再考虑更复杂的 `Transformer` 或 `ST-GCN`
