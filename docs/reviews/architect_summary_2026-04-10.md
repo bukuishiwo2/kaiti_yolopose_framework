@@ -4,8 +4,8 @@
 
 基于以下已完成输入，做一次项目级统一收口：
 
-- `docs/perception_audit_2026-04-10.md`
-- `docs/system_audit_2026-04-10.md`
+- `docs/reviews/perception_audit_2026-04-10.md`
+- `docs/reviews/system_audit_2026-04-10.md`
 - `README.md`
 - `docs/kaiti_alignment.md`
 - `docs/system_architecture.md`
@@ -22,7 +22,7 @@
 
 本次仅写入 1 个文件：
 
-- `docs/architect_summary_2026-04-10.md`
+- `docs/reviews/architect_summary_2026-04-10.md`
 
 ## 3. 项目级判断
 
@@ -208,7 +208,7 @@
 建议下一轮按“先收主线，再补闭环”的顺序推进：
 
 ```bash
-git diff -- docs/perception_audit_2026-04-10.md docs/system_audit_2026-04-10.md docs/architect_summary_2026-04-10.md
+git diff -- docs/reviews/perception_audit_2026-04-10.md docs/reviews/system_audit_2026-04-10.md docs/reviews/architect_summary_2026-04-10.md
 rg -n "fall_sequence_tcn.pt|fall_sequence_lstm.pt|infer_pose_stream.yaml|task_planner/request|person_state" README.md docs configs ros2_ws src
 python3 -m compileall ros2_ws/src/yolopose_ros
 ros2 launch yolopose_ros system_stack.launch.py

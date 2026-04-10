@@ -34,7 +34,7 @@
 
 本次 architect 收口文档写入：
 
-- [docs/architect_mock_input_summary_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/architect_mock_input_summary_2026-04-10.md)
+- [docs/reviews/architect_mock_input_summary_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/reviews/architect_mock_input_summary_2026-04-10.md)
 
 ## 3. 指标或结构性结论
 

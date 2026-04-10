@@ -54,6 +54,8 @@ outputs/*
 ros2_ws/build/
 ros2_ws/install/
 ros2_ws/log/
+ros2_ws/*.pt
+ros2_ws/*.onnx
 
 # Local benchmark/eval scratch directories if recreated elsewhere
 outputs/pose_events.jsonl

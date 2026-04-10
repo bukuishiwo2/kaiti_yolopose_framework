@@ -12,7 +12,7 @@
 
 ## 变更文件列表
 
-- `docs/interface_migration_summary_2026-04-10.md`
+- `docs/reviews/interface_migration_summary_2026-04-10.md`
 
 ## 指标或结构性结论
 
@@ -290,12 +290,12 @@
 
 ```bash
 cd /home/yhc/kaiti_yolopose_framework
-sed -n '1,260p' docs/interface_migration_summary_2026-04-10.md
+sed -n '1,260p' docs/reviews/interface_migration_summary_2026-04-10.md
 ```
 
 ```bash
 cd /home/yhc/kaiti_yolopose_framework
-git diff -- docs/interface_migration_summary_2026-04-10.md
+git diff -- docs/reviews/interface_migration_summary_2026-04-10.md
 ```
 
 ```bash

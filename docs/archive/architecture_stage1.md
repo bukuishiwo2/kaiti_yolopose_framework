@@ -1,5 +1,7 @@
 # Architecture (YOLO-Pose First Stage)
 
+> Archived document. This file records an earlier stage-1 architecture sketch and is no longer the current source of truth. Current project structure and system direction should be read from `README.md`, `docs/project_conventions.md`, and `docs/system_architecture.md`.
+
 ## Layering
 
 1. Core inference (`src/yolopose`): model load, predict/track, event stabilization.

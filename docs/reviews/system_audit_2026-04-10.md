@@ -27,7 +27,7 @@
 - `docs/system_bringup_skeleton.md`
 - `docs/kaiti_alignment.md`
 - 参考：`README.md`
-- 参考：`docs/worklog_2026-04-10.md`
+- 参考：`docs/worklogs/worklog_2026-04-10.md`
 - 参考：`src/yolopose/pipeline/runner.py`
 - 参考：`configs/infer_pose_stream.yaml`
 
@@ -102,7 +102,7 @@
 仓库当前主线结论明确为：
 
 - `README.md`：`LSTM` 是综合主模型，`TCN` 是低误报候选
-- `docs/worklog_2026-04-10.md`：默认推理模型已切回 `models/fall_sequence_lstm.pt`
+- `docs/worklogs/worklog_2026-04-10.md`：默认推理模型已切回 `models/fall_sequence_lstm.pt`
 
 但 `configs/infer_pose_stream.yaml` 当前仍写的是：
 
@@ -240,7 +240,7 @@
 
 changed files:
 
-- `docs/system_audit_2026-04-10.md`
+- `docs/reviews/system_audit_2026-04-10.md`
 
 ## 9. 下一步命令
 

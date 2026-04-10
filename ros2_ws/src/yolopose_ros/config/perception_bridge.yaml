@@ -1,6 +1,6 @@
 pose_stream_node:
   ros__parameters:
-    project_root: /home/yhc/kaiti_yolopose_framework
+    project_root: ""
     infer_config: configs/infer_pose_stream.yaml
     event_topic: /kaiti/perception/events
     input_mode: mock

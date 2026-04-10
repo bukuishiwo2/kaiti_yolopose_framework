@@ -18,12 +18,12 @@
 - 参考：
   - `README.md`
   - `docs/kaiti_alignment.md`
-  - `docs/worklog_2026-04-10.md`
+  - `docs/worklogs/worklog_2026-04-10.md`
 
 ## Changed Files
 
 本次仅写入 1 个文件：
-- `docs/perception_audit_2026-04-10.md`
+- `docs/reviews/perception_audit_2026-04-10.md`
 
 ## 关键发现
 
@@ -50,7 +50,7 @@
 文档和记录的主线判断是一致的：
 - `README.md` 明确写明 `LSTM` 是综合主模型，`TCN` 是低误报候选
 - `docs/kaiti_alignment.md` 明确要求保留 `LSTM` 为感知主线
-- `docs/worklog_2026-04-10.md` 明确写了“默认推理模型切回 `models/fall_sequence_lstm.pt`”
+- `docs/worklogs/worklog_2026-04-10.md` 明确写了“默认推理模型切回 `models/fall_sequence_lstm.pt`”
 - `reports/benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md` 也明确将 `LSTM` 定位为 default main model
 
 但代码默认入口不是这个口径：
@@ -110,7 +110,7 @@
    - `TCN` 在 ADL 误报抑制上更强，但明显牺牲 recall。
 
 3. 当前 `LSTM` 阈值微调收益已接近饱和。
-   - `docs/worklog_2026-04-10.md` 已明确这一轮优化不应继续停留在细粒度阈值搜索。
+   - `docs/worklogs/worklog_2026-04-10.md` 已明确这一轮优化不应继续停留在细粒度阈值搜索。
 
 4. 下一阶段重点应转向 hard negative 和补充训练，而不是直接更换更复杂模型。
    - 当前最缺的是负样本区分能力，不是更复杂 backbone。
@@ -198,7 +198,7 @@
 建议按以下顺序推进：
 
 ```bash
-git diff -- docs/perception_audit_2026-04-10.md
+git diff -- docs/reviews/perception_audit_2026-04-10.md
 rg -n "model_path: models/fall_sequence_tcn.pt|infer_pose_stream.yaml" README.md Makefile configs docs
 python scripts/run_fall_sequence_train.py --config configs/train_fall_sequence.yaml
 python scripts/eval_fall_batch.py --labels data/eval/video_labels_urfall_cam0.csv --config configs/infer_pose_stream.yaml --mode predict --device 0 --raw-key seq_raw_fall_detected --stable-key seq_stable_fall_detected --out-dir outputs/eval_urfall_sequence

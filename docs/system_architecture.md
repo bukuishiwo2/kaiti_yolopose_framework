@@ -5,7 +5,7 @@
 当前仓库已经把感知子系统做成可训练、可评估、可切换模型的原型；下一步要把它收敛成 ROS2 系统里的一个稳定语义源，再向建图、导航、任务规划层扩展。
 
 当前接口收敛基线见：
-- [docs/system_interface_contract_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/system_interface_contract_2026-04-10.md)
+- [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md)
 
 ## 1. 系统目标
 
@@ -166,7 +166,7 @@
 - `SupervisorStatus` 负责把上游事件收敛成系统态判断
 - `PlannerRequest` 负责向未来规划层输出最小意图
 
-详细字段、频率、枚举、异常值约定，统一以 [docs/system_interface_contract_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/system_interface_contract_2026-04-10.md) 为准。
+详细字段、频率、枚举、异常值约定，统一以 [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md) 为准。
 
 ### 3.3 对未来规划层的边界要求
 

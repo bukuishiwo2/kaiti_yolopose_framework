@@ -1,21 +1,46 @@
 # Docs Index
 
-本目录存放长期维护的项目说明文档。
+本目录用于长期维护项目说明文档，不再作为临时记录的平铺存放区。
 
-建议阅读顺序：
+## 1. 稳定文档
+
+建议优先阅读：
+
 1. [项目总览](../README.md)
-2. [多智能体协作说明](agents.md)
-3. [项目约定](project_conventions.md)
+2. [项目约定](project_conventions.md)
+3. [多代理协作说明](agents.md)
 4. [开题目标对齐](kaiti_alignment.md)
 5. [系统架构说明](system_architecture.md)
 6. [ROS2 最小骨架](system_bringup_skeleton.md)
-7. [ROS2 工作区说明](../ros2_ws/README.md)
-8. [架构说明](architecture.md)
-9. [FallVision 接入说明](fallvision_integration.md)
-10. [UR Fall Rule / LSTM / TCN 对比摘要](../reports/benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md)
-11. [TCN 定位说明](tcn_positioning.md)
-12. [Hard Negative 方案](hard_negative_plan.md)
-13. [方法路线图](method_roadmap.md)
-14. [推理测试资源](inference_resources.md)
-15. [外部参考链接](references.md)
-16. `worklog_YYYY-MM-DD.md`：开发过程记录
+7. [系统接口契约草案](system_interface_contract_2026-04-10.md)
+8. [ROS2 工作区说明](../ros2_ws/README.md)
+
+研究补充文档：
+
+- [FallVision 接入说明](fallvision_integration.md)
+- [Hard Negative 方案](hard_negative_plan.md)
+- [方法路线图](method_roadmap.md)
+- [推理测试资源](inference_resources.md)
+- [TCN 定位说明](tcn_positioning.md)
+- [外部参考链接](references.md)
+- [新机器环境说明](setup_new_machine.md)
+
+## 2. 阶段文档分层
+
+`docs/` 根目录之外，当前还维护三个子区：
+
+- [reviews/README.md](reviews/README.md)：阶段审计、接口评审、汇总结论
+- [worklogs/README.md](worklogs/README.md)：按日期记录的开发日志
+- [archive/README.md](archive/README.md)：已被替代但仍需保留的历史文档
+
+## 3. 放置规则
+
+文档应按以下规则放置：
+
+- 长期有效的说明文档：放 `docs/` 根目录
+- 带日期的阶段审计和汇总：放 `docs/reviews/`
+- 开发过程记录：放 `docs/worklogs/`
+- 历史版本或被替代方案：放 `docs/archive/`
+- benchmark 结果摘要：放 `reports/benchmarks/`
+
+不要继续把 `worklog_*.md`、`*_audit_*.md`、`*_summary_*.md` 直接放到 `docs/` 根目录。

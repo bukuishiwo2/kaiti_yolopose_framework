@@ -17,6 +17,13 @@ from std_msgs.msg import String
 TERMINAL_PIPELINE_STATES = {"completed", "error", "unavailable"}
 
 
+def _default_project_root() -> str:
+    env_value = os.environ.get("KAITI_PROJECT_ROOT", "").strip()
+    if env_value:
+        return env_value
+    return str(Path(__file__).resolve().parents[4])
+
+
 class PoseStreamNode(Node):
     """Bridge node with minimal multi-input support for the ROS2 skeleton."""
 
@@ -25,7 +32,7 @@ class PoseStreamNode(Node):
 
         self.declare_parameter(
             "project_root",
-            os.environ.get("KAITI_PROJECT_ROOT", "/home/yhc/kaiti_yolopose_framework"),
+            _default_project_root(),
         )
         self.declare_parameter("infer_config", "configs/infer_pose_stream.yaml")
         self.declare_parameter("event_topic", "/kaiti/perception/events")
@@ -36,7 +43,8 @@ class PoseStreamNode(Node):
         self.declare_parameter("camera_device", "")
         self.declare_parameter("camera_index", -1)
 
-        self._project_root = Path(self.get_parameter("project_root").value)
+        raw_project_root = str(self.get_parameter("project_root").value).strip()
+        self._project_root = Path(raw_project_root or _default_project_root()).resolve()
         self._infer_config = str(self.get_parameter("infer_config").value)
         self._event_topic = str(self.get_parameter("event_topic").value)
         self._input_mode = str(self.get_parameter("input_mode").value).strip().lower()

@@ -3,7 +3,7 @@
 本文件说明 `ros2_ws/` 里当前已经准备好的系统级骨架，以及下一步如何往 `RTAB-Map`、`Nav2`、`PlanSys2` 对接。
 
 接口字段级约定统一见：
-- [docs/system_interface_contract_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/system_interface_contract_2026-04-10.md)
+- [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md)
 
 ## 1. 目录结构
 
@@ -81,7 +81,7 @@ ros2_ws/
 ### 3.1 构建
 
 ```bash
-cd /home/yhc/kaiti_yolopose_framework/ros2_ws
+cd ros2_ws
 colcon build --symlink-install --packages-select yolopose_ros
 source install/setup.bash
 ```

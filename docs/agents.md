@@ -1,150 +1,157 @@
 # Multi-Agent Collaboration
 
-本文件是本项目的长期协作手册，用于配合仓库根目录的 [AGENTS.md](../AGENTS.md) 使用。
+本文件用于配合仓库根目录的 [AGENTS.md](../AGENTS.md) 使用，回答三个问题：
 
-它回答三个问题：
-
-1. 这个项目有哪些长期角色
-2. 每个角色应该改哪些文件
-3. 结果应该去哪里看
+1. 项目有哪些长期角色
+2. 每个角色默认改哪些文件
+3. 阶段结果应该去哪里看
 
 ## 1. 当前长期角色
 
-### 1.1 主代理
+### 1.1 `architect`
 
 负责：
-- 收口项目结论
-- 决定默认配置
-- 更新 `README` / `docs` / `reports`
-- 合并多条主线的阶段结果
+
+- 项目结论收口
+- 默认配置切换
+- 目录规范与文档分层
+- 根 README、阶段总结与跨模块一致性
 
 典型输出：
-- `README.md`
-- `reports/benchmarks/*.md`
-- `docs/worklog_*.md`
 
-### 1.2 感知代理
+- `README.md`
+- `AGENTS.md`
+- `docs/README.md`
+- `docs/project_conventions.md`
+- `docs/reviews/*.md`
+
+### 1.2 `perception`
 
 负责：
+
 - 跌倒检测算法实现
 - `LSTM / TCN` 训练与评估
-- 调参与模型对比
-- 感知推理与语义事件稳定
+- 感知调参与 hard negative 策略
+- 感知事件语义稳定化
 
 典型输出：
+
+- `src/yolopose/pipeline/`
 - `src/yolopose/temporal/`
 - `configs/train_fall_sequence*.yaml`
 - `configs/infer_pose_stream*.yaml`
-- `data/eval/fall_grid_*.yaml`
+- `data/eval/*.yaml`
 - `reports/benchmarks/*comparison*.md`
 
-### 1.3 数据代理
+### 1.3 `system_planner`
 
 负责：
-- 数据集接入
-- 标签 CSV 构建
-- hard negative 管理
-- 数据格式统一与文档化
 
-典型输出：
-- `scripts/build_*.py`
-- `scripts/merge_label_csvs.py`
-- `docs/fallvision_integration.md`
-- `docs/hard_negative_plan.md`
-- `data/eval/*.csv`
-
-### 1.4 系统代理
-
-负责：
-- `ROS2` 工作区骨架
-- 感知桥接、系统监督节点
-- `RTAB-Map / Nav2 / LTL / PlanSys2` 的系统级接口预留
+- `ros2_ws/` 系统骨架
+- 感知到任务层的接口设计
 - launch / config 组织
+- 系统接口、系统架构、bringup 文档
 
 典型输出：
+
 - `ros2_ws/`
 - `docs/system_architecture.md`
 - `docs/system_bringup_skeleton.md`
+- `docs/system_interface_contract_*.md`
 - `docs/kaiti_alignment.md`
 
 ## 2. 目录责任边界
 
 | 目录 / 文件 | 默认责任角色 |
 | --- | --- |
-| `src/yolopose/pipeline/` | 感知代理 |
-| `src/yolopose/temporal/` | 感知代理 |
-| `scripts/run_fall_sequence_train.py` | 感知代理 |
-| `scripts/eval_fall_batch.py` | 感知代理 |
-| `scripts/tune_fall_grid.py` | 感知代理 |
-| `scripts/build_*.py` | 数据代理 |
-| `data/eval/` | 数据代理 + 感知代理 |
-| `ros2_ws/` | 系统代理 |
-| `docs/system_*.md` | 系统代理 |
-| `docs/*integration*.md` | 数据代理 |
-| `README.md` | 主代理 |
-| `reports/benchmarks/` | 主代理收口，感知代理供稿 |
+| `src/yolopose/pipeline/` | `perception` |
+| `src/yolopose/temporal/` | `perception` |
+| `scripts/run_fall_sequence_train.py` | `perception` |
+| `scripts/eval_fall_batch.py` | `perception` |
+| `data/eval/` | `perception` |
+| `ros2_ws/` | `system_planner` |
+| `docs/system_*.md` | `system_planner` |
+| `docs/kaiti_alignment.md` | `system_planner` |
+| `README.md` | `architect` |
+| `AGENTS.md` | `architect` |
+| `docs/README.md` | `architect` |
+| `docs/project_conventions.md` | `architect` |
+| `docs/reviews/` | `architect` 收口 |
+| `reports/benchmarks/` | `architect` 收口，`perception` 供稿 |
 
-## 3. 查看其他代理进展的方法
+## 3. 阶段结果放置位置
 
-### 3.1 看感知代理
+阶段结果必须按类型落到正确位置：
+
+- benchmark 摘要：`reports/benchmarks/`
+- 审计、接口评审、汇总：`docs/reviews/`
+- 过程日志：`docs/worklogs/`
+- 历史方案：`docs/archive/`
+
+不要继续把阶段性文档直接平铺在 `docs/` 根目录。
+
+## 4. 查看其他角色进展的方法
+
+### 4.1 看 `perception`
 
 优先看：
+
 - [UR Fall Rule / LSTM / TCN 对比摘要](../reports/benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md)
 - [TCN 定位说明](tcn_positioning.md)
-- `data/eval/fall_grid_*.yaml`
-- `outputs/eval_*` 中的结果目录
+- [Hard Negative 方案](hard_negative_plan.md)
+- `configs/infer_pose_stream*.yaml`
 
-### 3.2 看系统代理
+### 4.2 看 `system_planner`
 
 优先看：
+
 - [系统架构说明](system_architecture.md)
 - [ROS2 最小骨架](system_bringup_skeleton.md)
+- [接口契约草案](system_interface_contract_2026-04-10.md)
 - [ROS2 工作区说明](../ros2_ws/README.md)
-- `ros2_ws/src/yolopose_ros/launch/`
 
-### 3.3 看主代理收口结果
+### 4.3 看 `architect`
 
 优先看：
+
 - [项目总览](../README.md)
-- [开题目标对齐](kaiti_alignment.md)
-- `docs/worklog_YYYY-MM-DD.md`
+- [项目约定](project_conventions.md)
+- [阶段评审索引](reviews/README.md)
+- [开发日志索引](worklogs/README.md)
 
-## 4. 什么时候应该开子代理
+## 5. 什么时候适合开子代理
 
-适合开子代理的任务：
+适合：
 
 1. 写入范围清楚
 2. 任务可独立完成
 3. 结果能直接落到文件
 4. 不阻塞主代理当前动作
 
-不适合开子代理的任务：
+不适合：
 
 1. 需要频繁修改同一文件
-2. 任务定义本身还不清楚
+2. 任务定义还不清楚
 3. 当前主线决策还没定
 
-## 5. 当前推荐协作方式
+## 6. 当前推荐协作方式
 
-当前项目推荐长期保持：
+当前长期保持三类角色即可：
 
-1. 主代理
-2. 感知代理
-3. 系统代理
+1. `architect`
+2. `perception`
+3. `system_planner`
 
-数据代理在数据集接入密集阶段再单独开启，平时可以由感知代理兼带。
+数据整理工作默认由 `perception` 协带，只有当数据接入本身成为独立任务时再拆角色。
 
-## 6. 当前阶段默认主线
+## 7. 当前阶段默认主线
 
-1. 感知主线：
+感知主线：
+
 - `LSTM` 作为综合主模型
 - `TCN` 作为低误报候选分支
 
-2. 系统主线：
-- `ROS2` 骨架先行
-- 逐步接 `RTAB-Map`、`Nav2`、`PlanSys2/LTL`
+系统主线：
 
-3. 数据主线：
-- `UR Fall` 继续作为主评估集
-- `FallVision` 更适合作为增强和 hard negative 来源
-
+- 先维持 `ROS2` 骨架和最小桥接闭环
+- 先做接口收敛，再接 `RTAB-Map / Nav2 / PlanSys2`

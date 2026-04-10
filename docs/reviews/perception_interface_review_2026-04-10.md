@@ -13,7 +13,7 @@
 
 ## 变更文件列表
 
-- `docs/perception_interface_review_2026-04-10.md`
+- `docs/reviews/perception_interface_review_2026-04-10.md`
 
 ## 1. 当前 perception 侧实际输出字段
 
@@ -258,7 +258,7 @@
 
 ```bash
 cd /home/yhc/kaiti_yolopose_framework
-git diff -- docs/perception_interface_review_2026-04-10.md
+git diff -- docs/reviews/perception_interface_review_2026-04-10.md
 ```
 
 ```bash
@@ -268,5 +268,5 @@ rg -n "stable_fall_detected|seq_stable_fall_detected|fall_state_changed|seq_fall
 
 ```bash
 cd /home/yhc/kaiti_yolopose_framework
-sed -n '1,260p' docs/perception_interface_review_2026-04-10.md
+sed -n '1,260p' docs/reviews/perception_interface_review_2026-04-10.md
 ```

@@ -1,10 +1,15 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, LogInfo
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+
+
+REPO_ROOT = str(Path(__file__).resolve().parents[4])
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -19,9 +24,7 @@ def generate_launch_description() -> LaunchDescription:
         [
             DeclareLaunchArgument(
                 "project_root",
-                default_value=EnvironmentVariable(
-                    "KAITI_PROJECT_ROOT", default_value="/home/yhc/kaiti_yolopose_framework"
-                ),
+                default_value=EnvironmentVariable("KAITI_PROJECT_ROOT", default_value=REPO_ROOT),
             ),
             DeclareLaunchArgument("bridge_config", default_value=perception_config),
             DeclareLaunchArgument("system_config", default_value=system_config),

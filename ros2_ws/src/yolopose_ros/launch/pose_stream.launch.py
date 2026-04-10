@@ -3,6 +3,10 @@ from launch.actions import DeclareLaunchArgument
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from pathlib import Path
+
+
+REPO_ROOT = str(Path(__file__).resolve().parents[4])
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -14,9 +18,7 @@ def generate_launch_description() -> LaunchDescription:
         [
             DeclareLaunchArgument(
                 "project_root",
-                default_value=EnvironmentVariable(
-                    "KAITI_PROJECT_ROOT", default_value="/home/yhc/kaiti_yolopose_framework"
-                ),
+                default_value=EnvironmentVariable("KAITI_PROJECT_ROOT", default_value=REPO_ROOT),
             ),
             DeclareLaunchArgument("bridge_config", default_value=bridge_config),
             DeclareLaunchArgument("input_mode", default_value="mock"),
