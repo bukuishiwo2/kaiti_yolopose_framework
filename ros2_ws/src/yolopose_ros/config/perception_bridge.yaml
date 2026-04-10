@@ -1,0 +1,5 @@
+yolopose_ros:
+  ros__parameters:
+    project_root: /home/yhc/kaiti_yolopose_framework
+    infer_config: configs/infer_pose_stream.yaml
+    event_topic: /kaiti/perception/events

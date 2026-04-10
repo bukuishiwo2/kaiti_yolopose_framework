@@ -5,13 +5,15 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from torch import nn
+
 import numpy as np
 import torch
 
 from yolopose.core.config import normalize_torch_device
 from yolopose.pipeline.stabilizer import BooleanStabilizer, StabilizerConfig
 from yolopose.temporal.features import POSE_FEATURE_DIM, empty_person_feature, extract_person_candidates, extract_primary_person_feature
-from yolopose.temporal.model import PoseFallLSTM
+from yolopose.temporal.model import load_pose_fall_model_from_checkpoint
 
 
 @dataclass
@@ -49,7 +51,7 @@ class SequenceFallDetector:
             StabilizerConfig(min_true_frames=int(cfg.min_true_frames), min_false_frames=int(cfg.min_false_frames))
         )
         self._track_states: dict[int, _TrackBufferState] = {}
-        self.model: PoseFallLSTM | None = None
+        self.model: nn.Module | None = None
         self.model_loaded = False
         self.model_device = 'cpu'
         self.feature_dim = POSE_FEATURE_DIM
@@ -65,7 +67,7 @@ class SequenceFallDetector:
             return
 
         checkpoint = torch.load(str(model_path), map_location='cpu', weights_only=False)
-        self.model = PoseFallLSTM.from_checkpoint(checkpoint)
+        self.model = load_pose_fall_model_from_checkpoint(checkpoint)
         self.feature_dim = int(checkpoint.get('feature_dim', POSE_FEATURE_DIM))
         self.cfg.seq_len = int(checkpoint.get('seq_len', self.cfg.seq_len))
         if 'threshold' in checkpoint and float(self.cfg.score_threshold) == 0.5:

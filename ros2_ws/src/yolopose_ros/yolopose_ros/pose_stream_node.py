@@ -16,9 +16,12 @@ class PoseStreamNode(Node):
     def __init__(self) -> None:
         super().__init__("pose_stream_node")
 
-        self.declare_parameter("project_root", "/home/yhc/kaiti_yolopose_framework")
+        self.declare_parameter(
+            "project_root",
+            os.environ.get("KAITI_PROJECT_ROOT", "/home/yhc/kaiti_yolopose_framework"),
+        )
         self.declare_parameter("infer_config", "configs/infer_pose_stream.yaml")
-        self.declare_parameter("event_topic", "/yolopose/events")
+        self.declare_parameter("event_topic", "/kaiti/perception/events")
 
         project_root = Path(self.get_parameter("project_root").value)
         infer_cfg = self.get_parameter("infer_config").value

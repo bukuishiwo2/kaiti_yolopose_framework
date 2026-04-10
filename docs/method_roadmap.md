@@ -77,6 +77,9 @@
 
 结论：
 - 如果要升级模型，优先 `TCN`
+- 当前 `TCN` 的实际定位是低误报候选，而不是当前主模型
+- 具体对照结果见 [UR Fall Rule / LSTM / TCN 对比摘要](../reports/benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md)
+- 定位说明见 [TCN 定位说明](tcn_positioning.md)
 
 ### 3.3 路线 C：Transformer 类模型
 

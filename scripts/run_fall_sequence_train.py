@@ -17,7 +17,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PROJECT_ROOT / 'src'))
 
 from yolopose.core.config import normalize_torch_device
-from yolopose.temporal.model import PoseFallLSTM, PoseFallModelConfig
+from yolopose.temporal.model import PoseFallModelConfig, build_pose_fall_model
 
 
 def parse_args() -> argparse.Namespace:
@@ -58,7 +58,7 @@ def compute_metrics(logits: torch.Tensor, labels: torch.Tensor, threshold: float
     }
 
 
-def evaluate(model: PoseFallLSTM, loader: DataLoader, device: str, threshold: float) -> tuple[float, dict[str, float]]:
+def evaluate(model: nn.Module, loader: DataLoader, device: str, threshold: float) -> tuple[float, dict[str, float]]:
     model.eval()
     total_loss = 0.0
     total_count = 0
@@ -119,12 +119,14 @@ def main() -> None:
 
     model_cfg = PoseFallModelConfig(
         feature_dim=feature_dim,
+        model_type=str(model_cfg_raw.get('type', model_cfg_raw.get('model_type', 'lstm'))),
         hidden_dim=int(model_cfg_raw.get('hidden_dim', 128)),
         num_layers=int(model_cfg_raw.get('num_layers', 2)),
         dropout=float(model_cfg_raw.get('dropout', 0.2)),
         bidirectional=bool(model_cfg_raw.get('bidirectional', False)),
+        tcn_kernel_size=int(model_cfg_raw.get('tcn_kernel_size', 3)),
     )
-    model = PoseFallLSTM(model_cfg).to(device)
+    model = build_pose_fall_model(model_cfg).to(device)
 
     batch_size = int(train_cfg.get('batch_size', 64))
     epochs = int(train_cfg.get('epochs', 20))

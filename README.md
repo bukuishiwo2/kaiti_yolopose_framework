@@ -4,9 +4,13 @@
 
 当前仓库已经具备两条完整技术路线：
 - 规则法基线：基于关键点几何关系进行单帧判断，再做时序稳定
-- 学习型主线：基于关键点序列训练 `LSTM` 时序分类器，再做事件稳定输出
+- 学习型主线：基于关键点序列训练时序分类器（当前已支持 `LSTM` 与 `TCN`），再做事件稳定输出
 
 当前推荐主线：**学习型时序模型**。规则法保留为 baseline 和对照组。
+
+当前学习型分支的定位也已经明确：
+- `LSTM`：综合主模型
+- `TCN`：低误报候选模型和对照分支，不是当前主模型
 
 ## 1. 项目目标
 
@@ -57,6 +61,11 @@
 - Recall: `0.8000`
 - F1: `0.7883`
 
+学习型时序模型（`TCN`, `outputs/eval_urfall_sequence_tcn/`）：
+- Precision: `0.8990`
+- Recall: `0.5882`
+- F1: `0.7111`
+
 同口径结论：
 - 学习型模型相对规则法显著提升了召回率和 F1
 - 规则法仍有参考价值，但不再是后续优化主线
@@ -65,6 +74,7 @@
 
 更详细的结果摘要见：
 - [UR Fall 对比摘要](reports/benchmarks/urfall_comparison_2026-04-09.md)
+- [UR Fall Rule / LSTM / TCN 对比摘要](reports/benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md)
 
 ## 4. 仓库结构
 
@@ -104,6 +114,7 @@ kaiti_yolopose_framework/
 - `reports/` 只放适合长期提交的结果摘要
 
 详细命名与目录规则见：
+- [多智能体协作说明](docs/agents.md)
 - [项目约定](docs/project_conventions.md)
 - [文档索引](docs/README.md)
 
@@ -170,6 +181,7 @@ python scripts/run_pose_infer.py --mode track --device 0
 - [fall_detector.py](src/yolopose/pipeline/fall_detector.py)
 - [runner.py](src/yolopose/pipeline/runner.py)
 - [infer_pose_stream.yaml](configs/infer_pose_stream.yaml)
+- [infer_pose_stream_tcn.yaml](configs/infer_pose_stream_tcn.yaml)
 
 方法：
 1. `YOLOPose` 输出人体框和 17 个关键点
@@ -197,7 +209,7 @@ python scripts/run_pose_infer.py --mode track --device 0
 方法：
 1. `YOLOPose` 提取关键点
 2. 将连续若干帧编码为姿态序列
-3. 使用 `LSTM` 做跌倒 / 非跌倒二分类
+3. 使用时序分类器（当前默认 `LSTM`，也支持 `TCN`）做跌倒 / 非跌倒二分类
 4. 用稳定器输出 `seq_raw_fall_detected` 和 `seq_stable_fall_detected`
 
 该路线优点：
@@ -285,14 +297,32 @@ python scripts/build_fallvision_sequence_dataset.py \
 
 ### 9.1 训练学习型时序模型
 
+LSTM：
+
 ```bash
 python scripts/run_fall_sequence_train.py \
   --config configs/train_fall_sequence.yaml
 ```
 
+TCN：
+
+```bash
+python scripts/run_fall_sequence_train.py \
+  --config configs/train_fall_sequence_tcn.yaml
+```
+
+也可以使用：
+
+```bash
+make train-seq
+make train-seq-tcn
+```
+
 默认输出：
 - [fall_sequence_lstm.pt](models/fall_sequence_lstm.pt)
 - [fall_sequence_lstm.history.json](models/fall_sequence_lstm.history.json)
+- [fall_sequence_tcn.pt](models/fall_sequence_tcn.pt)
+- [fall_sequence_tcn.history.json](models/fall_sequence_tcn.history.json)
 
 ### 9.2 评估规则法
 
@@ -307,6 +337,8 @@ python scripts/eval_fall_batch.py \
 
 ### 9.3 评估学习型模型
 
+LSTM：
+
 ```bash
 python scripts/eval_fall_batch.py \
   --labels data/eval/video_labels_urfall_cam0.csv \
@@ -316,6 +348,19 @@ python scripts/eval_fall_batch.py \
   --raw-key seq_raw_fall_detected \
   --stable-key seq_stable_fall_detected \
   --out-dir outputs/eval_urfall_sequence
+```
+
+TCN：
+
+```bash
+python scripts/eval_fall_batch.py \
+  --labels data/eval/video_labels_urfall_cam0.csv \
+  --config configs/infer_pose_stream_tcn.yaml \
+  --mode predict \
+  --device 0 \
+  --raw-key seq_raw_fall_detected \
+  --stable-key seq_stable_fall_detected \
+  --out-dir outputs/eval_urfall_sequence_tcn
 ```
 
 ### 9.4 调学习型阈值与稳定参数
@@ -328,6 +373,8 @@ python scripts/eval_fall_batch.py \
 已提供序列模型专用网格：
 - [fall_grid_sequence.yaml](data/eval/fall_grid_sequence.yaml)
 - [fall_grid_sequence_refine.yaml](data/eval/fall_grid_sequence_refine.yaml)
+- [fall_grid_sequence_tcn.yaml](data/eval/fall_grid_sequence_tcn.yaml)
+- [fall_grid_sequence_tcn_refine.yaml](data/eval/fall_grid_sequence_tcn_refine.yaml)
 
 直接运行：
 
@@ -349,6 +396,25 @@ python scripts/tune_fall_grid.py \
 ```bash
 make tune-seq
 ```
+
+TCN 调参：
+
+```bash
+python scripts/tune_fall_grid.py \
+  --labels data/eval/video_labels_urfall_cam0.csv \
+  --base-config configs/infer_pose_stream_tcn.yaml \
+  --grid data/eval/fall_grid_sequence_tcn_refine.yaml \
+  --target-detector sequence_fall_detector \
+  --mode predict \
+  --device 0 \
+  --raw-key seq_raw_fall_detected \
+  --stable-key seq_stable_fall_detected \
+ --out-dir outputs/tune_fall_grid_sequence_tcn_refine
+```
+
+说明：
+- 当前 `make tune-seq-tcn` 仍对应仓库里已有的 TCN 基准网格
+- 这份 `fall_grid_sequence_tcn_refine.yaml` 建议直接使用上面的命令运行
 
 第一轮结果表明最有效参数是 `score_threshold`。当前推荐主配置是：
 - `score_threshold=0.6`
@@ -397,6 +463,8 @@ python scripts/tune_fall_grid.py \
 
 时序模型训练配置：
 - [train_fall_sequence.yaml](configs/train_fall_sequence.yaml)
+- [train_fall_sequence_tcn.yaml](configs/train_fall_sequence_tcn.yaml)
+- [train_fall_sequence_fallvision.yaml](configs/train_fall_sequence_fallvision.yaml)
 
 ## 11. 结果归档与 Git 提交策略
 

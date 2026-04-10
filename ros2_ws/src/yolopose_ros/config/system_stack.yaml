@@ -1,0 +1,9 @@
+yolopose_ros:
+  ros__parameters:
+    perception_event_topic: /kaiti/perception/events
+    supervisor_status_topic: /kaiti/system/supervisor/status
+    planner_request_topic: /kaiti/task_planner/request
+    planner_mode: plansys2_placeholder
+    map_topic: /map
+    localization_topic: /rtabmap/localization_pose
+    nav_goal_action: /navigate_to_pose

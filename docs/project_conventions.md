@@ -183,7 +183,28 @@ bash scripts/clean_local_artifacts.sh
 - VS Code Markdown 预览对绝对文件系统路径的跳转不稳定
 - 相对路径在 GitHub、VS Code 和其他电脑上都更可移植
 
-## 6. Recommended Workflow
+## 6. Multi-Agent Rules
+
+项目级多智能体规则以仓库根目录的 `AGENTS.md` 为准。
+
+长期角色：
+- 主代理
+- 感知代理
+- 数据代理
+- 系统代理
+
+执行原则：
+1. 先定义写入范围，再开子代理
+2. 不同代理默认不要并行修改同一文件
+3. 任何实验结论必须落到：
+- `reports/benchmarks/` 或
+- `docs/worklog_*.md`
+4. 默认配置的切换由主代理收口完成
+5. 角色边界和查看进展的方法详见：
+- `AGENTS.md`
+- `docs/agents.md`
+
+## 7. Recommended Workflow
 
 1. 创建虚拟环境并安装依赖
 2. 执行 `pip install -e . --no-deps`
@@ -191,7 +212,7 @@ bash scripts/clean_local_artifacts.sh
 4. 将关键结论整理到 `reports/benchmarks/`
 5. 提交代码、配置、文档和摘要，不提交本地产物
 
-## 7. Publishing Checklist
+## 8. Publishing Checklist
 
 准备上传 GitHub 前，检查：
 

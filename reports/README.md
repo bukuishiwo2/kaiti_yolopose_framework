@@ -9,3 +9,4 @@
 
 当前已归档：
 - [UR Fall Benchmark 摘要](benchmarks/urfall_comparison_2026-04-09.md)
+- [UR Fall Rule / LSTM / TCN 对比摘要](benchmarks/urfall_rule_lstm_tcn_comparison_2026-04-10.md)
