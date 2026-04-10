@@ -109,5 +109,39 @@ This means TCN should be used as:
 
 Recommended next steps:
 1. Keep the current LSTM configuration as the main learning baseline.
-2. Run a narrower TCN threshold sweep near the low-recall region to test whether recall can be recovered without giving up the false-alarm advantage.
+2. Keep TCN as a low-false-alarm branch and tune it separately from the LSTM main path.
 3. If TCN remains conservative after refinement, keep it as a secondary model and move the main research effort to data augmentation and negative-sample hardening.
+
+## 8. TCN Coarse Sweep Result
+
+Completed tuning directory:
+- `outputs/tune_fall_grid_sequence_tcn/`
+
+Best coarse-sweep configuration:
+- `combo_id = c015`
+- `score_threshold = 0.4`
+- `min_true_frames = 3`
+- `min_false_frames = 7`
+
+Best result from the coarse sweep:
+- Precision: `0.8828`
+- Recall: `0.6286`
+- F1: `0.7343`
+- `fall_fn_segments = 1`
+- `adl_fp_segments = 4`
+- `adl_false_alarm_per_min = 0.577`
+
+Change vs untuned TCN:
+- Precision: `0.8990 -> 0.8828`
+- Recall: `0.5882 -> 0.6286`
+- F1: `0.7111 -> 0.7343`
+
+Interpretation:
+- Lowering the TCN threshold recovered part of recall without changing its overall conservative character.
+- TCN remains clearly below LSTM on overall F1.
+- TCN remains useful as a low-false-alarm branch, not as the default main model.
+
+Current repository decision:
+- Keep `LSTM` as the default learning-based model.
+- Track the current TCN best config in `configs/infer_pose_stream_tcn.yaml`.
+- Use tuned TCN for conservative-mode experiments and future narrow refinement only.

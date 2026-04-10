@@ -37,9 +37,9 @@ sequence_fall_detector:
   model_path: models/fall_sequence_tcn.pt
   device: null
   seq_len: 32
-  score_threshold: 0.6
+  score_threshold: 0.4
   keypoint_conf_threshold: 0.3
   min_true_frames: 3
-  min_false_frames: 5
+  min_false_frames: 7
   use_track_sequences: true
   track_ttl_frames: 45
