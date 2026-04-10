@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Iterator
+from typing import Any, Callable, Iterator
 
 import torch
 from ultralytics import YOLO
@@ -14,9 +14,15 @@ from yolopose.temporal.sequence_fall_detector import SequenceFallDetector, Seque
 
 
 class PoseRunner:
-    def __init__(self, cfg: dict[str, Any], project_root: Path):
+    def __init__(
+        self,
+        cfg: dict[str, Any],
+        project_root: Path,
+        event_callback: Callable[[dict[str, Any]], None] | None = None,
+    ):
         self.cfg = cfg
         self.project_root = project_root
+        self.event_callback = event_callback
         self.model = YOLO(cfg["model"])
         self._print_runtime_info()
         stab_cfg = cfg.get("stabilizer", {})
@@ -125,6 +131,8 @@ class PoseRunner:
 
                 if output_fp:
                     output_fp.write(json.dumps(record, ensure_ascii=True) + "\n")
+                if self.event_callback is not None:
+                    self.event_callback(record)
 
                 if changed:
                     print(

@@ -25,6 +25,10 @@ def generate_launch_description() -> LaunchDescription:
             ),
             DeclareLaunchArgument("bridge_config", default_value=perception_config),
             DeclareLaunchArgument("system_config", default_value=system_config),
+            DeclareLaunchArgument("input_mode", default_value="mock"),
+            DeclareLaunchArgument("video_file_path", default_value=""),
+            DeclareLaunchArgument("camera_device", default_value=""),
+            DeclareLaunchArgument("camera_index", default_value="-1"),
             LogInfo(
                 msg=[
                     "ROS2 system stack skeleton is starting. ",
@@ -38,7 +42,13 @@ def generate_launch_description() -> LaunchDescription:
                 output="screen",
                 parameters=[
                     LaunchConfiguration("bridge_config"),
-                    {"project_root": LaunchConfiguration("project_root")},
+                    {
+                        "project_root": LaunchConfiguration("project_root"),
+                        "input_mode": LaunchConfiguration("input_mode"),
+                        "video_file_path": LaunchConfiguration("video_file_path"),
+                        "camera_device": LaunchConfiguration("camera_device"),
+                        "camera_index": LaunchConfiguration("camera_index"),
+                    },
                 ],
             ),
             Node(

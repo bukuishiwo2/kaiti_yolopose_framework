@@ -4,6 +4,9 @@
 
 当前仓库已经把感知子系统做成可训练、可评估、可切换模型的原型；下一步要把它收敛成 ROS2 系统里的一个稳定语义源，再向建图、导航、任务规划层扩展。
 
+当前接口收敛基线见：
+- [docs/system_interface_contract_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/system_interface_contract_2026-04-10.md)
+
 ## 1. 系统目标
 
 对齐 `kaiti.docx` 的最终目标，完整系统应覆盖四层：
@@ -39,13 +42,13 @@
 - 已有最小实现
 - 仍是单机桥接原型
 
-建议输出：
+当前输出：
 - `/kaiti/perception/events`
-- `/kaiti/perception/person_state`
 
-建议消息格式：
-- 当前先用 `std_msgs/String` 携带 JSON
-- 后续再升级为自定义消息
+接口策略：
+- 当前继续使用 `std_msgs/msg/String` 承载 JSON object
+- 先冻结 schema v1，再升级为 `kaiti_msgs/msg/PerceptionEvent`
+- 当前不再额外定义 `/kaiti/perception/person_state`，避免在系统层形成第二条并行语义边界
 
 ### 2.2 建图与定位层
 
@@ -130,7 +133,7 @@
 - 根据状态决定是否触发规划层
 - 作为感知层与任务层之间的稳定缓冲
 
-建议接口：
+当前接口：
 - 输入：`/kaiti/perception/events`
 - 输出：`/kaiti/system/supervisor/status`
 - 输出：`/kaiti/task_planner/request`
@@ -141,43 +144,50 @@
 
 ## 3. 事件与接口约定
 
-### 3.1 感知事件
+### 3.1 当前阶段的接口收敛原则
 
-感知桥接节点建议输出统一事件对象，最少包含：
+本阶段先不新增真实规划模块，也不直接冻结自定义 `.msg`，而是先把三条 topic 的业务语义固定住。
 
-- `timestamp`
-- `source`
-- `person_present`
-- `person_count`
-- `fall_detected`
-- `fall_score`
-- `stable_fall_detected`
-- `frame_id`
+原因：
+- `Nav2 / PlanSys2 / Gazebo` 消费边界还没完全落地
+- 当前感知 payload 仍包含研究态诊断字段
+- 先冻结字段名、状态枚举、空值和频率约定，更利于平滑迁移
 
-如果是学习型模型，也可以附带：
-- `seq_fall_score`
-- `seq_raw_fall_detected`
-- `seq_stable_fall_detected`
+### 3.2 当前冻结的三个逻辑消息
 
-### 3.2 规划事件
+当前把三条 topic 视为三类正式逻辑消息：
 
-任务规划层建议使用事件标签而不是直接耦合原始帧信息，例如：
+- `PerceptionEvent`
+- `SupervisorStatus`
+- `PlannerRequest`
 
-- `fall_detected`
-- `person_lost`
-- `map_ready`
-- `goal_reached`
-- `battery_low`
-- `replan_required`
+其中：
+- `PerceptionEvent` 负责表达感知层对任务层有意义的稳定语义
+- `SupervisorStatus` 负责把上游事件收敛成系统态判断
+- `PlannerRequest` 负责向未来规划层输出最小意图
 
-### 3.3 任务动作
+详细字段、频率、枚举、异常值约定，统一以 [docs/system_interface_contract_2026-04-10.md](/home/yhc/kaiti_yolopose_framework/docs/system_interface_contract_2026-04-10.md) 为准。
 
-任务层输出不应直接等于“感知结果”，而应是可执行动作，例如：
+### 3.3 对未来规划层的边界要求
 
-- `navigate_to_pose`
-- `switch_to_safe_mode`
-- `notify_operator`
-- `request_relocalization`
+后续无论接 `PlanSys2`、LTL 自动机还是 Gazebo 验证脚本，都不应直接消费研究态感知细节，而应只依赖冻结核心字段：
+
+- 从感知层读取：
+  - `person_present`
+  - `stable_person_present`
+  - `stable_fall_detected`
+  - `seq_stable_fall_detected`
+  - `pipeline_state`
+  - `perception_available`
+- 从监督层读取：
+  - `supervisor_state`
+  - `planner_action`
+  - `reason`
+- 从规划请求读取：
+  - `requested_action`
+  - `reason`
+
+这能保证未来替换 YOLO 检测器、时序模型甚至 perception 内部实现时，不会把规划层一起拖垮。
 
 ## 4. LTL 与自动机映射
 
@@ -209,11 +219,12 @@
 
 ### 5.2 下一阶段
 
+- 在现有 JSON schema v1 上冻结字段并做一次代码对齐
 - 接入 `RTAB-Map`
 - 接入 `Nav2`
-- 定义自定义消息或服务
 - 引入 `PlanSys2` 或等价规划层
 - 建立 LTL 到自动机的映射
+- 在消费者语义稳定后，把三类逻辑消息迁移到 `kaiti_msgs`
 - 完成 Gazebo / TurtleBot4 骨架联调
 
 ## 6. 最终工程定位

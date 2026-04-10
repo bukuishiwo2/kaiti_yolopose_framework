@@ -1,5 +1,11 @@
-yolopose_ros:
+pose_stream_node:
   ros__parameters:
     project_root: /home/yhc/kaiti_yolopose_framework
     infer_config: configs/infer_pose_stream.yaml
     event_topic: /kaiti/perception/events
+    input_mode: mock
+    mock_publish_period_sec: 1.0
+    heartbeat_interval_sec: 2.0
+    video_file_path: ""
+    camera_device: ""
+    camera_index: -1
