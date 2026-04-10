@@ -9,7 +9,7 @@
 - 调参中间结果
 
 长期需要保留的关键结论，应整理到：
-- `reports/benchmarks/`
+- [reports/benchmarks/](../reports/benchmarks/)
 
 需要清理本地结果时：
 - 运行 `bash scripts/clean_outputs.sh`

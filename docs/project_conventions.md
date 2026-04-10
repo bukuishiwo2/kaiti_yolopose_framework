@@ -168,6 +168,21 @@ bash scripts/clean_local_artifacts.sh
 应整理为 Markdown 摘要，长期提交到：
 - `reports/benchmarks/`
 
+### 5.4 Markdown Links
+
+仓库内文档必须优先使用相对路径链接，例如：
+- `docs/project_conventions.md`
+- `../README.md`
+- `data/eval/fall_grid_sequence.yaml`
+
+不要在仓库文档中使用宿主机绝对路径，例如：
+- `/home/yhc/...`
+- `C:\\Users\...`
+
+原因：
+- VS Code Markdown 预览对绝对文件系统路径的跳转不稳定
+- 相对路径在 GitHub、VS Code 和其他电脑上都更可移植
+
 ## 6. Recommended Workflow
 
 1. 创建虚拟环境并安装依赖

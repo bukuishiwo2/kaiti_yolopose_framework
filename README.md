@@ -61,9 +61,10 @@
 - 学习型模型相对规则法显著提升了召回率和 F1
 - 规则法仍有参考价值，但不再是后续优化主线
 - 学习型模型当前主要问题是 ADL 场景误报偏多
+- 第一轮学习型调参后，当前默认候选配置已更新为 `score_threshold=0.6`、`min_true_frames=3`、`min_false_frames=5`
 
 更详细的结果摘要见：
-- [UR Fall 对比摘要](/home/yhc/kaiti_yolopose_framework/reports/benchmarks/urfall_comparison_2026-04-09.md)
+- [UR Fall 对比摘要](reports/benchmarks/urfall_comparison_2026-04-09.md)
 
 ## 4. 仓库结构
 
@@ -103,13 +104,13 @@ kaiti_yolopose_framework/
 - `reports/` 只放适合长期提交的结果摘要
 
 详细命名与目录规则见：
-- [项目约定](/home/yhc/kaiti_yolopose_framework/docs/project_conventions.md)
-- [文档索引](/home/yhc/kaiti_yolopose_framework/docs/README.md)
+- [项目约定](docs/project_conventions.md)
+- [文档索引](docs/README.md)
 
 ## 5. 环境安装
 
 ```bash
-cd /home/yhc/kaiti_yolopose_framework
+cd /path/to/kaiti_yolopose_framework
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -U pip
@@ -153,7 +154,7 @@ ls /dev/video*
 ### 6.3 多路流推理
 
 先编辑：
-- [example.streams](/home/yhc/kaiti_yolopose_framework/data/streams/example.streams)
+- [example.streams](data/streams/example.streams)
 
 每行写一个 RTSP 地址，然后运行：
 
@@ -166,9 +167,9 @@ python scripts/run_pose_infer.py --mode track --device 0
 ### 7.1 规则法基线
 
 核心文件：
-- [fall_detector.py](/home/yhc/kaiti_yolopose_framework/src/yolopose/pipeline/fall_detector.py)
-- [runner.py](/home/yhc/kaiti_yolopose_framework/src/yolopose/pipeline/runner.py)
-- [infer_pose_stream.yaml](/home/yhc/kaiti_yolopose_framework/configs/infer_pose_stream.yaml)
+- [fall_detector.py](src/yolopose/pipeline/fall_detector.py)
+- [runner.py](src/yolopose/pipeline/runner.py)
+- [infer_pose_stream.yaml](configs/infer_pose_stream.yaml)
 
 方法：
 1. `YOLOPose` 输出人体框和 17 个关键点
@@ -187,11 +188,11 @@ python scripts/run_pose_infer.py --mode track --device 0
 ### 7.2 学习型时序主线
 
 核心文件：
-- [features.py](/home/yhc/kaiti_yolopose_framework/src/yolopose/temporal/features.py)
-- [model.py](/home/yhc/kaiti_yolopose_framework/src/yolopose/temporal/model.py)
-- [sequence_fall_detector.py](/home/yhc/kaiti_yolopose_framework/src/yolopose/temporal/sequence_fall_detector.py)
-- [run_fall_sequence_train.py](/home/yhc/kaiti_yolopose_framework/scripts/run_fall_sequence_train.py)
-- [build_pose_sequence_dataset.py](/home/yhc/kaiti_yolopose_framework/scripts/build_pose_sequence_dataset.py)
+- [features.py](src/yolopose/temporal/features.py)
+- [model.py](src/yolopose/temporal/model.py)
+- [sequence_fall_detector.py](src/yolopose/temporal/sequence_fall_detector.py)
+- [run_fall_sequence_train.py](scripts/run_fall_sequence_train.py)
+- [build_pose_sequence_dataset.py](scripts/build_pose_sequence_dataset.py)
 
 方法：
 1. `YOLOPose` 提取关键点
@@ -236,6 +237,50 @@ python scripts/build_pose_sequence_dataset.py \
   --output data/processed/urfall_pose_sequences.npz
 ```
 
+### 8.4 补 hard negative 数据
+
+如果当前误报主要来自躺下、坐下、弯腰、地面动作，建议补 hard negative 数据而不是继续细调当前 LSTM 阈值。
+
+说明文档：
+- [hard_negative_plan.md](docs/hard_negative_plan.md)
+
+模板文件：
+- [video_labels_hard_negative_template.csv](data/eval/video_labels_hard_negative_template.csv)
+- [video_labels_hard_negative_seed.csv](data/eval/video_labels_hard_negative_seed.csv)
+
+合并脚本：
+- [merge_label_csvs.py](scripts/merge_label_csvs.py)
+
+合并示例：
+
+```bash
+python scripts/merge_label_csvs.py \
+  --inputs data/eval/video_labels_urfall_cam0.csv data/eval/video_labels_hard_negative.csv \
+  --output data/eval/video_labels_urfall_plus_hn.csv
+```
+
+### 8.5 接入 FallVision
+
+如果你已经下载了 FallVision 的 `keypoints_csv.rar`，当前推荐做法是：
+- 先解压得到实际 `.csv`
+- 然后直接用 CSV 构建时序训练集
+
+说明文档：
+- [fallvision_integration.md](docs/fallvision_integration.md)
+
+导入脚本：
+- [build_fallvision_sequence_dataset.py](scripts/build_fallvision_sequence_dataset.py)
+
+小规模验证：
+
+```bash
+python scripts/build_fallvision_sequence_dataset.py \
+  --root "data/Fall Detection Video Dataset" \
+  --glob "**/*.csv" \
+  --max-files-per-scene-label 5 \
+  --output data/processed/fallvision_smoke.npz
+```
+
 ## 9. 训练与评估
 
 ### 9.1 训练学习型时序模型
@@ -246,8 +291,8 @@ python scripts/run_fall_sequence_train.py \
 ```
 
 默认输出：
-- [fall_sequence_lstm.pt](/home/yhc/kaiti_yolopose_framework/models/fall_sequence_lstm.pt)
-- [fall_sequence_lstm.history.json](/home/yhc/kaiti_yolopose_framework/models/fall_sequence_lstm.history.json)
+- [fall_sequence_lstm.pt](models/fall_sequence_lstm.pt)
+- [fall_sequence_lstm.history.json](models/fall_sequence_lstm.history.json)
 
 ### 9.2 评估规则法
 
@@ -273,7 +318,59 @@ python scripts/eval_fall_batch.py \
   --out-dir outputs/eval_urfall_sequence
 ```
 
-### 9.4 结果文件说明
+### 9.4 调学习型阈值与稳定参数
+
+推荐先调这 3 个参数：
+- `sequence_fall_detector.score_threshold`
+- `sequence_fall_detector.min_true_frames`
+- `sequence_fall_detector.min_false_frames`
+
+已提供序列模型专用网格：
+- [fall_grid_sequence.yaml](data/eval/fall_grid_sequence.yaml)
+- [fall_grid_sequence_refine.yaml](data/eval/fall_grid_sequence_refine.yaml)
+
+直接运行：
+
+```bash
+python scripts/tune_fall_grid.py \
+  --labels data/eval/video_labels_urfall_cam0.csv \
+  --base-config configs/infer_pose_stream.yaml \
+  --grid data/eval/fall_grid_sequence.yaml \
+  --target-detector sequence_fall_detector \
+  --mode predict \
+  --device 0 \
+  --raw-key seq_raw_fall_detected \
+  --stable-key seq_stable_fall_detected \
+  --out-dir outputs/tune_fall_grid_sequence
+```
+
+或使用：
+
+```bash
+make tune-seq
+```
+
+第一轮结果表明最有效参数是 `score_threshold`。当前推荐主配置是：
+- `score_threshold=0.6`
+- `min_true_frames=3`
+- `min_false_frames=5`
+
+如果继续做第二轮小范围精调，建议运行：
+
+```bash
+python scripts/tune_fall_grid.py \
+  --labels data/eval/video_labels_urfall_cam0.csv \
+  --base-config configs/infer_pose_stream.yaml \
+  --grid data/eval/fall_grid_sequence_refine.yaml \
+  --target-detector sequence_fall_detector \
+  --mode predict \
+  --device 0 \
+  --raw-key seq_raw_fall_detected \
+  --stable-key seq_stable_fall_detected \
+  --out-dir outputs/tune_fall_grid_sequence_refine
+```
+
+### 9.5 结果文件说明
 
 批量评估输出目录通常包含：
 - `summary.json`：总体汇总指标
@@ -291,7 +388,7 @@ python scripts/eval_fall_batch.py \
 ## 10. 当前配置入口
 
 主推理配置：
-- [infer_pose_stream.yaml](/home/yhc/kaiti_yolopose_framework/configs/infer_pose_stream.yaml)
+- [infer_pose_stream.yaml](configs/infer_pose_stream.yaml)
 
 当前关键配置块：
 - `stabilizer`：人体存在稳定器
@@ -299,7 +396,7 @@ python scripts/eval_fall_batch.py \
 - `sequence_fall_detector`：学习型时序检测参数
 
 时序模型训练配置：
-- [train_fall_sequence.yaml](/home/yhc/kaiti_yolopose_framework/configs/train_fall_sequence.yaml)
+- [train_fall_sequence.yaml](configs/train_fall_sequence.yaml)
 
 ## 11. 结果归档与 Git 提交策略
 
@@ -320,8 +417,8 @@ python scripts/eval_fall_batch.py \
 - IDE 私有目录
 
 当前这些策略已经体现在：
-- [`.gitignore`](/home/yhc/kaiti_yolopose_framework/.gitignore)
-- [项目约定](/home/yhc/kaiti_yolopose_framework/docs/project_conventions.md)
+- [`.gitignore`](.gitignore)
+- [项目约定](docs/project_conventions.md)
 
 ## 12. 常用维护命令
 
@@ -353,7 +450,7 @@ make eval-seq
 如果你准备把当前目录作为正式仓库上传：
 
 ```bash
-cd /home/yhc/kaiti_yolopose_framework
+cd /path/to/kaiti_yolopose_framework
 git init -b main
 git add .
 git commit -m "Init fall detection research framework"
@@ -376,12 +473,12 @@ bash scripts/clean_local_artifacts.sh
 
 ## 14. 推荐阅读顺序
 
-1. [README.md](/home/yhc/kaiti_yolopose_framework/README.md)
-2. [project_conventions.md](/home/yhc/kaiti_yolopose_framework/docs/project_conventions.md)
-3. [architecture.md](/home/yhc/kaiti_yolopose_framework/docs/architecture.md)
-4. [UR Fall benchmark 摘要](/home/yhc/kaiti_yolopose_framework/reports/benchmarks/urfall_comparison_2026-04-09.md)
-5. [worklog_2026-04-08.md](/home/yhc/kaiti_yolopose_framework/docs/worklog_2026-04-08.md)
-6. [worklog_2026-04-09.md](/home/yhc/kaiti_yolopose_framework/docs/worklog_2026-04-09.md)
+1. [README.md](README.md)
+2. [project_conventions.md](docs/project_conventions.md)
+3. [architecture.md](docs/architecture.md)
+4. [UR Fall benchmark 摘要](reports/benchmarks/urfall_comparison_2026-04-09.md)
+5. [worklog_2026-04-08.md](docs/worklog_2026-04-08.md)
+6. [worklog_2026-04-09.md](docs/worklog_2026-04-09.md)
 
 ## 15. 下一步建议
 

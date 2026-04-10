@@ -5,7 +5,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 rm -rf "$ROOT_DIR/.idea"
 rm -rf "$ROOT_DIR/.pytest_cache" "$ROOT_DIR/.mypy_cache" "$ROOT_DIR/.ruff_cache"
-rm -rf "$ROOT_DIR/data/processed" "$ROOT_DIR/data/urfall"
+rm -rf "$ROOT_DIR/data/processed" "$ROOT_DIR/data/urfall" "$ROOT_DIR/data/Fall Detection Video Dataset"
 find "$ROOT_DIR/data/samples" -maxdepth 1 -type f -name '*.mp4' -delete 2>/dev/null || true
 rm -f "$ROOT_DIR"/*.pt
 rm -f "$ROOT_DIR/models"/*.pt "$ROOT_DIR/models"/*.json
