@@ -23,11 +23,20 @@ ros2_ws/
 2. 输出最小系统桥接 topic
 3. 为后续 `RTAB-Map / Nav2 / PlanSys2 / Gazebo` 预留清晰边界
 
+当前默认感知主线直接复用：
+
+- `configs/infer_pose_stream.yaml`
+- `models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt`
+- `score_threshold=0.6`
+- `min_true_frames=3`
+- `min_false_frames=5`
+
 当前输入模式支持：
 
 - `mock`：默认模式，无摄像头环境下可直接跑通
 - `video_file`：显式传入视频路径后运行
 - `camera`：显式传入 `camera_device` 或 `camera_index` 后运行；输入不可用时不会直接崩溃
+- `ros_image`：订阅 `/camera/image_raw` 等 ROS2 图像 topic 做在线推理
 
 当前接口契约草案见：
 
@@ -36,13 +45,17 @@ ros2_ws/
 ## 3. 当前最小闭环
 
 ```text
-mock / video_file / camera
+mock / video_file / camera / ros_image
         ↓
+camera_stream_node (optional for laptop webcam)
+        ↓  /camera/image_raw
 pose_stream_node
-        ↓  /kaiti/perception/events
+        ↓  /perception/events
 system_supervisor_node
-        ↓  /kaiti/system/supervisor/status
-        ↓  /kaiti/task_planner/request
+        ↓  /system/supervisor/status
+        ↓  /task_planner/request
+task_planner_bridge_node
+        ↓  /task_planner/status
 future planner layer
 ```
 
@@ -50,7 +63,10 @@ future planner layer
 
 - `mock` 模式周期性发布最小 perception event
 - `supervisor` 能在 perception 不可用、超时或退出时继续优雅处理
-- `planner_request` 已经作为未来规划层的最小请求边界存在
+- `planner_request` 已经被最小任务层占位节点消费
+- `planner_status` 已经作为未来规划层替换前的过渡反馈边界存在
+- `ros_image` 模式可用 `camera_stream_node` 把电脑摄像头接成 ROS2 真图像流
+- 可选发布 `/perception/debug_image`，可直接用 `rqt_image_view` 观察骨架和状态叠加
 
 ## 4. 启动方式
 
@@ -91,6 +107,16 @@ ros2 launch yolopose_ros system_stack.launch.py \
   camera_device:=/dev/video0
 ```
 
+电脑摄像头 + ROS2 图像流模式：
+
+```bash
+ros2 launch yolopose_ros system_stack.launch.py \
+  input_mode:=ros_image \
+  camera_stream_enabled:=true \
+  camera_index:=0 \
+  visualization_enabled:=true
+```
+
 如果摄像头不存在，`pose_stream_node` 不会直接崩溃，而是进入 `unavailable` 状态并继续发布状态事件。
 
 ## 5. 环境变量
@@ -108,18 +134,20 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - launch 文件：`snake_case.launch.py`
 - YAML 配置：`snake_case.yaml`
 - 节点文件：`snake_case_node.py`
-- topic 前缀：`/kaiti/`
+- topic 推荐命名：`/<layer>/<name>`
 
 当前默认参数文件顶层 key 已与节点名对齐：
 
+- `camera_stream_node`
 - `pose_stream_node`
 - `system_supervisor_node`
+- `task_planner_bridge_node`
 
 ## 7. 当前 topic 契约摘要
 
 当前三条 topic 仍使用 `std_msgs/msg/String`，但 payload 已收敛为有约束的 JSON schema。
 
-### `/kaiti/perception/events`
+### `/perception/events`
 
 逻辑消息：
 
@@ -138,7 +166,35 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `stable_fall_detected`
 - `seq_stable_fall_detected`
 
-### `/kaiti/system/supervisor/status`
+补充说明：
+
+- 当 `input_mode=ros_image` 时，`source` 会标记为 `ros:///camera/image_raw`
+- 诊断字段里会额外带 `ros_image_topic` 与 `ros_header_frame_id`
+
+### `/camera/image_raw`
+
+逻辑消息：
+
+- `sensor_msgs/msg/Image`
+
+当前用途：
+
+- 由 `camera_stream_node` 从电脑摄像头发布真实图像流
+- 供 `pose_stream_node(input_mode=ros_image)` 订阅
+
+### `/perception/debug_image`
+
+逻辑消息：
+
+- `sensor_msgs/msg/Image`
+
+当前用途：
+
+- 由 `pose_stream_node` 可选发布调试图像
+- 图像中叠加关键点骨架、人体框、track id、fall score、raw/stable state、supervisor action/reason
+- 可直接用 `rqt_image_view` 观察
+
+### `/system/supervisor/status`
 
 逻辑消息：
 
@@ -152,7 +208,7 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `planner_action`
 - `reason`
 
-### `/kaiti/task_planner/request`
+### `/task_planner/request`
 
 逻辑消息：
 
@@ -164,6 +220,14 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `planner_mode`
 - `requested_action`
 - `reason`
+
+### `/task_planner/status`
+
+当前用途：
+
+- 由 `task_planner_bridge_node` 发布占位反馈
+- 用于确认任务层最小消费者已经接到 supervisor request
+- 暂不作为冻结核心契约
 
 详细字段、频率、状态枚举和异常值约定，以：
 
@@ -185,17 +249,32 @@ ros2 launch yolopose_ros system_stack.launch.py input_mode:=mock
 
 ```bash
 source ros2_ws/install/setup.bash
-ros2 topic echo /kaiti/perception/events
+ros2 topic echo /perception/events
 ```
 
 ```bash
 source ros2_ws/install/setup.bash
-ros2 topic echo /kaiti/system/supervisor/status
+ros2 topic echo /camera/image_raw
 ```
 
 ```bash
 source ros2_ws/install/setup.bash
-ros2 topic echo /kaiti/task_planner/request
+ros2 topic echo /system/supervisor/status
+```
+
+```bash
+source ros2_ws/install/setup.bash
+ros2 topic echo /task_planner/request
+```
+
+```bash
+source ros2_ws/install/setup.bash
+ros2 topic echo /task_planner/status
+```
+
+```bash
+source ros2_ws/install/setup.bash
+rqt_image_view /perception/debug_image
 ```
 
 ## 9. 下一阶段
@@ -206,4 +285,4 @@ ros2 topic echo /kaiti/task_planner/request
 2. 再引入正式接口包 `kaiti_msgs`
 3. 再接 `RTAB-Map`
 4. 再接 `Nav2`
-5. 最后再接 `PlanSys2 / LTL / Gazebo`
+5. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo

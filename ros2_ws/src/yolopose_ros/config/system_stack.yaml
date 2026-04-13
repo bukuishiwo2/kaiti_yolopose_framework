@@ -1,8 +1,26 @@
 system_supervisor_node:
   ros__parameters:
-    perception_event_topic: /kaiti/perception/events
-    supervisor_status_topic: /kaiti/system/supervisor/status
-    planner_request_topic: /kaiti/task_planner/request
+    perception_event_topic: /perception/events
+    supervisor_status_topic: /system/supervisor/status
+    planner_request_topic: /task_planner/request
     planner_mode: plansys2_placeholder
     perception_timeout_sec: 3.0
     status_publish_period_sec: 1.0
+
+task_planner_bridge_node:
+  ros__parameters:
+    planner_request_topic: /task_planner/request
+    planner_status_topic: /task_planner/status
+    planner_mode: plansys2_placeholder
+    status_publish_period_sec: 1.0
+    request_timeout_sec: 5.0
+
+camera_stream_node:
+  ros__parameters:
+    image_topic: /camera/image_raw
+    camera_device: ""
+    camera_index: 0
+    camera_width: 640
+    camera_height: 480
+    camera_fps: 10.0
+    camera_frame_id: kaiti_camera_optical_frame

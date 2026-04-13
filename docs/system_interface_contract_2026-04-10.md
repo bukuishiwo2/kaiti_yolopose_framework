@@ -4,9 +4,9 @@
 
 当前约束范围只覆盖：
 
-- `/kaiti/perception/events`
-- `/kaiti/system/supervisor/status`
-- `/kaiti/task_planner/request`
+- `/perception/events`
+- `/system/supervisor/status`
+- `/task_planner/request`
 
 ## 1. 当前阶段决策
 
@@ -34,7 +34,7 @@
 - `src/yolopose/pipeline/fall_detector.py`
 - `src/yolopose/temporal/sequence_fall_detector.py`
 
-### 2.1 `/kaiti/perception/events` 当前实际字段
+### 2.1 `/perception/events` 当前实际字段
 
 当前这个 topic 实际承载了两类消息：
 
@@ -48,7 +48,7 @@
 | `ts` | `string` | mock / runner / terminal heartbeat | UTC ISO8601 时间戳 |
 | `role` | `string` | `pose_stream_node` | 当前固定为感知桥接节点身份 |
 | `event_type` | `string` | 节点包装层 | `perception_event` 或 `perception_status` |
-| `input_mode` | `string` | 节点参数 | `mock` / `video_file` / `camera` |
+| `input_mode` | `string` | 节点参数 | `mock` / `video_file` / `camera` / `ros_image` |
 | `pipeline_state` | `string` | 节点状态机 | `starting` / `mock_running` / `running` / `completed` / `error` / `unavailable` |
 | `perception_available` | `bool` | 节点状态机 | 感知当前是否可用 |
 | `reason` | `string` | 节点状态机 | 原因码或原因码附带细节 |
@@ -102,7 +102,7 @@
 | `stable_fall_detected` | `bool` | 节点状态机 | 当前不可用时固定为 `false` |
 | `seq_stable_fall_detected` | `bool` | 节点状态机 | 当前不可用时固定为 `false` |
 
-### 2.2 `/kaiti/system/supervisor/status` 当前实际字段
+### 2.2 `/system/supervisor/status` 当前实际字段
 
 | 字段 | 类型 | 当前来源 | 说明 |
 | --- | --- | --- | --- |
@@ -115,7 +115,7 @@
 | `reason` | `string` | 监督状态机 | 当前决策原因 |
 | `source_event` | `object` | 透传 perception 事件 | 当前完整回显上游事件，属于调试态字段 |
 
-### 2.3 `/kaiti/task_planner/request` 当前实际字段
+### 2.3 `/task_planner/request` 当前实际字段
 
 | 字段 | 类型 | 当前来源 | 说明 |
 | --- | --- | --- | --- |
@@ -145,7 +145,7 @@
 
 绑定 topic：
 
-- `/kaiti/perception/events`
+- `/perception/events`
 
 当前建议的长期消息名：
 
@@ -158,7 +158,7 @@
 | `ts` | `string` | 是 | 事件生成时间 |
 | `role` | `string` | 是 | 当前固定为 `pose_stream_node` |
 | `event_type` | `string` | 是 | `perception_event` 或 `perception_status` |
-| `input_mode` | `string` | 是 | `mock` / `video_file` / `camera` |
+| `input_mode` | `string` | 是 | `mock` / `video_file` / `camera` / `ros_image` |
 | `pipeline_state` | `string` | 是 | 当前输入链路状态 |
 | `perception_available` | `bool` | 是 | 当前感知是否可用 |
 | `reason` | `string` | 是 | 当前状态或事件原因 |
@@ -207,6 +207,7 @@
 - `mock`
 - `video_file`
 - `camera`
+- `ros_image`
 
 `pipeline_state`：
 
@@ -235,7 +236,7 @@
 
 绑定 topic：
 
-- `/kaiti/system/supervisor/status`
+- `/system/supervisor/status`
 
 当前建议的长期消息名：
 
@@ -298,7 +299,7 @@
 
 绑定 topic：
 
-- `/kaiti/task_planner/request`
+- `/task_planner/request`
 
 当前建议的长期消息名：
 
@@ -329,7 +330,7 @@
 
 #### 频率约定
 
-- 与 `/kaiti/system/supervisor/status` 同步发布
+- 与 `/system/supervisor/status` 同步发布
 
 #### 异常值约定
 
@@ -360,7 +361,7 @@
 ## 6. 本轮接口层最高优先级结论
 
 1. 三个 topic 现在已经有足够清晰的语义边界，可以先冻结 schema，再升级 `.msg`
-2. `/kaiti/perception/events` 需要区分 `perception_event` 与 `perception_status`，下游不能把两者当同一类帧事件使用
-3. `/kaiti/system/supervisor/status` 的核心契约应该只有 `state + action + reason`，`source_event` 只保留为过渡期调试字段
-4. `/kaiti/task_planner/request` 当前是“最小意图请求”，不是完整计划结果，这个边界应保持到接入真实规划层
+2. `/perception/events` 需要区分 `perception_event` 与 `perception_status`，下游不能把两者当同一类帧事件使用
+3. `/system/supervisor/status` 的核心契约应该只有 `state + action + reason`，`source_event` 只保留为过渡期调试字段
+4. `/task_planner/request` 当前是“最小意图请求”，不是完整计划结果，这个边界应保持到接入真实规划层
 5. 先冻结核心字段、后引入 `kaiti_msgs`，可以避免未来接 `Nav2 / PlanSys2 / Gazebo` 时重新推翻接口

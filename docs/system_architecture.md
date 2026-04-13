@@ -41,14 +41,18 @@
 当前状态：
 - 已有最小实现
 - 仍是单机桥接原型
+- 默认直接复用 `configs/infer_pose_stream.yaml`
+- 当前默认学习型主线为 `models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt`
+- 当前默认时序阈值为 `score_threshold=0.6`、`min_true_frames=3`、`min_false_frames=5`
 
 当前输出：
-- `/kaiti/perception/events`
+- `/perception/events`
+- `/perception/debug_image`（可选调试）
 
 接口策略：
 - 当前继续使用 `std_msgs/msg/String` 承载 JSON object
 - 先冻结 schema v1，再升级为 `kaiti_msgs/msg/PerceptionEvent`
-- 当前不再额外定义 `/kaiti/perception/person_state`，避免在系统层形成第二条并行语义边界
+- 当前不再额外定义 `/perception/person_state`，避免在系统层形成第二条并行语义边界
 
 ### 2.2 建图与定位层
 
@@ -114,13 +118,15 @@
 - 执行动作列表
 
 建议接口：
-- `/kaiti/task_planner/request`
-- `/kaiti/task_planner/plan`
-- `/kaiti/task_planner/status`
+- `/task_planner/request`
+- `/task_planner/plan`
+- `/task_planner/status`
 
 当前状态：
-- 未接入
-- 仅有规划位点定义
+- 已接入最小占位任务层节点
+- 当前由 `task_planner_bridge_node` 消费 `/task_planner/request`
+- 当前输出 `/task_planner/status` 作为任务层占位状态
+- 仍未接入真实 `PlanSys2 / LTL` 规划逻辑
 
 ### 2.5 系统监督层
 
@@ -134,12 +140,13 @@
 - 作为感知层与任务层之间的稳定缓冲
 
 当前接口：
-- 输入：`/kaiti/perception/events`
-- 输出：`/kaiti/system/supervisor/status`
-- 输出：`/kaiti/task_planner/request`
+- 输入：`/perception/events`
+- 输出：`/system/supervisor/status`
+- 输出：`/task_planner/request`
 
 当前状态：
 - 已有最小占位节点
+- 当前已经和占位任务层形成 `perception -> supervisor -> planner_request -> planner_status` 最小链路
 - 主要用于打通消息边界和后续接入点
 
 ## 3. 事件与接口约定
@@ -165,6 +172,8 @@
 - `PerceptionEvent` 负责表达感知层对任务层有意义的稳定语义
 - `SupervisorStatus` 负责把上游事件收敛成系统态判断
 - `PlannerRequest` 负责向未来规划层输出最小意图
+
+当前 `task_planner_bridge_node` 还会发布 `/task_planner/status`，但该消息目前仅作为系统层占位反馈，不纳入本轮冻结核心契约。
 
 详细字段、频率、枚举、异常值约定，统一以 [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md) 为准。
 
@@ -215,14 +224,15 @@
 - 批量评估与调参
 - ROS2 站点级最小桥接包 `yolopose_ros`
 - 系统监督占位节点
+- 任务层占位节点 `task_planner_bridge_node`
 - 系统级 launch / config 骨架
 
 ### 5.2 下一阶段
 
 - 在现有 JSON schema v1 上冻结字段并做一次代码对齐
+- 用真实 `PlanSys2 / LTL` 消费端替换当前 `task_planner_bridge_node`
 - 接入 `RTAB-Map`
 - 接入 `Nav2`
-- 引入 `PlanSys2` 或等价规划层
 - 建立 LTL 到自动机的映射
 - 在消费者语义稳定后，把三类逻辑消息迁移到 `kaiti_msgs`
 - 完成 Gazebo / TurtleBot4 骨架联调

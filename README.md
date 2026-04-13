@@ -14,21 +14,26 @@
 当前推荐默认：
 
 - 主学习模型：`LSTM`
+- 默认学习型模型：`models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt`
+- 默认学习型推理参数：`score_threshold=0.6`、`min_true_frames=3`、`min_false_frames=5`
 - `TCN`：低误报候选，不是默认主模型
 - 规则法：baseline 和对照组
 - ROS2 输入模式：`mock` 默认可跑，`video_file / camera` 可选
+- ROS2 在线图像模式：`ros_image`，可接 `/camera/image_raw`
+- ROS2 调试可视化：可选发布 `/perception/debug_image`
 
 当前结论：
 
 - `YOLOPose + 时序模型` 已经形成可训练、可推理、可评估、可调参的完整闭环
-- `ROS2` 已经打通最小闭环：`perception -> supervisor -> planner_request`
+- `ROS2` 已经打通最小闭环：`perception -> supervisor -> planner_request -> task_planner_status`
 - topic 仍使用 `std_msgs/msg/String + JSON`，但接口语义已经开始收敛
-- 当前重点不是扩新模块，而是继续收口感知正式语义和系统正式接口
+- 当前默认学习型正式结果：`Precision=0.8657`、`Recall=0.7401`、`F1=0.7979`
+- 当前重点是冻结感知默认主线并继续收口系统正式接口
 
 关键 benchmark 摘要：
 
 - 规则法 baseline：`Precision=0.7558`，`Recall=0.4196`，`F1=0.5396`
-- `LSTM` 时序模型：`Precision=0.7769`，`Recall=0.8000`，`F1=0.7883`
+- 默认 `LSTM` 时序模型：`Precision=0.8657`，`Recall=0.7401`，`F1=0.7979`
 - `TCN` 时序模型：`Precision=0.8990`，`Recall=0.5882`，`F1=0.7111`
 
 详见：
@@ -130,13 +135,14 @@ source install/setup.bash
 ros2 launch yolopose_ros system_stack.launch.py input_mode:=mock
 ```
 
-另开终端观察三条 topic：
+另开终端观察四条 topic：
 
 ```bash
 source ros2_ws/install/setup.bash
-ros2 topic echo /kaiti/perception/events
-ros2 topic echo /kaiti/system/supervisor/status
-ros2 topic echo /kaiti/task_planner/request
+ros2 topic echo /perception/events
+ros2 topic echo /system/supervisor/status
+ros2 topic echo /task_planner/request
+ros2 topic echo /task_planner/status
 ```
 
 ### 5.3 视频文件模式
@@ -146,6 +152,29 @@ source ros2_ws/install/setup.bash
 ros2 launch yolopose_ros system_stack.launch.py \
   input_mode:=video_file \
   video_file_path:=/absolute/path/to/demo.mp4
+```
+
+### 5.4 电脑摄像头 + ROS2 图像流在线模式
+
+```bash
+source ros2_ws/install/setup.bash
+ros2 launch yolopose_ros system_stack.launch.py \
+  input_mode:=ros_image \
+  camera_stream_enabled:=true \
+  camera_index:=0 \
+  visualization_enabled:=true
+```
+
+另开终端观察：
+
+```bash
+source ros2_ws/install/setup.bash
+ros2 topic echo /camera/image_raw
+```
+
+```bash
+source ros2_ws/install/setup.bash
+rqt_image_view /perception/debug_image
 ```
 
 ## 6. 感知主线
@@ -264,9 +293,9 @@ python scripts/eval_fall_batch.py \
 
 当前最小消息边界：
 
-- `/kaiti/perception/events`
-- `/kaiti/system/supervisor/status`
-- `/kaiti/task_planner/request`
+- `/perception/events`
+- `/system/supervisor/status`
+- `/task_planner/request`
 
 当前相关文档：
 

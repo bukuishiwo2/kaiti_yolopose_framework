@@ -22,8 +22,10 @@ setup(
     license="Apache-2.0",
     entry_points={
         "console_scripts": [
+            "camera_stream_node = yolopose_ros.camera_stream_node:main",
             "pose_stream_node = yolopose_ros.pose_stream_node:main",
             "system_supervisor_node = yolopose_ros.system_supervisor_node:main",
+            "task_planner_bridge_node = yolopose_ros.task_planner_bridge_node:main",
         ],
     },
 )

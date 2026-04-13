@@ -49,7 +49,7 @@
 
 - launch 文件：`snake_case.launch.py`
 - 节点文件：`snake_case_node.py`
-- ROS2 topic：`/kaiti/<layer>/<name>`
+- ROS2 topic：`/<layer>/<name>`
 
 ### 2.4 文档文件
 

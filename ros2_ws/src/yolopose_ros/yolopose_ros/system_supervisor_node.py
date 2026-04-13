@@ -19,9 +19,9 @@ class SystemSupervisorNode(Node):
     def __init__(self) -> None:
         super().__init__("system_supervisor_node")
 
-        self.declare_parameter("perception_event_topic", "/kaiti/perception/events")
-        self.declare_parameter("supervisor_status_topic", "/kaiti/system/supervisor/status")
-        self.declare_parameter("planner_request_topic", "/kaiti/task_planner/request")
+        self.declare_parameter("perception_event_topic", "/perception/events")
+        self.declare_parameter("supervisor_status_topic", "/system/supervisor/status")
+        self.declare_parameter("planner_request_topic", "/task_planner/request")
         self.declare_parameter("planner_mode", "plansys2_placeholder")
         self.declare_parameter("perception_timeout_sec", 3.0)
         self.declare_parameter("status_publish_period_sec", 1.0)

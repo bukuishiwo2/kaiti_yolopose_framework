@@ -21,7 +21,9 @@ ros2_ws/
         │   └── system_stack.launch.py
         ├── resource/
         ├── yolopose_ros/
+        │   ├── camera_stream_node.py
         │   ├── pose_stream_node.py
+        │   ├── task_planner_bridge_node.py
         │   └── system_supervisor_node.py
         ├── package.xml
         ├── setup.py
@@ -34,7 +36,7 @@ ros2_ws/
 
 作用：
 - 只启动感知桥接节点
-- 支持 `mock / video_file / camera` 三种输入模式
+- 支持 `mock / video_file / camera / ros_image` 四种输入模式
 - 当前默认是 `mock`，适合无摄像头机器直接验证
 
 ### 2.2 `launch/perception_bridge.launch.py`
@@ -47,7 +49,7 @@ ros2_ws/
 
 作用：
 - 当前系统级入口
-- 同时拉起感知桥接节点和系统监督节点
+- 可选拉起电脑摄像头发布节点，并同时拉起感知桥接节点、系统监督节点和任务层占位节点
 - 支持 `input_mode` 启动参数，并把输入模式透传给感知桥接节点
 - 用日志说明 `RTAB-Map`、`Nav2`、`PlanSys2` 的未来挂载点
 
@@ -57,14 +59,15 @@ ros2_ws/
 - 给感知桥接节点提供参数默认值
 - 包含项目根目录、推理配置路径、事件话题
 - 当前默认 `input_mode: mock`
-- 显式保留 `video_file_path`、`camera_device`、`camera_index` 三类输入参数
+- 显式保留 `video_file_path`、`camera_device`、`camera_index`、`ros_image_topic` 等输入参数
+- 可选保留 `visualization_enabled`、`visualization_topic`、`supervisor_status_topic` 等调试参数
 
 ### 2.5 `config/system_stack.yaml`
 
 作用：
-- 给系统监督节点提供参数默认值
-- 定义感知输入、监督输出、规划请求的 topic 约定
-- 定义感知超时和周期性状态发布参数
+- 给相机节点、系统监督节点和任务层占位节点提供参数默认值
+- 定义图像输入、感知输入、监督输出、规划请求、规划状态的 topic 约定
+- 定义感知超时、请求超时和周期性状态发布参数
 
 ### 2.6 `yolopose_ros/system_supervisor_node.py`
 
@@ -75,6 +78,33 @@ ros2_ws/
 - 同步输出最小 planner request，维持 perception-to-planner handoff 边界
 
 当前它不负责真正规划，只负责把系统边界先打通。
+
+### 2.6 `yolopose_ros/camera_stream_node.py`
+
+作用：
+- 从电脑摄像头读取实时图像
+- 发布 `/camera/image_raw`
+- 作为 `ros_image` 在线推理模式的最小图像源
+
+当前它只负责最小图像发布，不负责 `camera_info`、标定或图像压缩。
+
+### 2.7 `yolopose_ros/pose_stream_node.py` 可视化调试能力
+
+当前额外支持：
+- 可选发布调试图像 topic
+- 图像中叠加关键点骨架、人体框、track id
+- 图像中叠加 `fall score / raw state / stable state`
+- 通过订阅 supervisor status 叠加 `planner_action / reason`
+
+### 2.8 `yolopose_ros/task_planner_bridge_node.py`
+
+作用：
+- 订阅 `/task_planner/request`
+- 将 `monitor / wait_for_update / trigger_safe_mode / hold` 映射成最小任务层状态
+- 发布 `/task_planner/status`
+- 作为未来 `PlanSys2 / LTL` 消费端的占位替身
+
+当前它不生成真实任务计划，只负责把 `planner_request` 后面的最小任务层接入补齐。
 
 ## 3. 当前可执行方式
 
@@ -114,21 +144,44 @@ ros2 launch yolopose_ros pose_stream.launch.py \
   camera_device:=/dev/video0
 ```
 
-如果摄像头设备不存在，`pose_stream_node` 不会直接崩溃，而是进入 `unavailable` 状态并持续向 `/kaiti/perception/events` 发布状态事件。
+如果摄像头设备不存在，`pose_stream_node` 不会直接崩溃，而是进入 `unavailable` 状态并持续向 `/perception/events` 发布状态事件。
+
+### 3.6 电脑摄像头 + ROS2 图像流模式
+
+```bash
+ros2 launch yolopose_ros system_stack.launch.py \
+  input_mode:=ros_image \
+  camera_stream_enabled:=true \
+  camera_index:=0 \
+  visualization_enabled:=true
+```
+
+该模式的最小链路为：
+1. `camera_stream_node` 发布 `/camera/image_raw`
+2. `pose_stream_node(input_mode=ros_image)` 订阅真实图像流并做在线推理
+3. `pose_stream_node` 可选发布 `/perception/debug_image`
+4. `system_supervisor_node` 输出 `/task_planner/request`
+5. `task_planner_bridge_node` 输出 `/task_planner/status`
 
 ## 4. 当前消息流
 
 当前系统骨架中，消息流建议按如下方式理解：
 
 ```text
-mock / camera / video_file
+mock / camera / video_file / ros_image
+        ↓
+camera_stream_node (optional)
+        ↓  /camera/image_raw
         ↓
 pose_stream_node
-        ↓  /kaiti/perception/events
+        ↓  /perception/events
+        ↓  /perception/debug_image (optional)
 system_supervisor_node
-        ↓  /kaiti/system/supervisor/status
-        ↓  /kaiti/task_planner/request
-planner layer (future)
+        ↓  /system/supervisor/status
+        ↓  /task_planner/request
+task_planner_bridge_node
+        ↓  /task_planner/status
+planner layer (future replacement)
         ↓
 nav2 / rtabmap / task execution
 ```
@@ -137,13 +190,16 @@ nav2 / rtabmap / task execution
 
 - `mock` 模式周期性发布最小 perception event
 - `video_file` 或 `camera` 模式在输入缺失、runner 初始化失败、或 runner 退出后，转为 `unavailable / error / completed` 状态事件
+- `ros_image` 模式在图像流未到达或中断时，发布 `waiting_for_ros_image / ros_image_timeout` 状态事件
 - `system_supervisor_node` 会在感知无消息超过 `perception_timeout_sec` 后发布 `perception_timeout` 状态，不会静默
+- `task_planner_bridge_node` 会消费监督层请求并持续发布占位 `planner_status`
+- `visualization_enabled=true` 时，`pose_stream_node` 会额外发布调试图像 topic
 
-## 5. 当前三条 topic 的正式收敛方式
+## 5. 当前核心三条 topic 的正式收敛方式
 
 当前仍使用 `std_msgs/msg/String`，但不再把 payload 当成无约束 JSON。后续联调时应把三条 topic 分别视为三类正式逻辑消息：
 
-### 5.1 `/kaiti/perception/events`
+### 5.1 `/perception/events`
 
 逻辑消息名：
 - `PerceptionEvent`
@@ -180,10 +236,10 @@ nav2 / rtabmap / task execution
 
 频率约定：
 - `mock` 默认 `1 Hz`
-- `video_file / camera` 跟随处理帧率
-- 终止态 heartbeat 默认 `0.5 Hz`
+- `video_file / camera / ros_image` 跟随处理帧率或图像流频率
+- 终止态或等待态 heartbeat 默认 `0.5 Hz`
 
-### 5.2 `/kaiti/system/supervisor/status`
+### 5.2 `/system/supervisor/status`
 
 逻辑消息名：
 - `SupervisorStatus`
@@ -205,7 +261,7 @@ nav2 / rtabmap / task execution
 - 正常时随 perception 事件同步发布
 - 等待 perception 或 perception 超时时，按 `status_publish_period_sec` 周期发布，默认 `1 Hz`
 
-### 5.3 `/kaiti/task_planner/request`
+### 5.3 `/task_planner/request`
 
 逻辑消息名：
 - `PlannerRequest`
@@ -218,6 +274,41 @@ nav2 / rtabmap / task execution
 
 当前这不是完整任务计划，只是监督层给未来规划层的最小意图请求。后续接 `PlanSys2` 或 LTL 自动机时，应保留这条边界，只在消费端把 `requested_action` 映射成真实计划更新或动作分发。
 
+### 5.4 `/task_planner/status`
+
+逻辑消息名：
+- `TaskPlannerStatus`（占位）
+
+当前用途：
+- 由 `task_planner_bridge_node` 发布
+- 用于确认 `/task_planner/request` 已被系统层最小消费者接收
+- 作为后续真实规划层替换前的过渡状态 topic
+
+当前常见字段：
+- `ts`
+- `planner_mode`
+- `planner_state`
+- `active_action`
+- `reason`
+
+说明：
+- 该 topic 当前不属于冻结核心契约
+- 后续接入真实规划层时，可以保留 topic 名，也可以在稳定后收敛为正式 `kaiti_msgs`
+
+### 5.5 `/perception/debug_image`
+
+逻辑消息名：
+- `DebugPerceptionImage`（调试）
+
+当前用途：
+- 发布带关键点骨架、人体框、track id 的调试图像
+- 叠加 `fall score / raw / stable / supervisor action / reason`
+- 供 `rqt_image_view` 直接查看
+
+说明：
+- 该 topic 不属于核心接口契约
+- 默认关闭，需显式设置 `visualization_enabled:=true`
+
 ## 6. 命名规则
 
 建议统一使用以下规则：
@@ -226,14 +317,19 @@ nav2 / rtabmap / task execution
 - launch 文件：`snake_case.launch.py`
 - config 文件：`snake_case.yaml`
 - 节点名：`snake_case`
-- topic：`/kaiti/<layer>/<name>`
+- topic：`/<layer>/<name>`
 
 推荐命名示例：
 - `pose_stream_node`
+- `camera_stream_node`
 - `system_supervisor_node`
-- `/kaiti/perception/events`
-- `/kaiti/system/supervisor/status`
-- `/kaiti/task_planner/request`
+- `task_planner_bridge_node`
+- `/camera/image_raw`
+- `/perception/events`
+- `/perception/debug_image`
+- `/system/supervisor/status`
+- `/task_planner/request`
+- `/task_planner/status`
 
 ## 7. 当前已实现与下一阶段
 
@@ -242,9 +338,12 @@ nav2 / rtabmap / task execution
 - 感知桥接包 `yolopose_ros`
 - 只启动感知的本地 launch
 - 系统级 skeleton launch
+- 电脑摄像头 ROS2 图像发布节点
+- 在线可视化调试图像 topic
 - 系统监督占位节点
+- 任务层占位节点
 - 参数化 YAML 配置
-- `mock / video_file / camera` 三种输入模式骨架
+- `mock / video_file / camera / ros_image` 四种输入模式骨架
 - 无摄像头环境下可跑通的最小闭环
 
 ### 7.2 下一阶段
@@ -253,8 +352,7 @@ nav2 / rtabmap / task execution
 - 再引入 `kaiti_msgs` 包承接冻结核心字段
 - 引入 `RTAB-Map`
 - 引入 `Nav2`
-- 引入 `PlanSys2` 或同类规划层
-- 用真实任务流替代当前日志占位
+- 用真实 `PlanSys2 / LTL` 任务流替代当前 `task_planner_bridge_node`
 
 ## 8. 说明
 

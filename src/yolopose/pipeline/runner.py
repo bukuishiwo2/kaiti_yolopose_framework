@@ -19,10 +19,12 @@ class PoseRunner:
         cfg: dict[str, Any],
         project_root: Path,
         event_callback: Callable[[dict[str, Any]], None] | None = None,
+        visualization_callback: Callable[[Any, dict[str, Any]], None] | None = None,
     ):
         self.cfg = cfg
         self.project_root = project_root
         self.event_callback = event_callback
+        self.visualization_callback = visualization_callback
         self.model = YOLO(cfg["model"])
         self._print_runtime_info()
         stab_cfg = cfg.get("stabilizer", {})
@@ -66,6 +68,7 @@ class PoseRunner:
             ),
             project_root=project_root,
         )
+        self._frame_counter = 0
 
     def _print_runtime_info(self) -> None:
         req_device = self.cfg.get("device")
@@ -101,6 +104,57 @@ class PoseRunner:
             return self.model.track(**common_args)
         return self.model.predict(**common_args)
 
+    def _build_record(self, result: Any, source_override: str | None = None) -> dict[str, Any]:
+        self._frame_counter += 1
+        person_count = int(len(result.boxes)) if result.boxes is not None else 0
+        raw_present = person_count >= self.min_persons
+        stable_present, changed = self.stabilizer.update(raw_present)
+        fall_info = self.fall_detector.infer(result)
+        seq_fall_info = self.sequence_fall_detector.infer(result)
+
+        record = {
+            "ts": datetime.now(timezone.utc).isoformat(),
+            "frame_id": self._frame_counter,
+            "source": str(source_override or getattr(result, "path", self.cfg["source"])),
+            "person_count": person_count,
+            "raw_person_present": raw_present,
+            "stable_person_present": stable_present,
+            "state_changed": changed,
+        }
+        record.update(fall_info)
+        record.update(seq_fall_info)
+        return record
+
+    def infer_frame(self, frame: Any, source: str = "ros_image") -> dict[str, Any]:
+        common_args = dict(
+            source=frame,
+            stream=False,
+            conf=float(self.cfg.get("conf", 0.25)),
+            iou=float(self.cfg.get("iou", 0.7)),
+            imgsz=int(self.cfg.get("imgsz", 640)),
+            device=self.cfg.get("device"),
+            half=bool(self.cfg.get("half", False)),
+            classes=self.cfg.get("classes"),
+            show=False,
+            save=False,
+            verbose=False,
+        )
+
+        mode = self.cfg.get("mode", "predict")
+        if mode == "track":
+            common_args["tracker"] = self.cfg.get("tracker", "bytetrack.yaml")
+            common_args["persist"] = True
+            results = self.model.track(**common_args)
+        else:
+            results = self.model.predict(**common_args)
+
+        if not results:
+            raise RuntimeError("no_results_from_model")
+        record = self._build_record(results[0], source_override=source)
+        if self.visualization_callback is not None:
+            self.visualization_callback(results[0], record)
+        return record
+
     def run(self) -> None:
         output_jsonl = self.cfg.get("save_jsonl")
         output_fp = None
@@ -110,48 +164,36 @@ class PoseRunner:
             output_fp = output_path.open("w", encoding="utf-8")
 
         try:
-            for frame_id, result in enumerate(self._predict_iter(), start=1):
-                person_count = int(len(result.boxes)) if result.boxes is not None else 0
-                raw_present = person_count >= self.min_persons
-                stable_present, changed = self.stabilizer.update(raw_present)
-                fall_info = self.fall_detector.infer(result)
-                seq_fall_info = self.sequence_fall_detector.infer(result)
-
-                record = {
-                    "ts": datetime.now(timezone.utc).isoformat(),
-                    "frame_id": frame_id,
-                    "source": str(getattr(result, "path", self.cfg["source"])),
-                    "person_count": person_count,
-                    "raw_person_present": raw_present,
-                    "stable_person_present": stable_present,
-                    "state_changed": changed,
-                }
-                record.update(fall_info)
-                record.update(seq_fall_info)
+            for result in self._predict_iter():
+                record = self._build_record(result)
 
                 if output_fp:
                     output_fp.write(json.dumps(record, ensure_ascii=True) + "\n")
                 if self.event_callback is not None:
                     self.event_callback(record)
+                if self.visualization_callback is not None:
+                    self.visualization_callback(result, record)
 
-                if changed:
+                if record["state_changed"]:
                     print(
-                        f"[event] frame={frame_id} stable_person_present={stable_present} "
-                        f"person_count={person_count}"
+                        f"[event] frame={record['frame_id']} "
+                        f"stable_person_present={record['stable_person_present']} "
+                        f"person_count={record['person_count']}"
                     )
-                if fall_info["fall_state_changed"]:
+                if record["fall_state_changed"]:
                     print(
-                        f"[fall] frame={frame_id} stable_fall_detected={fall_info['stable_fall_detected']} "
-                        f"raw_fall_detected={fall_info['raw_fall_detected']} "
-                        f"fall_person_candidates={fall_info['fall_person_candidates']} "
-                        f"fall_max_score={fall_info['fall_max_score']:.2f}"
+                        f"[fall] frame={record['frame_id']} "
+                        f"stable_fall_detected={record['stable_fall_detected']} "
+                        f"raw_fall_detected={record['raw_fall_detected']} "
+                        f"fall_person_candidates={record['fall_person_candidates']} "
+                        f"fall_max_score={record['fall_max_score']:.2f}"
                     )
-                if seq_fall_info["seq_fall_state_changed"]:
+                if record["seq_fall_state_changed"]:
                     print(
-                        f"[seq-fall] frame={frame_id} "
-                        f"seq_stable_fall_detected={seq_fall_info['seq_stable_fall_detected']} "
-                        f"seq_raw_fall_detected={seq_fall_info['seq_raw_fall_detected']} "
-                        f"seq_fall_score={seq_fall_info['seq_fall_score']:.2f}"
+                        f"[seq-fall] frame={record['frame_id']} "
+                        f"seq_stable_fall_detected={record['seq_stable_fall_detected']} "
+                        f"seq_raw_fall_detected={record['seq_raw_fall_detected']} "
+                        f"seq_fall_score={record['seq_fall_score']:.2f}"
                     )
         finally:
             if output_fp:
