@@ -1,0 +1,20 @@
+data:
+  dataset: data/processed/urfall_pose_sequences.npz
+
+model:
+  hidden_dim: 128
+  num_layers: 2
+  dropout: 0.2
+  bidirectional: false
+
+train:
+  device: 0
+  batch_size: 64
+  epochs: 12
+  learning_rate: 0.0003
+  weight_decay: 0.0001
+  threshold: 0.5
+  init_checkpoint: models/fall_sequence_lstm_urfall_plus_fallvision_nofall_sampled.pt
+
+output:
+  checkpoint: models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt

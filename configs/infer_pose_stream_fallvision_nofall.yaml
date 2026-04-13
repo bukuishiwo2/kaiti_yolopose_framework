@@ -1,12 +1,12 @@
 model: yolo11n-pose.pt
-mode: predict           # predict | track
-source: 0              # image/video path, rtsp url, webcam index, or *.streams file
+mode: predict
+source: 0
 imgsz: 640
 conf: 0.25
 iou: 0.7
-device: null           # e.g. cpu, 0, cuda:0
+device: null
 half: false
-classes: [0]           # person class only
+classes: [0]
 vid_stride: 1
 stream_buffer: false
 show: false
@@ -34,7 +34,7 @@ fall_detector:
 
 sequence_fall_detector:
   enabled: true
-  model_path: models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt
+  model_path: models/fall_sequence_lstm_urfall_plus_fallvision_nofall.pt
   device: null
   seq_len: 32
   score_threshold: 0.6

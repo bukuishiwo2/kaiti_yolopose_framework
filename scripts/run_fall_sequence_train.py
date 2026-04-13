@@ -97,6 +97,10 @@ def main() -> None:
     ckpt_path = (PROJECT_ROOT / output_cfg.get('checkpoint', 'models/fall_sequence_lstm.pt')).resolve()
     ckpt_path.parent.mkdir(parents=True, exist_ok=True)
     history_path = ckpt_path.with_suffix('.history.json')
+    init_ckpt_raw = train_cfg.get('init_checkpoint')
+    init_ckpt_path = None
+    if init_ckpt_raw:
+        init_ckpt_path = (PROJECT_ROOT / init_ckpt_raw).resolve() if not Path(init_ckpt_raw).is_absolute() else Path(init_ckpt_raw)
 
     blob = np.load(dataset_path, allow_pickle=True)
     x = blob['x'].astype(np.float32)
@@ -127,6 +131,16 @@ def main() -> None:
         tcn_kernel_size=int(model_cfg_raw.get('tcn_kernel_size', 3)),
     )
     model = build_pose_fall_model(model_cfg).to(device)
+    if init_ckpt_path is not None:
+        checkpoint = torch.load(init_ckpt_path, map_location=device)
+        checkpoint_cfg = dict(checkpoint.get('model_cfg', {}))
+        if checkpoint_cfg and checkpoint_cfg != model_cfg.__dict__:
+            raise SystemExit(
+                f"Checkpoint model_cfg does not match current config: {init_ckpt_path}\n"
+                f"checkpoint={checkpoint_cfg}\ncurrent={model_cfg.__dict__}"
+            )
+        model.load_state_dict(checkpoint['model_state'])
+        print(f'[init] loaded checkpoint from {init_ckpt_path}')
 
     batch_size = int(train_cfg.get('batch_size', 64))
     epochs = int(train_cfg.get('epochs', 20))
@@ -189,6 +203,8 @@ def main() -> None:
                 'train_cfg': dict(train_cfg),
                 'metrics': val_metrics,
             }
+            if init_ckpt_path is not None:
+                checkpoint['init_checkpoint'] = str(init_ckpt_path)
             torch.save(checkpoint, ckpt_path)
             history_path.write_text(json.dumps(history, ensure_ascii=False, indent=2), encoding='utf-8')
             print(f'[best] checkpoint saved to {ckpt_path}')

@@ -148,9 +148,94 @@
 - FallVision 更适合作为补充训练源或 hard negative 来源
 - 不应采用“FallVision-only 训练后直接替换默认推理模型”的方案
 
-## 8. Next Step
+## 8. FallVision No-Fall Two-Stage Result (2026-04-13)
+
+为验证 `FallVision` 是否能作为 hard negative 来源，新增了三组同口径实验：
+
+1. `FallVision no-fall` 全量直接并入训练
+2. `FallVision no-fall` 视频级 `5%` 抽样并入训练
+3. `5%` 抽样并入训练后，再回到 `UR Fall` 单独 fine-tune
+
+### 8.1 Full Merge Result
+
+评估目录：
+- `outputs/eval_urfall_sequence_fallvision_nofall/`
+
+稳定结果：
+- Precision: `0.4385`
+- Recall: `0.8168`
+- F1: `0.5706`
+
+观察：
+- `stable_fp_frames` 从基线的 `325` 激增到 `1867`
+- `adl_fp_segments` 明显爆炸
+
+结论：
+- `FallVision no-fall` 不能全量直接拼接到当前训练集
+
+### 8.2 Sampled 5% Result
+
+评估目录：
+- `outputs/eval_urfall_sequence_fallvision_nofall_sampled/`
+
+稳定结果：
+- Precision: `0.7829`
+- Recall: `0.7171`
+- F1: `0.7485`
+
+观察：
+- 相比全量并入，误报已明显回落
+- 但仍未超过当前 `UR Fall` 基线
+
+结论：
+- `FallVision` 可以作为辅助数据，但必须做受控抽样
+
+### 8.3 Two-Stage Fine-Tune Result
+
+评估目录：
+- `outputs/eval_urfall_sequence_fallvision_nofall_sampled_finetuned/`
+
+对应模型：
+- `models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt`
+
+训练流程：
+1. 使用 `UR Fall + FallVision no-fall sampled 5%` 训练
+2. 使用该 checkpoint 回到 `UR Fall` 单独 fine-tune
+
+稳定结果：
+- Precision: `0.8657`
+- Recall: `0.7401`
+- F1: `0.7979`
+
+与当前 `UR Fall` 主线基线（`outputs/eval_urfall_sequence/`）相比：
+- Precision: `0.8059 -> 0.8657`
+- Recall: `0.7557 -> 0.7401`
+- F1: `0.7800 -> 0.7979`
+
+段级与误报观察：
+- `adl_fp_frames: 273 -> 162`
+- `adl_fp_segments: 11 -> 9`
+- `fall_fn_segments` 仍保持为 `0`
+
+结论：
+- `FallVision` 路线是可行的
+- 关键不是“是否使用 FallVision”，而是“如何使用”
+- 当前最优方案不是 `FallVision-only` 或全量直接并入，而是：
+  - `FallVision no-fall` 受控抽样
+  - 与 `UR Fall` 混合训练
+  - 最后回到 `UR Fall` 做收口 fine-tune
+
+### 8.4 Updated Default
+
+截至 `2026-04-13`，默认学习型主线更新为：
+- `models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt`
+- `score_threshold = 0.6`
+- `min_true_frames = 3`
+- `min_false_frames = 5`
+
+## 9. Next Step
 
 1. 保留当前 LSTM 主配置作为正式 baseline
-2. 收集或构造更多 hard negative（躺下、坐下、弯腰、地面动作）
-3. 在现有关键点序列框架上继续研究更合适的时序模型
-4. 优先考虑 `TCN`，再考虑更复杂的 `Transformer` 或 `ST-GCN`
+2. 围绕 `FallVision no-fall` 继续做更细的抽样比例比较（如 `3% / 10% / 15%`）
+3. 优先针对 `adl-37 / adl-13 / adl-14` 做更定向的 hard negative 设计
+4. 在默认学习型主线冻结后，把更多精力转向系统主线接入
