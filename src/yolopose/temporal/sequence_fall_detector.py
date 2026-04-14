@@ -98,11 +98,30 @@ class SequenceFallDetector:
             score = torch.sigmoid(logits).item()
         return float(score)
 
+    @staticmethod
+    def _candidate_invalid_reason(candidate: dict[str, Any] | None) -> str:
+        if candidate is None:
+            return "no_person_candidate"
+        if not bool(candidate.get('feature_valid', False)):
+            return "no_visible_keypoints"
+        return ""
+
     def _base_output(self) -> dict[str, Any]:
         return {
             'seq_fall_detector_enabled': bool(self.cfg.enabled),
             'seq_fall_model_loaded': bool(self.model_loaded),
+            'seq_detector_enabled': bool(self.cfg.enabled),
+            'seq_model_loaded': bool(self.model_loaded),
             'seq_fall_track_mode_used': False,
+            'seq_sequence_len': int(self.cfg.seq_len),
+            'seq_window_ready': False,
+            'seq_window_size': 0,
+            'seq_track_id': None,
+            'seq_feature_valid': False,
+            'seq_visible_keypoint_count': 0,
+            'seq_invalid_reason': "",
+            'seq_skip_reason': "",
+            'seq_debug_mode': "inactive",
             'seq_raw_fall_detected': False,
             'seq_stable_fall_detected': False,
             'seq_fall_state_changed': False,
@@ -120,17 +139,37 @@ class SequenceFallDetector:
             keypoint_conf_threshold=float(self.cfg.keypoint_conf_threshold),
         )
         self._global_buffer.append(feature)
+        window_size = len(self._global_buffer)
+        window_ready = bool(window_size >= int(self.cfg.seq_len))
         score = self._score_sequence(list(self._global_buffer))
         raw = score >= float(self.cfg.score_threshold)
         stable, changed = self._global_stabilizer.update(raw)
         self._global_state = bool(stable)
         self._global_score = float(score)
+        invalid_reason = self._candidate_invalid_reason(meta)
+        if invalid_reason:
+            skip_reason = invalid_reason
+        elif not window_ready:
+            skip_reason = "waiting_for_window"
+        else:
+            skip_reason = ""
 
         out = self._base_output()
         out.update(
             {
                 'seq_fall_detector_enabled': True,
                 'seq_fall_model_loaded': bool(self.model_loaded),
+                'seq_detector_enabled': True,
+                'seq_model_loaded': bool(self.model_loaded),
+                'seq_debug_mode': 'global',
+                'seq_sequence_len': int(self.cfg.seq_len),
+                'seq_window_ready': bool(window_ready),
+                'seq_window_size': int(window_size),
+                'seq_track_id': None if meta is None else meta.get('track_id'),
+                'seq_feature_valid': False if meta is None else bool(meta.get('feature_valid', False)),
+                'seq_visible_keypoint_count': 0 if meta is None else int(meta.get('visible_keypoint_count', 0)),
+                'seq_invalid_reason': invalid_reason,
+                'seq_skip_reason': skip_reason,
                 'seq_raw_fall_detected': bool(raw),
                 'seq_stable_fall_detected': bool(stable),
                 'seq_fall_state_changed': bool(changed),
@@ -145,8 +184,10 @@ class SequenceFallDetector:
         candidates = extract_person_candidates(result, keypoint_conf_threshold=float(self.cfg.keypoint_conf_threshold))
         seen_track_ids: set[int] = set()
         top_candidate: dict[str, Any] | None = None
+        top_candidate_meta: dict[str, Any] | None = None
         top_score = 0.0
         any_changed = False
+        top_window_size = 0
 
         for person in candidates:
             track_id = person.get('track_id')
@@ -167,6 +208,8 @@ class SequenceFallDetector:
             if score >= top_score:
                 top_score = float(score)
                 top_candidate = {'track_id': track_id, 'score': float(score), 'area': float(person.get('area', 0.0))}
+                top_candidate_meta = person
+                top_window_size = len(state.features)
 
         for track_id in list(self._track_states.keys()):
             if track_id in seen_track_ids:
@@ -183,13 +226,34 @@ class SequenceFallDetector:
         stable_state = len(active_track_ids) > 0
         changed_global = stable_state != self._global_state
         self._global_state = stable_state
+        window_ready = bool(top_window_size >= int(self.cfg.seq_len))
+        invalid_reason = self._candidate_invalid_reason(top_candidate_meta)
+        if top_candidate is None:
+            skip_reason = "no_track_candidate"
+        elif invalid_reason:
+            skip_reason = invalid_reason
+        elif not window_ready:
+            skip_reason = "waiting_for_window"
+        else:
+            skip_reason = ""
 
         out = self._base_output()
         out.update(
             {
                 'seq_fall_detector_enabled': True,
                 'seq_fall_model_loaded': bool(self.model_loaded),
+                'seq_detector_enabled': True,
+                'seq_model_loaded': bool(self.model_loaded),
                 'seq_fall_track_mode_used': True,
+                'seq_debug_mode': 'track',
+                'seq_sequence_len': int(self.cfg.seq_len),
+                'seq_window_ready': bool(window_ready),
+                'seq_window_size': int(top_window_size),
+                'seq_track_id': None if top_candidate is None else top_candidate.get('track_id'),
+                'seq_feature_valid': False if top_candidate_meta is None else bool(top_candidate_meta.get('feature_valid', False)),
+                'seq_visible_keypoint_count': 0 if top_candidate_meta is None else int(top_candidate_meta.get('visible_keypoint_count', 0)),
+                'seq_invalid_reason': invalid_reason,
+                'seq_skip_reason': skip_reason,
                 'seq_raw_fall_detected': bool(top_score >= float(self.cfg.score_threshold)),
                 'seq_stable_fall_detected': bool(stable_state),
                 'seq_fall_state_changed': bool(any_changed or changed_global),
@@ -206,11 +270,29 @@ class SequenceFallDetector:
         self._frame_idx += 1
 
         if not self.cfg.enabled:
-            return self._base_output()
+            out = self._base_output()
+            out.update(
+                {
+                    'seq_skip_reason': 'detector_disabled',
+                    'seq_invalid_reason': 'detector_disabled',
+                    'seq_debug_mode': 'disabled',
+                }
+            )
+            return out
 
         if not self.model_loaded:
             out = self._base_output()
-            out.update({'seq_fall_detector_enabled': True, 'seq_fall_model_loaded': False})
+            out.update(
+                {
+                    'seq_fall_detector_enabled': True,
+                    'seq_fall_model_loaded': False,
+                    'seq_detector_enabled': True,
+                    'seq_model_loaded': False,
+                    'seq_skip_reason': 'model_not_loaded',
+                    'seq_invalid_reason': 'model_not_loaded',
+                    'seq_debug_mode': 'unloaded',
+                }
+            )
             return out
 
         boxes = getattr(result, 'boxes', None)

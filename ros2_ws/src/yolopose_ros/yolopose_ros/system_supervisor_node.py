@@ -69,8 +69,24 @@ class SystemSupervisorNode(Node):
         except json.JSONDecodeError:
             return {"raw": payload}
 
+    @staticmethod
+    def _sequence_branch_unavailable(event: dict[str, Any]) -> bool:
+        """Allow rule fallback only when the sequence branch explicitly reports unavailability."""
+        return (
+            event.get("seq_fall_detector_enabled") is False
+            or event.get("seq_fall_model_loaded") is False
+        )
+
+    @classmethod
+    def _resolve_fall_trigger(cls, event: dict[str, Any]) -> tuple[bool, str]:
+        if bool(event.get("seq_stable_fall_detected")):
+            return True, "sequence_mainline"
+        if cls._sequence_branch_unavailable(event) and bool(event.get("stable_fall_detected")):
+            return True, "rule_fallback"
+        return False, "none"
+
     def _build_status(self, event: dict[str, Any]) -> dict[str, Any]:
-        fall_flag = bool(event.get("stable_fall_detected") or event.get("seq_stable_fall_detected"))
+        fall_flag, fall_trigger_source = self._resolve_fall_trigger(event)
         person_present = event.get("person_present")
         if person_present is None:
             person_present = event.get("stable_person_present")
@@ -87,7 +103,7 @@ class SystemSupervisorNode(Node):
         elif fall_flag:
             planner_action = "trigger_safe_mode"
             supervisor_state = "alert"
-            reason = "fall_detected"
+            reason = "fall_detected_rule_fallback" if fall_trigger_source == "rule_fallback" else "fall_detected"
         elif person_present is False:
             planner_action = "wait_for_update"
             supervisor_state = "monitoring"
@@ -106,6 +122,7 @@ class SystemSupervisorNode(Node):
             "planner_request_topic": self._planner_request_topic,
             "planner_action": planner_action,
             "reason": reason,
+            "fall_trigger_source": fall_trigger_source,
             "source_event": event,
         }
 

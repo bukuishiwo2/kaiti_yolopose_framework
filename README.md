@@ -18,6 +18,7 @@
 - 默认学习型推理参数：`score_threshold=0.6`、`min_true_frames=3`、`min_false_frames=5`
 - `TCN`：低误报候选，不是默认主模型
 - 规则法：baseline 和对照组
+- supervisor 默认消费 `seq_stable_fall_detected`，规则法仅保留为 debug/baseline，并只在时序分支显式失效时回退
 - ROS2 输入模式：`mock` 默认可跑，`video_file / camera` 可选
 - ROS2 在线图像模式：`ros_image`，可接 `/camera/image_raw`
 - ROS2 调试可视化：可选发布 `/perception/debug_image`
@@ -117,6 +118,16 @@ python scripts/run_pose_infer.py \
   --config configs/infer_pose_stream.yaml \
   --source /path/to/video.mp4 \
   --device 0
+```
+
+如需输出与 ROS2 调试图像风格接近的离线 OSD 可视化视频：
+
+```bash
+python scripts/run_pose_infer.py \
+  --config configs/infer_pose_stream.yaml \
+  --source /path/to/video.mp4 \
+  --device 0 \
+  --save-debug-video
 ```
 
 常见 `device` 写法：

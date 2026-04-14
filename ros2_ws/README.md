@@ -170,6 +170,20 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 
 - 当 `input_mode=ros_image` 时，`source` 会标记为 `ros:///camera/image_raw`
 - 诊断字段里会额外带 `ros_image_topic` 与 `ros_header_frame_id`
+- supervisor 默认以 `seq_stable_fall_detected` 作为任务层跌倒触发输入
+- `stable_fall_detected / raw_fall_detected` 继续保留在事件与调试图像中，仅用于 baseline/debug 与显式失效回退
+- sequence 在线诊断字段已补齐，当前可直接从 `PerceptionEvent` 观察：
+  `seq_model_loaded`
+  `seq_detector_enabled`
+  `seq_sequence_len`
+  `seq_window_ready`
+  `seq_window_size`
+  `seq_track_id`
+  `seq_fall_score`
+  `seq_raw_fall_detected`
+  `seq_stable_fall_detected`
+  `seq_skip_reason`
+  `seq_invalid_reason`
 
 ### `/camera/image_raw`
 
@@ -192,6 +206,7 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 
 - 由 `pose_stream_node` 可选发布调试图像
 - 图像中叠加关键点骨架、人体框、track id、fall score、raw/stable state、supervisor action/reason
+- sequence 调试信息会额外显示 `loaded / ready / win / mode / track / valid / kpts / skip / invalid`
 - 可直接用 `rqt_image_view` 观察
 
 ### `/system/supervisor/status`
@@ -207,6 +222,11 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `planner_mode`
 - `planner_action`
 - `reason`
+
+当前决策补充：
+
+- 正常情况下只消费时序主线 `seq_stable_fall_detected`
+- 仅当 perception event 明确给出 `seq_fall_detector_enabled=false` 或 `seq_fall_model_loaded=false` 时，才允许规则法 `stable_fall_detected` 回退接管
 
 ### `/task_planner/request`
 

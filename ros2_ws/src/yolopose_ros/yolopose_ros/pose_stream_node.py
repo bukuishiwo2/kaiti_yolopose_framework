@@ -369,6 +369,10 @@ class PoseStreamNode(Node):
 
         supervisor_action = self._latest_supervisor_overlay["planner_action"]
         supervisor_reason = self._latest_supervisor_overlay["reason"]
+        seq_track_id = record.get("seq_track_id")
+        seq_track_label = "-" if seq_track_id in (None, "") else str(seq_track_id)
+        seq_skip_reason = str(record.get("seq_skip_reason", "")).strip() or "-"
+        seq_invalid_reason = str(record.get("seq_invalid_reason", "")).strip() or "-"
         lines = [
             f"frame={record.get('frame_id')} persons={record.get('person_count')}",
             (
@@ -384,6 +388,21 @@ class PoseStreamNode(Node):
                 f"stable={int(bool(record.get('seq_stable_fall_detected')))}"
             ),
             (
+                "seq dbg "
+                f"loaded={int(bool(record.get('seq_model_loaded', record.get('seq_fall_model_loaded', False))))} "
+                f"ready={int(bool(record.get('seq_window_ready')))} "
+                f"win={int(record.get('seq_window_size', 0))}/{int(record.get('seq_sequence_len', 0))} "
+                f"mode={record.get('seq_debug_mode', '-')}"
+            ),
+            (
+                "seq dbg "
+                f"track={seq_track_label} "
+                f"valid={int(bool(record.get('seq_feature_valid')))} "
+                f"kpts={int(record.get('seq_visible_keypoint_count', 0))} "
+                f"skip={seq_skip_reason} "
+                f"invalid={seq_invalid_reason}"
+            ),
+            (
                 "supervisor "
                 f"action={supervisor_action} "
                 f"reason={supervisor_reason}"
@@ -396,7 +415,7 @@ class PoseStreamNode(Node):
                 line,
                 (12, y),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.62,
+                0.56,
                 (0, 0, 0),
                 4,
                 cv2.LINE_AA,
@@ -406,8 +425,8 @@ class PoseStreamNode(Node):
                 line,
                 (12, y),
                 cv2.FONT_HERSHEY_SIMPLEX,
-                0.62,
-                (0, 255, 0) if idx < 3 else (0, 200, 255),
+                0.56,
+                (0, 255, 0) if idx < 4 else (0, 200, 255),
                 2,
                 cv2.LINE_AA,
             )

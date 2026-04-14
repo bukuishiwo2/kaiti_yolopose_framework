@@ -256,11 +256,13 @@
 当前实现中存在但不冻结为核心契约的字段：
 
 - `planner_request_topic`
+- `fall_trigger_source`
 - `source_event`
 
 理由：
 
 - `planner_request_topic` 属于配置态信息，不应长期进入业务消息
+- `fall_trigger_source` 用于标记 `sequence_mainline / rule_fallback / none`，当前主要服务调试，不宜让下游长期硬编码依赖
 - `source_event` 是整个 perception JSON 的嵌套回显，不适合作为长期稳定字段
 
 #### 枚举约定
@@ -284,6 +286,13 @@
 - `alert + trigger_safe_mode`：检测到稳定跌倒事件
 - `monitoring + wait_for_update`：当前无人或暂不满足触发条件
 - `monitoring + monitor`：感知正常且未触发告警
+
+当前默认跌倒触发准则：
+
+- supervisor 默认只消费 `seq_stable_fall_detected`
+- `stable_fall_detected` 不再与 `seq_stable_fall_detected` 做常态 `OR`
+- 仅当 perception event 明确给出 `seq_fall_detector_enabled=false` 或 `seq_fall_model_loaded=false` 时，才允许规则法 `stable_fall_detected` 作为最小回退
+- 因此当前系统层默认消费的是 `LSTM` 时序主线，规则法保留为 baseline/debug 字段
 
 #### 频率约定
 

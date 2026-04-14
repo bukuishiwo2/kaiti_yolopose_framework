@@ -77,6 +77,13 @@ def extract_person_candidates(result: Any, keypoint_conf_threshold: float = 0.3)
     for i in range(n):
         x1, y1, x2, y2 = [float(v) for v in boxes_xyxy[i]]
         area = max(0.0, (x2 - x1) * (y2 - y1))
+        visible_keypoint_count = int(
+            sum(
+                1
+                for idx in range(POSE_KPT_COUNT)
+                if _clip_conf(kp_conf[i][idx]) >= float(keypoint_conf_threshold)
+            )
+        )
         feature = encode_person_feature(
             boxes_xyxy[i],
             kp_xy[i],
@@ -93,6 +100,8 @@ def extract_person_candidates(result: Any, keypoint_conf_threshold: float = 0.3)
                 'area': float(area),
                 'box_xyxy': [x1, y1, x2, y2],
                 'feature': feature,
+                'visible_keypoint_count': visible_keypoint_count,
+                'feature_valid': bool(visible_keypoint_count > 0),
             }
         )
     candidates.sort(key=lambda item: item['area'], reverse=True)

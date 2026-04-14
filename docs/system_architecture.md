@@ -198,6 +198,12 @@
 
 这能保证未来替换 YOLO 检测器、时序模型甚至 perception 内部实现时，不会把规划层一起拖垮。
 
+当前默认消费策略补充：
+
+- supervisor 对任务层暴露的默认跌倒语义，已经收口为 `seq_stable_fall_detected`
+- 规则法 `stable_fall_detected` 继续保留在 `PerceptionEvent` 中，但默认只承担 baseline/debug 职责
+- 仅当时序分支在事件中显式报告 `disabled` 或 `model_not_loaded` 时，才允许规则法作为最小回退
+
 ## 4. LTL 与自动机映射
 
 开题目标里的 `LTL + 自动机`，在工程上建议这样落地：
