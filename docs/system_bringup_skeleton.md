@@ -3,7 +3,7 @@
 本文件说明 `ros2_ws/` 里当前已经准备好的系统级骨架，以及下一步如何往 `RTAB-Map`、`Nav2`、`PlanSys2` 对接。
 
 接口字段级约定统一见：
-- [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md)
+- [system_interface_contract.md](system_interface_contract.md)
 
 ## 1. 目录结构
 

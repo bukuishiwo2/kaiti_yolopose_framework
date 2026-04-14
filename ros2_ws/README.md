@@ -38,9 +38,9 @@ ros2_ws/
 - `camera`：显式传入 `camera_device` 或 `camera_index` 后运行；输入不可用时不会直接崩溃
 - `ros_image`：订阅 `/camera/image_raw` 等 ROS2 图像 topic 做在线推理
 
-当前接口契约草案见：
+当前稳定接口契约见：
 
-- [../docs/system_interface_contract_2026-04-10.md](../docs/system_interface_contract_2026-04-10.md)
+- [../docs/system_interface_contract.md](../docs/system_interface_contract.md)
 
 ## 3. 当前最小闭环
 
@@ -251,7 +251,7 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 
 详细字段、频率、状态枚举和异常值约定，以：
 
-- [../docs/system_interface_contract_2026-04-10.md](../docs/system_interface_contract_2026-04-10.md)
+- [../docs/system_interface_contract.md](../docs/system_interface_contract.md)
 
 为准。
 

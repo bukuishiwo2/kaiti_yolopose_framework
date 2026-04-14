@@ -1,5 +1,7 @@
 # System Interface Contract 2026-04-10
 
+> 说明：本文件是 `2026-04-10` 的冻结草案快照。当前稳定接口口径已统一收口到 [system_interface_contract.md](system_interface_contract.md)。本文件继续保留，供历史追溯与差异核对使用。
+
 本文件用于把当前 `ros2_ws` 中基于 `std_msgs/msg/String + JSON` 的临时 topic，收敛成后续可平滑迁移到正式 ROS2 message 的接口契约。
 
 当前约束范围只覆盖：

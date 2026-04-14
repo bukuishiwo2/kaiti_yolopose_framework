@@ -26,10 +26,10 @@
 当前结论：
 
 - `YOLOPose + 时序模型` 已经形成可训练、可推理、可评估、可调参的完整闭环
-- `ROS2` 已经打通最小闭环：`perception -> supervisor -> planner_request -> task_planner_status`
-- topic 仍使用 `std_msgs/msg/String + JSON`，但接口语义已经开始收敛
+- `ROS2` 已经打通最小闭环：`/perception/events -> /system/supervisor/status -> /task_planner/request -> /task_planner/status`
+- topic 仍使用 `std_msgs/msg/String + JSON`，但接口语义已经收敛为稳定 schema v1
 - 当前默认学习型正式结果：`Precision=0.8657`、`Recall=0.7401`、`F1=0.7979`
-- 当前重点是冻结感知默认主线并继续收口系统正式接口
+- 当前重点是冻结感知默认主线，并继续收口系统正式接口与外部验证策略
 
 关键 benchmark 摘要：
 
@@ -76,6 +76,7 @@ kaiti_yolopose_framework/
 
 - [项目约定](docs/project_conventions.md)
 - [文档索引](docs/README.md)
+- [文档信息架构](docs/documentation_information_architecture.md)
 - [多代理协作说明](docs/agents.md)
 - [项目级角色边界](AGENTS.md)
 
@@ -87,10 +88,15 @@ kaiti_yolopose_framework/
 2. [开题目标对齐](docs/kaiti_alignment.md)
 3. [系统架构说明](docs/system_architecture.md)
 4. [ROS2 最小骨架说明](docs/system_bringup_skeleton.md)
-5. [系统接口契约草案](docs/system_interface_contract_2026-04-10.md)
-6. [ROS2 工作区说明](ros2_ws/README.md)
-7. [阶段审计与汇总](docs/reviews/README.md)
-8. [开发工作日志](docs/worklogs/README.md)
+5. [系统接口契约](docs/system_interface_contract.md)
+6. [数据集定位与外部验证策略](docs/dataset_positioning.md)
+7. [ROS2 工作区说明](ros2_ws/README.md)
+8. [阶段审计与汇总](docs/reviews/README.md)
+9. [开发工作日志](docs/worklogs/README.md)
+
+文档信息架构说明见：
+
+- [文档信息架构](docs/documentation_information_architecture.md)
 
 ## 4. 环境安装
 
@@ -312,7 +318,7 @@ python scripts/eval_fall_batch.py \
 
 - [系统架构说明](docs/system_architecture.md)
 - [ROS2 骨架说明](docs/system_bringup_skeleton.md)
-- [系统接口契约草案](docs/system_interface_contract_2026-04-10.md)
+- [系统接口契约](docs/system_interface_contract.md)
 - [ROS2 工作区 README](ros2_ws/README.md)
 
 ## 9. 命名与分层规则
@@ -365,7 +371,8 @@ make help
 
 ## 12. 下一步重点
 
-当前最应该推进的不是继续扩模块，而是继续做两类收口：
+当前最应该推进的是三类收口：
 
-1. 感知侧把研究态双跌倒语义收成单一正式 `fall_state`
-2. 系统侧把当前 schema v1 映射成稳定 payload，再平滑迁移到正式 `kaiti_msgs`
+1. 保持默认 `LSTM` 主线不变，并将规则法稳定定位为 baseline/debug
+2. 在当前 schema v1 基础上继续冻结系统层正式接口，再平滑迁移到 `kaiti_msgs`
+3. 用补充数据和 external validation 补齐慢跌倒、家居场景与遮挡场景盲区

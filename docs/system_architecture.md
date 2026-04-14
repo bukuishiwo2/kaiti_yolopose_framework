@@ -4,7 +4,10 @@
 
 当前仓库已经把感知子系统做成可训练、可评估、可切换模型的原型；下一步要把它收敛成 ROS2 系统里的一个稳定语义源，再向建图、导航、任务规划层扩展。
 
-当前接口收敛基线见：
+当前稳定接口收敛基线见：
+- [system_interface_contract.md](system_interface_contract.md)
+
+历史冻结快照见：
 - [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md)
 
 ## 1. 系统目标
@@ -175,7 +178,7 @@
 
 当前 `task_planner_bridge_node` 还会发布 `/task_planner/status`，但该消息目前仅作为系统层占位反馈，不纳入本轮冻结核心契约。
 
-详细字段、频率、枚举、异常值约定，统一以 [system_interface_contract_2026-04-10.md](system_interface_contract_2026-04-10.md) 为准。
+详细字段、频率、枚举、异常值约定，统一以 [system_interface_contract.md](system_interface_contract.md) 为准。
 
 ### 3.3 对未来规划层的边界要求
 

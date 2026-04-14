@@ -107,7 +107,7 @@
 
 - [系统架构说明](system_architecture.md)
 - [ROS2 最小骨架](system_bringup_skeleton.md)
-- [接口契约草案](system_interface_contract_2026-04-10.md)
+- [系统接口契约](system_interface_contract.md)
 - [ROS2 工作区说明](../ros2_ws/README.md)
 
 ### 4.3 看 `architect`

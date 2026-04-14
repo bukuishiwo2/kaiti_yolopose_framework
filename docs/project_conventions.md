@@ -62,7 +62,7 @@
 - benchmark 摘要：`reports/benchmarks/<topic>_YYYY-MM-DD.md`
 - 历史归档：`docs/archive/<topic>_stageN.md` 或 `docs/archive/<topic>_YYYY-MM-DD.md`
 
-当前像 `system_interface_contract_2026-04-10.md` 这类文件，属于“冻结草案快照”。后续如果契约稳定，应升格为无日期的稳定文件名。
+当前像 `system_interface_contract_2026-04-10.md` 这类文件，属于“冻结草案快照”。若契约已稳定，应升格为无日期的稳定文件名，并保留 dated snapshot 作为追溯依据。
 
 ### 2.5 目录命名
 
@@ -208,9 +208,12 @@ bash scripts/clean_local_artifacts.sh
 
 - `docs/project_conventions.md`
 - `docs/agents.md`
+- `docs/documentation_information_architecture.md`
 - `docs/kaiti_alignment.md`
 - `docs/system_architecture.md`
 - `docs/system_bringup_skeleton.md`
+- `docs/system_interface_contract.md`
+- `docs/dataset_positioning.md`
 
 ### 5.3 `reports/`
 
@@ -251,7 +254,18 @@ bash scripts/clean_local_artifacts.sh
 4. 默认配置切换由 `architect` 收口
 5. 接口设计和 ROS2 文档由 `system_planner` 收口
 
-## 7. Recommended Workflow
+## 7. Current Stable Wording
+
+为避免文档间口径漂移，当前统一表述如下：
+
+- 默认主线：`UR Fall` 主 benchmark + `LSTM` 学习型主线
+- baseline：规则法，只保留为对照、诊断和最小回退
+- debug：研究态或联调态辅助字段，不属于冻结核心契约
+- system skeleton：当前 `ros2_ws` 中的 ROS2 骨架与接口占位实现
+- planner placeholder：当前 `task_planner_bridge_node` 与 `plansys2_placeholder`
+- external validation：用于验证家居、慢跌倒、遮挡与域外泛化的数据集或视频源
+
+## 8. Recommended Workflow
 
 1. 创建虚拟环境并安装依赖
 2. 执行 `pip install -e . --no-deps`
@@ -260,7 +274,7 @@ bash scripts/clean_local_artifacts.sh
 5. 将过程记录整理到 `docs/worklogs/`
 6. 提交代码、配置、文档和摘要，不提交本地产物
 
-## 8. Publishing Checklist
+## 9. Publishing Checklist
 
 准备上传前，检查：
 
