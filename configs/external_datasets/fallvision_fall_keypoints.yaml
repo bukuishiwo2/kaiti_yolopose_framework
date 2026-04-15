@@ -1,0 +1,22 @@
+dataset:
+  key: fallvision_fall_keypoints
+  display_name: FallVision Fall Keypoints Supplement
+  family: fallvision
+  usage: supplement_train
+  label: fall
+
+storage:
+  root: data/external/fallvision_fall_keypoints
+  raw_dir: raw
+  extracted_dir: extracted
+  manifests_dir: manifests
+  reports_dir: reports
+  splits_dir: splits
+
+download:
+  strategy: fallvision_dataverse
+  fallvision:
+    label: fall
+    scene: all
+    asset_type: keypoints
+    variant: mask

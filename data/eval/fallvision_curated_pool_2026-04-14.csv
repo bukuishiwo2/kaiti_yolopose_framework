@@ -1,0 +1,7 @@
+priority,label,scene,clip_prefix,csv_count,selection_reason,notes
+1,fall,bed,Fall/Bed/Mask Video/f_mask_b_2_keypoints_csv/f_mask_b_2_keypoints_csv,355,longer bed fall clip,preferred slow-fall candidate
+2,fall,bed,Fall/Bed/Mask Video/f_mask_b_1_keypoints_csv/f_mask_b_1_keypoints_csv,243,secondary longer bed fall clip,keep as alternate bed candidate
+1,fall,chair,Fall/Chair/Mask Video/f_mask_c_2_keypoints_csv/f_mask_c_2_keypoints_csv,514,longer chair fall clip,preferred slow-fall candidate
+2,fall,chair,Fall/Chair/Mask Video/f_mask_c_3_keypoints_csv/f_mask_c_3_keypoints_csv,252,secondary longer chair fall clip,keep as alternate chair candidate
+1,fall,stand,Fall/Stand/Mask Video/f_mask_s_3_keypoints_csv/f_mask_s_3_keypoints_csv,535,longer stand fall clip,preferred slow-fall candidate
+2,fall,stand,Fall/Stand/Mask Video/f_mask_s_1_keypoints_csv/f_mask_s_1_keypoints_csv,243,secondary stand fall clip,keep as alternate stand candidate

@@ -1,0 +1,23 @@
+dataset:
+  key: fallvision_fall_videos_debug
+  display_name: FallVision Fall Videos Debug
+  family: fallvision
+  usage: external_validation
+  label: fall
+
+storage:
+  root: data/external/fallvision_fall_videos_debug
+  raw_dir: raw
+  extracted_dir: extracted
+  manifests_dir: manifests
+  reports_dir: reports
+  splits_dir: splits
+
+download:
+  strategy: fallvision_dataverse
+  fallvision:
+    label: fall
+    scene: all
+    asset_type: videos
+    variant: raw
+    max_files_per_group: 1

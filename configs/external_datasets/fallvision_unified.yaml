@@ -1,0 +1,18 @@
+dataset:
+  key: fallvision
+  display_name: FallVision Unified Canonical View
+  family: fallvision
+  usage: supplement_train
+  label: mixed
+
+storage:
+  root: data/external/fallvision
+  raw_dir: raw
+  extracted_dir: extracted
+  manifests_dir: manifests
+  reports_dir: reports
+  splits_dir: splits
+
+download:
+  strategy: manual_or_url
+  source_urls: []

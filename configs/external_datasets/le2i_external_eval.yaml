@@ -1,0 +1,18 @@
+dataset:
+  key: le2i_external_eval
+  display_name: Le2i External Validation
+  family: le2i
+  usage: external_validation
+  label: unknown
+
+storage:
+  root: data/external/le2i_external_eval
+  raw_dir: raw
+  extracted_dir: extracted
+  manifests_dir: manifests
+  reports_dir: reports
+  splits_dir: splits
+
+download:
+  strategy: manual_or_url
+  source_urls: []
