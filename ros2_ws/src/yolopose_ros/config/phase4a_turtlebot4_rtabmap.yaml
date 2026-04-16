@@ -1,0 +1,27 @@
+phase4a_turtlebot4_rtabmap:
+  ros__parameters:
+    simulator_launch_package: turtlebot4_ignition_bringup
+    simulator_launch_file: turtlebot4_ignition.launch.py
+    turtlebot4_model: standard
+    turtlebot4_world: warehouse
+    turtlebot4_slam: false
+    turtlebot4_nav2: false
+    turtlebot4_rviz: false
+
+    rgb_topic: /oakd/rgb/preview/image_raw
+    depth_topic: /oakd/rgb/preview/depth
+    camera_info_topic: /oakd/rgb/preview/camera_info
+    scan_topic: /scan
+    odom_topic: /odom
+    base_frame_id: base_link
+
+    use_sim_time: true
+    approx_sync: true
+    subscribe_scan: true
+    visual_odometry: false
+    publish_tf_odom: false
+    rtabmap_args: --delete_db_on_start
+
+    perception_input_mode: ros_image
+    perception_visualization_enabled: true
+    planner_mode: plansys2_placeholder

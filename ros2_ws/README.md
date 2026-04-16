@@ -329,11 +329,68 @@ source ros2_ws/install/setup.bash
 rqt_image_view /perception/debug_image
 ```
 
-## 9. 下一阶段
+## 9. Phase 4a TurtleBot4 + RTAB-Map 最小接入
+
+Phase 4a 提供一个专用入口，用于把 TurtleBot4 仿真相机接到现有 `pose_stream_node(input_mode=ros_image)`，同时让 RTAB-Map 消费同一组仿真传感器流。
+
+先安装外部运行依赖：
+
+```bash
+sudo apt install ros-humble-turtlebot4-simulator ros-humble-irobot-create-nodes ros-humble-rtabmap-ros
+```
+
+构建并启动：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros phase4a_turtlebot4_rtabmap.launch.py
+```
+
+默认逻辑 topic：
+
+- RGB：`/oakd/rgb/preview/image_raw`
+- Depth：`/oakd/rgb/preview/depth`
+- Camera info：`/oakd/rgb/preview/camera_info`
+- Laser scan：`/scan`
+- Odometry：`/odom`
+- TF：`/tf`、`/tf_static`
+
+当前默认禁用 RTAB-Map visual odometry：
+
+- `visual_odometry:=false`
+- `publish_tf_odom:=false`
+
+因此 `/odom` 应只由 TurtleBot4 底盘侧发布，不能再出现 `/rgbd_odometry` 同时发布 `/odom`。
+
+如果 TurtleBot4 仿真实际 topic 名不同，启动时覆盖：
+
+```bash
+ros2 launch yolopose_ros phase4a_turtlebot4_rtabmap.launch.py \
+  rgb_topic:=/actual/rgb/image \
+  depth_topic:=/actual/depth/image \
+  camera_info_topic:=/actual/camera_info
+```
+
+验证最小输出：
+
+```bash
+ros2 topic echo /perception/events
+ros2 topic echo /task_planner/status
+ros2 topic echo --once /map
+ros2 topic echo --once /localization_pose
+ros2 run tf2_ros tf2_echo odom base_link
+```
+
+该入口不启动 Nav2 完整闭环，不接 PlanSys2 / LTL，不新增消息类型，也不让 planner placeholder 消费地图或定位输出。
+
+## 10. 下一阶段
 
 后续系统主线应保持这个顺序：
 
 1. 先把当前 schema v1 和实现完全对齐
-2. 再接 `RTAB-Map`
+2. 验证 Phase 4a `RTAB-Map` 最小挂载
 3. 再接 `Nav2`
 4. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo

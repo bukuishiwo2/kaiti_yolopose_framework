@@ -14,9 +14,11 @@ ros2_ws/
     └── yolopose_ros/
         ├── config/
         │   ├── perception_bridge.yaml
+        │   ├── phase4a_turtlebot4_rtabmap.yaml
         │   └── system_stack.yaml
         ├── launch/
         │   ├── perception_bridge.launch.py
+        │   ├── phase4a_turtlebot4_rtabmap.launch.py
         │   ├── pose_stream.launch.py
         │   └── system_stack.launch.py
         ├── resource/
@@ -53,7 +55,18 @@ ros2_ws/
 - 支持 `input_mode` 启动参数，并把输入模式透传给感知桥接节点
 - 用日志说明 `RTAB-Map`、`Nav2`、`PlanSys2` 的未来挂载点
 
-### 2.4 `config/perception_bridge.yaml`
+### 2.4 `launch/phase4a_turtlebot4_rtabmap.launch.py`
+
+作用：
+- Phase 4a 专用系统入口
+- 组合 TurtleBot4 仿真、当前 `system_stack.launch.py` 和 `rtabmap_launch`
+- 默认让 TurtleBot4 自带 `slam/nav2` 保持关闭，由本项目单独拉起 RTAB-Map
+- 将仿真 RGB 图像通过 `input_mode=ros_image` 接到 `pose_stream_node`
+- RTAB-Map 作为建图定位 sidecar 输出 `/map`、`/localization_pose` 和 `/tf`
+- 默认禁用 RTAB-Map visual odometry，只使用 TurtleBot4 `/odom`
+- 不改变 `/perception/events -> /system/supervisor/status -> /task_planner/request -> /task_planner/status` 语义
+
+### 2.5 `config/perception_bridge.yaml`
 
 作用：
 - 给感知桥接节点提供参数默认值
@@ -62,7 +75,7 @@ ros2_ws/
 - 显式保留 `video_file_path`、`camera_device`、`camera_index`、`ros_image_topic` 等输入参数
 - 可选保留 `visualization_enabled`、`visualization_topic`、`supervisor_status_topic` 等调试参数
 
-### 2.5 `config/system_stack.yaml`
+### 2.6 `config/system_stack.yaml`
 
 作用：
 - 给相机节点、系统监督节点和任务层占位节点提供参数默认值
@@ -70,7 +83,18 @@ ros2_ws/
 - 定义感知超时、请求超时和周期性状态发布参数
 - 定义 `need_reobserve` 的最小进入 / 退出滞回参数
 
-### 2.6 `yolopose_ros/system_supervisor_node.py`
+### 2.7 `config/phase4a_turtlebot4_rtabmap.yaml`
+
+作用：
+- 记录 Phase 4a 默认仿真和 RTAB-Map topic 口径
+- 默认机器人为 `TurtleBot4 standard`
+- 默认世界为 `warehouse`
+- 默认 RTAB-Map 输入为 `/oakd/rgb/preview/image_raw`、`/oakd/rgb/preview/depth`、`/oakd/rgb/preview/camera_info`、`/scan`、`/odom`、`/tf`
+- 默认 `visual_odometry=false`、`publish_tf_odom=false`，避免 `rgbd_odometry` 与 TurtleBot4 底盘同时发布 `/odom`
+- 默认 perception 输入为 `ros_image`
+- 该文件作为人工维护的集成配置说明，具体 launch 参数仍可在命令行覆盖
+
+### 2.8 `yolopose_ros/system_supervisor_node.py`
 
 作用：
 - 订阅感知事件
@@ -80,7 +104,7 @@ ros2_ws/
 
 当前它不负责真正规划，只负责把系统边界先打通。
 
-### 2.6 `yolopose_ros/camera_stream_node.py`
+### 2.9 `yolopose_ros/camera_stream_node.py`
 
 作用：
 - 从电脑摄像头读取实时图像
@@ -89,7 +113,7 @@ ros2_ws/
 
 当前它只负责最小图像发布，不负责 `camera_info`、标定或图像压缩。
 
-### 2.7 `yolopose_ros/pose_stream_node.py` 可视化调试能力
+### 2.10 `yolopose_ros/pose_stream_node.py` 可视化调试能力
 
 当前额外支持：
 - 可选发布调试图像 topic
@@ -98,7 +122,7 @@ ros2_ws/
 - 图像中叠加 `observation_state / observation_reason`
 - 通过订阅 supervisor status 叠加 `planner_action / reason`
 
-### 2.8 `yolopose_ros/task_planner_bridge_node.py`
+### 2.11 `yolopose_ros/task_planner_bridge_node.py`
 
 作用：
 - 订阅 `/task_planner/request`
@@ -164,6 +188,39 @@ ros2 launch yolopose_ros system_stack.launch.py \
 3. `pose_stream_node` 可选发布 `/perception/debug_image`
 4. `system_supervisor_node` 输出 `/task_planner/request`
 5. `task_planner_bridge_node` 输出 `/task_planner/status`
+
+### 3.7 Phase 4a TurtleBot4 仿真 + RTAB-Map 最小接入
+
+先安装外部运行依赖：
+
+```bash
+sudo apt install ros-humble-turtlebot4-simulator ros-humble-irobot-create-nodes ros-humble-rtabmap-ros
+```
+
+再启动最小系统入口：
+
+```bash
+ros2 launch yolopose_ros phase4a_turtlebot4_rtabmap.launch.py
+```
+
+如果 TurtleBot4 仿真实际 topic 与默认逻辑名不同，优先用 launch 参数覆盖：
+
+```bash
+ros2 launch yolopose_ros phase4a_turtlebot4_rtabmap.launch.py \
+  rgb_topic:=/actual/rgb/image \
+  depth_topic:=/actual/depth/image \
+  camera_info_topic:=/actual/camera_info \
+  odom_topic:=/odom \
+  scan_topic:=/scan
+```
+
+该入口只负责最小挂载：
+
+1. TurtleBot4 仿真发布 RGB / depth / camera_info / odom / tf / scan
+2. `pose_stream_node(input_mode=ros_image)` 消费 RGB 图像并保持当前 perception 事件语义
+3. RTAB-Map 消费同一组仿真传感器流并输出 `/map`、`/localization_pose`、`/tf`
+4. `task_planner_bridge_node` 仍是 placeholder，不消费地图或定位输出
+5. `/odom` 必须只有 `diffdrive_controller` 一个 publisher，当前默认不启动 `/rgbd_odometry`
 
 ## 4. 当前消息流
 
@@ -372,6 +429,7 @@ nav2 / rtabmap / task execution
 - 在线可视化调试图像 topic
 - 系统监督占位节点
 - 任务层占位节点
+- Phase 4a TurtleBot4 + RTAB-Map 最小接入 launch/config
 - 参数化 YAML 配置
 - `mock / video_file / camera / ros_image` 四种输入模式骨架
 - 无摄像头环境下可跑通的最小闭环
@@ -379,7 +437,7 @@ nav2 / rtabmap / task execution
 ### 7.2 下一阶段
 
 - 保持当前 perception / supervisor / planner request / planner status 语义不回改
-- 按挂载边界引入 `RTAB-Map`
+- 继续验证 Phase 4a `RTAB-Map` 最小挂载的 topic、TF 和地图输出
 - 按挂载边界引入 `Nav2`
 - 用真实 `PlanSys2 / LTL` 任务流替代当前 `task_planner_bridge_node`
 
@@ -387,12 +445,13 @@ nav2 / rtabmap / task execution
 
 ### 8.1 `RTAB-Map / 建图定位层`
 
-当前不接入真实 `RTAB-Map` 节点，只冻结未来挂载点：
+当前 Phase 4a 已提供最小 `RTAB-Map` 接入入口，但仍只把它作为空间层 sidecar：
 
-- 未来输入：`/camera/image_raw`、`/camera/camera_info`、`/scan`、`/odom`、`/tf`
-- 未来输出：`/map`、`/rtabmap/localization_pose`、`/tf`
+- 最小输入：`/oakd/rgb/preview/image_raw`、`/oakd/rgb/preview/depth`、`/oakd/rgb/preview/camera_info`、`/scan`、`/odom`、`/tf`
+- 最小输出：`/map`、`/localization_pose`、`/tf`
 - 当前关系：不改变 `/perception/events -> /system/supervisor/status -> /task_planner/request` 语义
 - 后续职责：向真实 planner 提供地图、定位和可达性信息
+- 当前限制：不承诺地图质量，不把 `/map` 或 `/localization_pose` 接入 planner placeholder
 
 ### 8.2 `Nav2 / 导航执行层`
 
@@ -415,11 +474,13 @@ nav2 / rtabmap / task execution
 
 ### 8.4 当前明确不做
 
-- 不接真实 `RTAB-Map`
 - 不接真实 `Nav2`
 - 不接真实 `PlanSys2 / LTL`
 - 不新增 action/service 调用
 - 不新增消息类型体系
+- 不做大规模家居仿真环境
+- 不做 Kalibr 标定流程
+- 不让 planner placeholder 消费 `/map` 或 `/localization_pose`
 - 不改 `models/*.pt`
 - 不训练
 - 不扩外部数据集

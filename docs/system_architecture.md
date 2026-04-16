@@ -212,15 +212,18 @@
 - `need_reobserve` 不覆盖真实跌倒告警，也不替代 `no_person_present`
 - 为减少真实在线链路中的 `low_visibility <-> stable` 抖动，supervisor 对 `need_reobserve` 做最小进入 / 退出滞回
 
-### 3.4 Phase 3 后续模块挂载边界
+### 3.4 Phase 3 / Phase 4a 后续模块挂载边界
 
-当前阶段只冻结挂载边界，不接真实 `RTAB-Map / Nav2 / PlanSys2 / LTL`。
+Phase 3 已冻结挂载边界。Phase 4a 在不回改 perception / supervisor / planner placeholder 语义的前提下，新增 TurtleBot4 仿真与 `RTAB-Map` 的最小接入入口。
 
-`RTAB-Map / 建图定位层` 后续从传感器和机器人状态侧挂载，不反向修改感知到任务层的语义：
+`RTAB-Map / 建图定位层` 从传感器和机器人状态侧挂载，不反向修改感知到任务层的语义：
 
-- 输入边界：`/camera/image_raw`、`/camera/camera_info`、`/scan`、`/odom`、`/tf`
-- 输出边界：`/map`、`/rtabmap/localization_pose`、`/tf`
+- Phase 4a 最小入口：`phase4a_turtlebot4_rtabmap.launch.py`
+- 输入边界：`/oakd/rgb/preview/image_raw`、`/oakd/rgb/preview/depth`、`/oakd/rgb/preview/camera_info`、`/scan`、`/odom`、`/tf`
+- 输出边界：`/map`、`/localization_pose`、`/tf`
 - 与当前链路关系：建图定位层可以为未来 planner 提供空间状态，但不直接消费 `fall_max_score`、`seq_fall_score` 等研究态感知字段
+- Phase 4a 限制：`/map` 和 `/localization_pose` 只作为可观察的空间层输出，不进入 `task_planner_bridge_node`
+- Phase 4a odom 策略：禁用 `rgbd_odometry`，只使用 TurtleBot4 `/odom` 作为唯一里程计来源
 
 `Nav2 / 导航执行层` 后续从真实任务规划层接收导航目标，不直接消费 perception event：
 
@@ -263,11 +266,12 @@
 - 系统监督占位节点
 - 任务层占位节点 `task_planner_bridge_node`
 - 系统级 launch / config 骨架
+- Phase 4a TurtleBot4 仿真 + RTAB-Map 最小接入 launch/config
 
 ### 5.2 下一阶段
 
 - 保持当前 `PerceptionEvent / SupervisorStatus / PlannerRequest / TaskPlannerStatus` 语义不回改
-- 先按本文挂载边界接入 `RTAB-Map` 与传感器标定链路
+- 先验证 Phase 4a `RTAB-Map` 最小挂载的 topic、TF、地图和定位输出
 - 再接 `Nav2` 导航执行
 - 最后用真实 `PlanSys2 / LTL` 消费端替换当前 `task_planner_bridge_node`
 - 建立 LTL 到自动机的映射

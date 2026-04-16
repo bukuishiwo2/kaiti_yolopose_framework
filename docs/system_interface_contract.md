@@ -362,3 +362,22 @@
 - `*_active_track_ids`
 
 未来 planner 应通过 `SupervisorStatus.planner_action` 或 `PlannerRequest.requested_action` 消费系统语义，而不是直接解释模型分数或候选细节。
+
+## 8. Phase 4a RTAB-Map 最小接入边界
+
+Phase 4a 新增 TurtleBot4 仿真与 `RTAB-Map` 最小挂载入口，但不改变本文冻结的系统语义契约。
+
+新增空间层 topic 只作为 sidecar 输出：
+
+- RTAB-Map 输入：`/oakd/rgb/preview/image_raw`、`/oakd/rgb/preview/depth`、`/oakd/rgb/preview/camera_info`、`/scan`、`/odom`、`/tf`
+- RTAB-Map 输出：`/map`、`/localization_pose`、`/tf`
+
+当前约束：
+
+- 默认禁用 RTAB-Map visual odometry，`/odom` 必须只由 TurtleBot4 底盘侧发布
+- `/perception/events` 不新增字段
+- `/system/supervisor/status` 不新增状态
+- `/task_planner/request` 不新增动作
+- `/task_planner/status` 不新增 planner placeholder 状态
+- `task_planner_bridge_node` 不消费 `/map` 或 `/localization_pose`
+- 后续真实 planner 可消费空间层输出，但不得要求 perception 或 supervisor 为 Phase 4a 回改现有语义
