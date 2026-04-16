@@ -437,9 +437,9 @@ nav2 / rtabmap / task execution
 ### 7.2 下一阶段
 
 - 保持当前 perception / supervisor / planner request / planner status 语义不回改
-- 继续验证 Phase 4a `RTAB-Map` 最小挂载的 topic、TF 和地图输出
-- 按挂载边界引入 `Nav2`
-- 用真实 `PlanSys2 / LTL` 任务流替代当前 `task_planner_bridge_node`
+- Phase 4a 按最小接入目标冻结，验收结论见 `docs/reviews/phase4a_acceptance_2026-04-16.md`
+- 后续若进入 `Nav2` 或 `PlanSys2 / LTL`，应另起阶段并重新定义验收标准
+- 当前 `task_planner_bridge_node` 仍保持 placeholder，不消费 `/map` 或 `/localization_pose`
 
 ## 8. 后续系统挂载边界
 

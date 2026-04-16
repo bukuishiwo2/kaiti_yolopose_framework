@@ -26,3 +26,4 @@
 - [Mock 输入闭环汇总](architect_mock_input_summary_2026-04-10.md)
 - [接口迁移汇总](interface_migration_summary_2026-04-10.md)
 - [感知接口评审](perception_interface_review_2026-04-10.md)
+- [Phase 4a 验收](phase4a_acceptance_2026-04-16.md)

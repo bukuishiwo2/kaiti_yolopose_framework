@@ -108,6 +108,7 @@
 
 1. 感知侧继续保持 `LSTM` 默认主线，并将额外数据策略收口为补盲区而非换主线
 2. 系统侧保持当前冻结接口，不回改 perception / supervisor / planner placeholder 语义
-3. 后续按边界逐步接 `RTAB-Map`、`Nav2`、`PlanSys2 / LTL`
-4. 用外部验证而不是主 benchmark 替换，评估家居、慢跌倒与遮挡域泛化
-5. 逐步从“模型实验仓库”过渡到“系统型课题仓库”
+3. 当前 Phase 4a 先按边界接入 TurtleBot4 仿真与 `RTAB-Map` 最小链路
+4. 后续再按边界逐步接 `Nav2`、`PlanSys2 / LTL`
+5. 用外部验证而不是主 benchmark 替换，评估家居、慢跌倒与遮挡域泛化
+6. 逐步从“模型实验仓库”过渡到“系统型课题仓库”
