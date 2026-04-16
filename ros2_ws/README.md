@@ -143,6 +143,11 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `system_supervisor_node`
 - `task_planner_bridge_node`
 
+`system_supervisor_node` 当前提供 `need_reobserve` 边界稳定化参数：
+
+- `reobserve_enter_frames: 2`
+- `reobserve_exit_frames: 5`
+
 ## 7. 当前 topic 契约摘要
 
 当前三条 topic 仍使用 `std_msgs/msg/String`，但 payload 已收敛为有约束的 JSON schema。
@@ -171,6 +176,7 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - 当 `input_mode=ros_image` 时，`source` 会标记为 `ros:///camera/image_raw`
 - 诊断字段里会额外带 `ros_image_topic` 与 `ros_header_frame_id`
 - supervisor 默认以 `seq_stable_fall_detected` 作为任务层跌倒触发输入
+- 当前额外输出 `observation_state / observation_reason`，用于表达“有人但当前不可可靠判断”的观察态
 - `stable_fall_detected / raw_fall_detected` 继续保留在事件与调试图像中，仅用于 baseline/debug 与显式失效回退
 - sequence 在线诊断字段已补齐，当前可直接从 `PerceptionEvent` 观察：
   `seq_model_loaded`
@@ -227,6 +233,9 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 
 - 正常情况下只消费时序主线 `seq_stable_fall_detected`
 - 仅当 perception event 明确给出 `seq_fall_detector_enabled=false` 或 `seq_fall_model_loaded=false` 时，才允许规则法 `stable_fall_detected` 回退接管
+- `need_reobserve` 当前只用于“有人但当前不可可靠判断”的中间状态
+- `need_reobserve` 不覆盖真实 `fall_detected`，也不替代 `no_person_present`
+- `need_reobserve` 采用最小滞回：连续 2 帧进入，连续 5 帧退出，减少 `low_visibility <-> stable` 抖动
 
 ### `/task_planner/request`
 
@@ -248,6 +257,29 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - 由 `task_planner_bridge_node` 发布占位反馈
 - 用于确认任务层最小消费者已经接到 supervisor request
 - 暂不作为冻结核心契约
+
+当前字段会区分：
+
+- `reason`：当前实际状态原因
+- `state_reason`：由动作映射得到的占位状态原因
+- `request_reason`：原始请求原因
+- `request_supported`：占位 planner 是否支持该动作
+
+当前最小占位状态集合：
+
+- `idle`
+- `waiting`
+- `reobserve_pending`
+- `dispatching_safe_mode`
+- `holding`
+
+当前固定映射：
+
+- `monitor -> idle / monitoring_request`
+- `wait_for_update -> waiting / waiting_for_perception_update`
+- `need_reobserve -> reobserve_pending / reobserve_requested`
+- `trigger_safe_mode -> dispatching_safe_mode / safe_mode_requested`
+- `hold -> holding / planner_hold`
 
 详细字段、频率、状态枚举和异常值约定，以：
 
@@ -302,7 +334,6 @@ rqt_image_view /perception/debug_image
 后续系统主线应保持这个顺序：
 
 1. 先把当前 schema v1 和实现完全对齐
-2. 再引入正式接口包 `kaiti_msgs`
-3. 再接 `RTAB-Map`
-4. 再接 `Nav2`
-5. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo
+2. 再接 `RTAB-Map`
+3. 再接 `Nav2`
+4. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo

@@ -89,9 +89,10 @@
 目标：把感知层接到开题文档要求的完整机器人任务系统中。
 
 当前重点：
-- 明确 `RTAB-Map + Nav2 + 感知节点 + 任务规划节点` 的 ROS2 拓扑
-- 明确任务相关语义状态的 ROS2 接口
-- 搭建仿真与规划骨架
+- 已打通 `perception -> supervisor -> planner_request -> planner_status` 最小链路
+- 已将 `need_reobserve` 接入系统状态流，并增加最小滞回机制
+- 已固定 planner placeholder 的动作、状态、原因码映射
+- 当前重点切换为冻结后续 `RTAB-Map / Nav2 / PlanSys2 / LTL` 挂载边界，而不是立即接真实模块
 
 ## 5. 当前阶段的工程判断
 
@@ -106,7 +107,7 @@
 ## 6. 下一阶段建议
 
 1. 感知侧继续保持 `LSTM` 默认主线，并将额外数据策略收口为补盲区而非换主线
-2. 系统侧尽快补 `RTAB-Map / Nav2 / LTL/PlanSys2` 骨架
-3. 将感知输出逐步收敛为任务层可用的稳定状态变量
+2. 系统侧保持当前冻结接口，不回改 perception / supervisor / planner placeholder 语义
+3. 后续按边界逐步接 `RTAB-Map`、`Nav2`、`PlanSys2 / LTL`
 4. 用外部验证而不是主 benchmark 替换，评估家居、慢跌倒与遮挡域泛化
 5. 逐步从“模型实验仓库”过渡到“系统型课题仓库”

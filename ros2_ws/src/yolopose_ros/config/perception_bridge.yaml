@@ -14,3 +14,4 @@ pose_stream_node:
     visualization_enabled: false
     visualization_topic: /perception/debug_image
     supervisor_status_topic: /system/supervisor/status
+    reobserve_visible_keypoint_threshold: 6

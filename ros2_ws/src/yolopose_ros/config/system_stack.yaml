@@ -6,6 +6,8 @@ system_supervisor_node:
     planner_mode: plansys2_placeholder
     perception_timeout_sec: 3.0
     status_publish_period_sec: 1.0
+    reobserve_enter_frames: 2
+    reobserve_exit_frames: 5
 
 task_planner_bridge_node:
   ros__parameters:

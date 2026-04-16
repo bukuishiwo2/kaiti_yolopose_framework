@@ -9,13 +9,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-
-ACTION_TO_STATE = {
-    "monitor": ("idle", "monitoring_request"),
-    "wait_for_update": ("waiting", "waiting_for_perception_update"),
-    "trigger_safe_mode": ("dispatching_safe_mode", "safe_mode_requested"),
-    "hold": ("holding", "planner_hold"),
-}
+from yolopose_ros.system_semantics import build_planner_status
 
 
 class TaskPlannerBridgeNode(Node):
@@ -75,22 +69,14 @@ class TaskPlannerBridgeNode(Node):
         reason: str,
         request: dict[str, Any] | None,
     ) -> dict[str, Any]:
-        planner_state, default_reason = ACTION_TO_STATE.get(
-            requested_action,
-            ("invalid_request", "unsupported_requested_action"),
+        return build_planner_status(
+            ts=self._timestamp(),
+            planner_mode=self._planner_mode,
+            request_topic=self._request_topic,
+            requested_action=requested_action,
+            reason=reason,
+            request=request,
         )
-        if not reason:
-            reason = default_reason
-        return {
-            "ts": self._timestamp(),
-            "role": "task_planner_bridge",
-            "planner_mode": self._planner_mode,
-            "planner_state": planner_state,
-            "active_action": requested_action,
-            "reason": reason,
-            "request_topic": self._request_topic,
-            "source_request": request,
-        }
 
     def _publish_status(self, payload: dict[str, Any]) -> None:
         msg = String()

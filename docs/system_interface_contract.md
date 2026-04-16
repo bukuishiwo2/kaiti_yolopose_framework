@@ -10,23 +10,24 @@
 
 ## 1. 适用范围
 
-当前稳定约束只覆盖三条核心系统 topic：
+当前稳定约束覆盖三条核心系统 topic，并记录一个占位反馈 topic：
 
 - `/perception/events`
 - `/system/supervisor/status`
 - `/task_planner/request`
+- `/task_planner/status`
 
-`/task_planner/status` 目前仍属于任务层占位反馈，不纳入冻结核心契约。
+其中 `/task_planner/status` 目前仍属于任务层占位反馈，不等同于真实 planner 的完整执行反馈，但其占位字段和映射关系已固定。
 
 ## 2. 当前阶段决策
 
-当前阶段先冻结字段语义和消息边界，不立即冻结自定义 `.msg`。
+当前阶段先冻结字段语义和消息边界，不立即切换到新的自定义消息类型。
 
 原因：
 
 1. `Nav2 / PlanSys2 / Gazebo / TurtleBot4` 还未完整接入，消费者边界仍在形成期。
 2. 感知层仍保留研究态诊断字段，这些字段对联调有价值，但不宜直接进入长期稳定消息。
-3. 先冻结 schema 语义，再迁移到 `kaiti_msgs`，成本最低。
+3. 先冻结 schema 语义，再按实际集成需要收口消息定义，成本最低。
 
 因此当前正式口径为：
 
@@ -66,6 +67,8 @@
 - `stable_person_present`
 - `stable_fall_detected`
 - `seq_stable_fall_detected`
+- `observation_state`
+- `observation_reason`
 - `source`
 - `frame_id`
 - `person_count`
@@ -89,6 +92,8 @@
 
 - `stable_fall_detected`：规则法稳定跌倒结果，保留为 baseline/debug
 - `seq_stable_fall_detected`：时序主线稳定跌倒结果，当前系统层默认消费
+- `observation_state`：当前观察质量语义；当前稳定取值为 `observable / no_person / low_visibility / occluded / window_not_ready / unavailable`
+- `observation_reason`：观察态原因码；当前用于 `need_reobserve` 判定与联调日志
 
 ### 3.2 `SupervisorStatus`
 
@@ -114,6 +119,8 @@
 
 - `planner_request_topic`
 - `fall_trigger_source`
+- `observation_state`
+- `observation_reason`
 - `source_event`
 
 当前默认跌倒触发准则：
@@ -125,6 +132,25 @@
    - `seq_fall_model_loaded = false`
 
 这意味着当前系统层默认消费的是 `LSTM` 时序主线，而不是规则法。
+
+当前 `need_reobserve` 触发准则：
+
+1. `need_reobserve` 不覆盖真实 `fall_detected`
+2. `need_reobserve` 不替代 `no_person_present`
+3. `need_reobserve` 只用于“有人但当前不可可靠判断”的中间状态
+4. 当前由以下观察态作为 raw `need_reobserve` 候选：
+   - `low_visibility`
+   - `occluded`
+   - `window_not_ready`
+5. supervisor 对 raw `need_reobserve` 做最小滞回：
+   - 连续 `reobserve_enter_frames=2` 帧 raw 候选才进入 `need_reobserve`
+   - 连续 `reobserve_exit_frames=5` 帧非 raw 候选才退出回 `monitor`
+
+当前允许存在但不建议下游长期依赖的 `need_reobserve` 调试字段：
+
+- `need_reobserve_raw`
+- `reobserve_enter_count`
+- `reobserve_exit_count`
 
 ### 3.3 `PlannerRequest`
 
@@ -143,6 +169,38 @@
 - `planner_mode`
 - `requested_action`
 - `reason`
+
+### 3.4 `TaskPlannerStatus`（占位）
+
+绑定 topic：
+
+- `/task_planner/status`
+
+职责：
+
+- 确认当前占位任务层已经消费 `/task_planner/request`
+- 在真实 `PlanSys2 / LTL` 消费端接入前，提供可观察的 planner placeholder 状态
+
+当前字段：
+
+- `ts`
+- `role`
+- `planner_mode`
+- `planner_state`
+- `active_action`
+- `reason`
+- `state_reason`
+- `request_reason`
+- `request_supported`
+- `request_topic`
+- `source_request`
+
+说明：
+
+- `reason`：当前实际状态原因，支持动作时优先保留上游 `request_reason`
+- `state_reason`：由 `active_action -> planner_state` 映射得到的占位状态原因
+- `request_reason`：原始 `PlannerRequest.reason`
+- `request_supported`：当前占位 planner 是否支持该 `requested_action`
 
 ## 4. 枚举与异常值约定
 
@@ -177,8 +235,20 @@
 
 - `monitor`
 - `wait_for_update`
+- `need_reobserve`
 - `trigger_safe_mode`
 - `hold`
+
+`PlannerRequest -> TaskPlannerStatus` 当前固定映射：
+
+| `requested_action` | `planner_state` | `state_reason` |
+|---|---|---|
+| `monitor` | `idle` | `monitoring_request` |
+| `wait_for_update` | `waiting` | `waiting_for_perception_update` |
+| `need_reobserve` | `reobserve_pending` | `reobserve_requested` |
+| `trigger_safe_mode` | `dispatching_safe_mode` | `safe_mode_requested` |
+| `hold` | `holding` | `planner_hold` |
+| 其他值 | `invalid_request` | `unsupported_requested_action` |
 
 异常值约定：
 
@@ -212,5 +282,83 @@
 
 1. 继续在 `String + JSON` 上稳定消费者语义
 2. 在代码层对齐 schema v1 字段集合
-3. 将 `PerceptionEvent / SupervisorStatus / PlannerRequest` 映射到 `kaiti_msgs`
+3. 在消费者边界稳定后，再决定是否收口为新的正式消息定义
 4. 保留调试字段为 debug-only 扩展，不进入最小冻结契约
+
+## 7. Phase 3 接口冻结与占位边界
+
+### 7.1 当前已冻结接口清单
+
+当前系统主线冻结以下 topic 与语义：
+
+| Topic | 逻辑消息 | 当前用途 | 后续保留策略 |
+|---|---|---|---|
+| `/perception/events` | `PerceptionEvent` | 感知稳定语义事件 | 保留为感知到系统层的输入边界 |
+| `/system/supervisor/status` | `SupervisorStatus` | 系统监督状态与动作建议 | 保留为调试、监控和未来 planner 的状态参考 |
+| `/task_planner/request` | `PlannerRequest` | supervisor 到 planner 的最小意图 | 保留为真实 planner 的输入边界 |
+| `/task_planner/status` | `TaskPlannerStatus`（占位） | planner placeholder 反馈 | topic 可保留，消费者实现可替换 |
+
+当前冻结动作集合：
+
+- `monitor`
+- `wait_for_update`
+- `need_reobserve`
+- `trigger_safe_mode`
+- `hold`
+
+当前冻结 supervisor 状态集合：
+
+- `monitoring`
+- `alert`
+- `degraded`
+
+当前占位 planner 状态集合：
+
+- `idle`
+- `waiting`
+- `reobserve_pending`
+- `dispatching_safe_mode`
+- `holding`
+- `invalid_request`
+
+### 7.2 后续真实 planner 继续保留的字段
+
+真实 `PlanSys2 / LTL` 消费端替换 `task_planner_bridge_node` 时，应继续保留并消费：
+
+- `PlannerRequest.ts`
+- `PlannerRequest.role`
+- `PlannerRequest.planner_mode`
+- `PlannerRequest.requested_action`
+- `PlannerRequest.reason`
+
+真实 planner 可继续发布到 `/task_planner/status`，并至少保留：
+
+- `ts`
+- `role`
+- `planner_mode`
+- `planner_state`
+- `active_action`
+- `reason`
+
+当前 `state_reason / request_reason / request_supported / source_request` 属于 placeholder 过渡反馈字段。真实 planner 可保留用于调试，但不应让上游依赖这些字段反向改变行为。
+
+### 7.3 不应直接暴露给未来 planner 的字段
+
+以下字段仍可保留在 perception event 中用于调试、分析或 OSD，但未来 planner 不应直接硬编码依赖：
+
+- `raw_fall_detected`
+- `fall_max_score`
+- `fall_person_candidates`
+- `seq_raw_fall_detected`
+- `seq_fall_score`
+- `seq_fall_threshold`
+- `seq_window_ready`
+- `seq_window_size`
+- `seq_track_id`
+- `seq_skip_reason`
+- `seq_invalid_reason`
+- `fall_top_candidate`
+- `seq_fall_top_candidate`
+- `*_active_track_ids`
+
+未来 planner 应通过 `SupervisorStatus.planner_action` 或 `PlannerRequest.requested_action` 消费系统语义，而不是直接解释模型分数或候选细节。

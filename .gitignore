@@ -42,7 +42,10 @@ models/*.json
 data/processed/
 data/urfall/
 data/Fall Detection Video Dataset/
+data/external/*
+!data/external/README.md
 data/samples/*.mp4
+data/*.mp4
 !data/samples/.gitkeep
 
 # Runtime outputs

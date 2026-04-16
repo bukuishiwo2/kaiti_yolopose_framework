@@ -54,7 +54,7 @@
 
 接口策略：
 - 当前继续使用 `std_msgs/msg/String` 承载 JSON object
-- 先冻结 schema v1，再升级为 `kaiti_msgs/msg/PerceptionEvent`
+- 先冻结 schema v1，再按实际系统集成需要收口消息定义
 - 当前不再额外定义 `/perception/person_state`，避免在系统层形成第二条并行语义边界
 
 ### 2.2 建图与定位层
@@ -189,6 +189,8 @@
   - `stable_person_present`
   - `stable_fall_detected`
   - `seq_stable_fall_detected`
+  - `observation_state`
+  - `observation_reason`
   - `pipeline_state`
   - `perception_available`
 - 从监督层读取：
@@ -206,6 +208,32 @@
 - supervisor 对任务层暴露的默认跌倒语义，已经收口为 `seq_stable_fall_detected`
 - 规则法 `stable_fall_detected` 继续保留在 `PerceptionEvent` 中，但默认只承担 baseline/debug 职责
 - 仅当时序分支在事件中显式报告 `disabled` 或 `model_not_loaded` 时，才允许规则法作为最小回退
+- 当前系统主线新增 `need_reobserve` 占位动作，但只用于“有人且当前不可可靠判断”的中间状态
+- `need_reobserve` 不覆盖真实跌倒告警，也不替代 `no_person_present`
+- 为减少真实在线链路中的 `low_visibility <-> stable` 抖动，supervisor 对 `need_reobserve` 做最小进入 / 退出滞回
+
+### 3.4 Phase 3 后续模块挂载边界
+
+当前阶段只冻结挂载边界，不接真实 `RTAB-Map / Nav2 / PlanSys2 / LTL`。
+
+`RTAB-Map / 建图定位层` 后续从传感器和机器人状态侧挂载，不反向修改感知到任务层的语义：
+
+- 输入边界：`/camera/image_raw`、`/camera/camera_info`、`/scan`、`/odom`、`/tf`
+- 输出边界：`/map`、`/rtabmap/localization_pose`、`/tf`
+- 与当前链路关系：建图定位层可以为未来 planner 提供空间状态，但不直接消费 `fall_max_score`、`seq_fall_score` 等研究态感知字段
+
+`Nav2 / 导航执行层` 后续从真实任务规划层接收导航目标，不直接消费 perception event：
+
+- 输入边界：未来 planner 发出的导航 goal 或恢复动作
+- 输出边界：导航执行反馈、失败原因、到达状态
+- 与当前链路关系：当前 `task_planner_bridge_node` 不调用 `/navigate_to_pose`，只保留 future planner 的替换位置
+
+`PlanSys2 / LTL / 任务规划层` 后续替换当前 `task_planner_bridge_node` 的消费者职责：
+
+- 保留输入边界：`/task_planner/request`
+- 保留反馈边界：`/task_planner/status`
+- 允许新增内部计划、动作分发或执行反馈 topic，但不要求上游 `pose_stream_node` 或 `system_supervisor_node` 改语义
+- 未来 planner 应只依赖 `requested_action / reason` 与 supervisor 的冻结状态，不直接硬编码 perception 的调试字段
 
 ## 4. LTL 与自动机映射
 
@@ -238,12 +266,11 @@
 
 ### 5.2 下一阶段
 
-- 在现有 JSON schema v1 上冻结字段并做一次代码对齐
-- 用真实 `PlanSys2 / LTL` 消费端替换当前 `task_planner_bridge_node`
-- 接入 `RTAB-Map`
-- 接入 `Nav2`
+- 保持当前 `PerceptionEvent / SupervisorStatus / PlannerRequest / TaskPlannerStatus` 语义不回改
+- 先按本文挂载边界接入 `RTAB-Map` 与传感器标定链路
+- 再接 `Nav2` 导航执行
+- 最后用真实 `PlanSys2 / LTL` 消费端替换当前 `task_planner_bridge_node`
 - 建立 LTL 到自动机的映射
-- 在消费者语义稳定后，把三类逻辑消息迁移到 `kaiti_msgs`
 - 完成 Gazebo / TurtleBot4 骨架联调
 
 ## 6. 最终工程定位

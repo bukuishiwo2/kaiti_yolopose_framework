@@ -9,8 +9,12 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 
-
-TERMINAL_PERCEPTION_STATES = {"completed", "error", "unavailable"}
+from yolopose_ros.system_semantics import (
+    ReobserveHysteresis,
+    ReobserveHysteresisConfig,
+    build_planner_request,
+    build_supervisor_status,
+)
 
 
 class SystemSupervisorNode(Node):
@@ -25,6 +29,8 @@ class SystemSupervisorNode(Node):
         self.declare_parameter("planner_mode", "plansys2_placeholder")
         self.declare_parameter("perception_timeout_sec", 3.0)
         self.declare_parameter("status_publish_period_sec", 1.0)
+        self.declare_parameter("reobserve_enter_frames", 2)
+        self.declare_parameter("reobserve_exit_frames", 5)
 
         self._perception_event_topic = str(self.get_parameter("perception_event_topic").value)
         self._status_topic = str(self.get_parameter("supervisor_status_topic").value)
@@ -32,6 +38,8 @@ class SystemSupervisorNode(Node):
         self._planner_mode = str(self.get_parameter("planner_mode").value)
         self._perception_timeout_sec = float(self.get_parameter("perception_timeout_sec").value)
         self._status_publish_period_sec = float(self.get_parameter("status_publish_period_sec").value)
+        self._reobserve_enter_frames = int(self.get_parameter("reobserve_enter_frames").value)
+        self._reobserve_exit_frames = int(self.get_parameter("reobserve_exit_frames").value)
 
         self._status_pub = self.create_publisher(String, self._status_topic, 10)
         self._planner_request_pub = self.create_publisher(String, self._planner_request_topic, 10)
@@ -44,14 +52,23 @@ class SystemSupervisorNode(Node):
 
         self._last_event_monotonic: float | None = None
         self._last_status_key: tuple[str, str] | None = None
+        self._reobserve_hysteresis = ReobserveHysteresis(
+            ReobserveHysteresisConfig(
+                enter_frames=self._reobserve_enter_frames,
+                exit_frames=self._reobserve_exit_frames,
+            )
+        )
 
         self.get_logger().info(
-            "Supervisor ready: perception_topic=%s status_topic=%s planner_topic=%s planner_mode=%s"
+            "Supervisor ready: perception_topic=%s status_topic=%s planner_topic=%s "
+            "planner_mode=%s reobserve_enter_frames=%d reobserve_exit_frames=%d"
             % (
                 self._perception_event_topic,
                 self._status_topic,
                 self._planner_request_topic,
                 self._planner_mode,
+                self._reobserve_enter_frames,
+                self._reobserve_exit_frames,
             )
         )
 
@@ -69,71 +86,19 @@ class SystemSupervisorNode(Node):
         except json.JSONDecodeError:
             return {"raw": payload}
 
-    @staticmethod
-    def _sequence_branch_unavailable(event: dict[str, Any]) -> bool:
-        """Allow rule fallback only when the sequence branch explicitly reports unavailability."""
-        return (
-            event.get("seq_fall_detector_enabled") is False
-            or event.get("seq_fall_model_loaded") is False
-        )
-
-    @classmethod
-    def _resolve_fall_trigger(cls, event: dict[str, Any]) -> tuple[bool, str]:
-        if bool(event.get("seq_stable_fall_detected")):
-            return True, "sequence_mainline"
-        if cls._sequence_branch_unavailable(event) and bool(event.get("stable_fall_detected")):
-            return True, "rule_fallback"
-        return False, "none"
-
     def _build_status(self, event: dict[str, Any]) -> dict[str, Any]:
-        fall_flag, fall_trigger_source = self._resolve_fall_trigger(event)
-        person_present = event.get("person_present")
-        if person_present is None:
-            person_present = event.get("stable_person_present")
-
-        perception_available = event.get("perception_available")
-        pipeline_state = str(event.get("pipeline_state", "")).strip().lower()
-        reason = str(event.get("reason", "")).strip()
-
-        if perception_available is False or pipeline_state in TERMINAL_PERCEPTION_STATES:
-            planner_action = "hold"
-            supervisor_state = "degraded"
-            if not reason:
-                reason = f"perception_{pipeline_state or 'unavailable'}"
-        elif fall_flag:
-            planner_action = "trigger_safe_mode"
-            supervisor_state = "alert"
-            reason = "fall_detected_rule_fallback" if fall_trigger_source == "rule_fallback" else "fall_detected"
-        elif person_present is False:
-            planner_action = "wait_for_update"
-            supervisor_state = "monitoring"
-            reason = "no_person_present"
-        else:
-            planner_action = "monitor"
-            supervisor_state = "monitoring"
-            if not reason:
-                reason = "stable"
-
-        return {
-            "ts": self._timestamp(),
-            "role": "system_supervisor",
-            "supervisor_state": supervisor_state,
-            "planner_mode": self._planner_mode,
-            "planner_request_topic": self._planner_request_topic,
-            "planner_action": planner_action,
-            "reason": reason,
-            "fall_trigger_source": fall_trigger_source,
-            "source_event": event,
-        }
-
-    def _build_planner_request(self, status: dict[str, Any]) -> dict[str, Any]:
-        return {
-            "ts": status["ts"],
-            "role": "system_supervisor",
-            "planner_mode": status["planner_mode"],
-            "requested_action": status["planner_action"],
-            "reason": status["reason"],
-        }
+        reobserve = self._reobserve_hysteresis.update(event)
+        return build_supervisor_status(
+            ts=self._timestamp(),
+            event=event,
+            planner_mode=self._planner_mode,
+            planner_request_topic=self._planner_request_topic,
+            need_reobserve_active=reobserve.active,
+            need_reobserve_reason=reobserve.reason,
+            need_reobserve_raw=reobserve.raw,
+            reobserve_enter_count=reobserve.enter_count,
+            reobserve_exit_count=reobserve.exit_count,
+        )
 
     def _publish_json(self, publisher, payload: dict[str, Any]) -> None:
         msg = String()
@@ -143,7 +108,7 @@ class SystemSupervisorNode(Node):
     def _publish_status(self, event: dict[str, Any]) -> None:
         status = self._build_status(event)
         self._publish_json(self._status_pub, status)
-        self._publish_json(self._planner_request_pub, self._build_planner_request(status))
+        self._publish_json(self._planner_request_pub, build_planner_request(status))
 
         status_key = (str(status["planner_action"]), str(status["reason"]))
         if status_key != self._last_status_key:

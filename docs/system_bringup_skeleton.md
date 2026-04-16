@@ -68,6 +68,7 @@ ros2_ws/
 - 给相机节点、系统监督节点和任务层占位节点提供参数默认值
 - 定义图像输入、感知输入、监督输出、规划请求、规划状态的 topic 约定
 - 定义感知超时、请求超时和周期性状态发布参数
+- 定义 `need_reobserve` 的最小进入 / 退出滞回参数
 
 ### 2.6 `yolopose_ros/system_supervisor_node.py`
 
@@ -94,13 +95,14 @@ ros2_ws/
 - 可选发布调试图像 topic
 - 图像中叠加关键点骨架、人体框、track id
 - 图像中叠加 `fall score / raw state / stable state`
+- 图像中叠加 `observation_state / observation_reason`
 - 通过订阅 supervisor status 叠加 `planner_action / reason`
 
 ### 2.8 `yolopose_ros/task_planner_bridge_node.py`
 
 作用：
 - 订阅 `/task_planner/request`
-- 将 `monitor / wait_for_update / trigger_safe_mode / hold` 映射成最小任务层状态
+- 将 `monitor / wait_for_update / need_reobserve / trigger_safe_mode / hold` 映射成最小任务层状态
 - 发布 `/task_planner/status`
 - 作为未来 `PlanSys2 / LTL` 消费端的占位替身
 
@@ -192,6 +194,7 @@ nav2 / rtabmap / task execution
 - `video_file` 或 `camera` 模式在输入缺失、runner 初始化失败、或 runner 退出后，转为 `unavailable / error / completed` 状态事件
 - `ros_image` 模式在图像流未到达或中断时，发布 `waiting_for_ros_image / ros_image_timeout` 状态事件
 - `system_supervisor_node` 会在感知无消息超过 `perception_timeout_sec` 后发布 `perception_timeout` 状态，不会静默
+- `need_reobserve` 需要连续 `reobserve_enter_frames` 帧 raw 候选才进入，并连续 `reobserve_exit_frames` 帧稳定可观测才退出
 - `task_planner_bridge_node` 会消费监督层请求并持续发布占位 `planner_status`
 - `visualization_enabled=true` 时，`pose_stream_node` 会额外发布调试图像 topic
 
@@ -219,6 +222,8 @@ nav2 / rtabmap / task execution
 - `stable_person_present`
 - `stable_fall_detected`
 - `seq_stable_fall_detected`
+- `observation_state`
+- `observation_reason`
 
 运行态帧事件额外依赖：
 - `frame_id`
@@ -253,9 +258,11 @@ nav2 / rtabmap / task execution
 
 当前会附带：
 - `planner_request_topic`
+- `observation_state`
+- `observation_reason`
 - `source_event`
 
-这两个字段只用于过渡期调试，后续真正接规划层时不应作为稳定依赖。
+这些字段只用于过渡期调试，后续真正接规划层时不应作为稳定依赖。
 
 频率约定：
 - 正常时随 perception 事件同步发布
@@ -286,14 +293,37 @@ nav2 / rtabmap / task execution
 
 当前常见字段：
 - `ts`
+- `role`
 - `planner_mode`
 - `planner_state`
 - `active_action`
 - `reason`
+- `state_reason`
+- `request_reason`
+- `request_supported`
+- `request_topic`
+- `source_request`
+
+当前最小占位状态集合：
+- `idle`
+- `waiting`
+- `reobserve_pending`
+- `dispatching_safe_mode`
+- `holding`
+
+当前 request/status 固定映射：
+
+| `requested_action` | `planner_state` | `state_reason` |
+|---|---|---|
+| `monitor` | `idle` | `monitoring_request` |
+| `wait_for_update` | `waiting` | `waiting_for_perception_update` |
+| `need_reobserve` | `reobserve_pending` | `reobserve_requested` |
+| `trigger_safe_mode` | `dispatching_safe_mode` | `safe_mode_requested` |
+| `hold` | `holding` | `planner_hold` |
 
 说明：
 - 该 topic 当前不属于冻结核心契约
-- 后续接入真实规划层时，可以保留 topic 名，也可以在稳定后收敛为正式 `kaiti_msgs`
+- 后续接入真实规划层时，可以保留 topic 名并替换消费者实现
 
 ### 5.5 `/perception/debug_image`
 
@@ -348,12 +378,53 @@ nav2 / rtabmap / task execution
 
 ### 7.2 下一阶段
 
-- 先把当前 JSON schema v1 对齐到实现
-- 再引入 `kaiti_msgs` 包承接冻结核心字段
-- 引入 `RTAB-Map`
-- 引入 `Nav2`
+- 保持当前 perception / supervisor / planner request / planner status 语义不回改
+- 按挂载边界引入 `RTAB-Map`
+- 按挂载边界引入 `Nav2`
 - 用真实 `PlanSys2 / LTL` 任务流替代当前 `task_planner_bridge_node`
 
-## 8. 说明
+## 8. 后续系统挂载边界
+
+### 8.1 `RTAB-Map / 建图定位层`
+
+当前不接入真实 `RTAB-Map` 节点，只冻结未来挂载点：
+
+- 未来输入：`/camera/image_raw`、`/camera/camera_info`、`/scan`、`/odom`、`/tf`
+- 未来输出：`/map`、`/rtabmap/localization_pose`、`/tf`
+- 当前关系：不改变 `/perception/events -> /system/supervisor/status -> /task_planner/request` 语义
+- 后续职责：向真实 planner 提供地图、定位和可达性信息
+
+### 8.2 `Nav2 / 导航执行层`
+
+当前不接入 `/navigate_to_pose` action，只冻结未来挂载点：
+
+- 未来输入：真实 planner 发出的导航目标或恢复动作
+- 未来输出：导航状态、到达结果、失败原因
+- 当前关系：`task_planner_bridge_node` 不调用 Nav2，只作为 planner placeholder
+- 后续职责：执行由真实 planner 产生的空间动作
+
+### 8.3 `PlanSys2 / LTL / 任务规划层`
+
+当前不接入真实 `PlanSys2` 或 LTL 自动机，只冻结替换边界：
+
+- 替换对象：`task_planner_bridge_node`
+- 保留输入：`/task_planner/request`
+- 保留输出：`/task_planner/status`
+- 允许新增：内部 plan、action dispatch、execution feedback topic
+- 不允许要求：上游 `pose_stream_node` 或 `system_supervisor_node` 为真实 planner 回改现有语义
+
+### 8.4 当前明确不做
+
+- 不接真实 `RTAB-Map`
+- 不接真实 `Nav2`
+- 不接真实 `PlanSys2 / LTL`
+- 不新增 action/service 调用
+- 不新增消息类型体系
+- 不改 `models/*.pt`
+- 不训练
+- 不扩外部数据集
+- 不让 planner 直接依赖感知研究态字段
+
+## 9. 说明
 
 这个骨架的目标不是一次性把所有模块都接完，而是先把工程边界和启动入口固定下来，避免后续把感知、建图、规划混成一个难以维护的文件堆。当前版本先优先保证 `mock` 默认可运行，再为真实视频和摄像头输入留出兼容入口。

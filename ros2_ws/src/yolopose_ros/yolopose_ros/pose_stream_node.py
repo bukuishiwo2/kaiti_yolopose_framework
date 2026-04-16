@@ -16,6 +16,8 @@ from rclpy.node import Node
 from sensor_msgs.msg import Image
 from std_msgs.msg import String
 
+from yolopose_ros.system_semantics import enrich_observation
+
 
 TERMINAL_PIPELINE_STATES = {"completed", "error", "unavailable"}
 
@@ -50,6 +52,7 @@ class PoseStreamNode(Node):
         self.declare_parameter("visualization_enabled", False)
         self.declare_parameter("visualization_topic", "/perception/debug_image")
         self.declare_parameter("supervisor_status_topic", "/system/supervisor/status")
+        self.declare_parameter("reobserve_visible_keypoint_threshold", 6)
 
         raw_project_root = str(self.get_parameter("project_root").value).strip()
         self._project_root = Path(raw_project_root or _default_project_root()).resolve()
@@ -66,6 +69,9 @@ class PoseStreamNode(Node):
         self._visualization_enabled = bool(self.get_parameter("visualization_enabled").value)
         self._visualization_topic = str(self.get_parameter("visualization_topic").value).strip()
         self._supervisor_status_topic = str(self.get_parameter("supervisor_status_topic").value).strip()
+        self._reobserve_visible_keypoint_threshold = int(
+            self.get_parameter("reobserve_visible_keypoint_threshold").value
+        )
         if self._input_mode not in {"mock", "video_file", "camera", "ros_image"}:
             self.get_logger().warning(
                 "Unsupported input_mode=%s, fallback to mock" % self._input_mode
@@ -137,7 +143,8 @@ class PoseStreamNode(Node):
     def _publish_mock_event(self) -> None:
         self._frame_id += 1
         self._publish_payload(
-            {
+            enrich_observation(
+                {
                 "ts": self._timestamp(),
                 "role": "pose_stream_node",
                 "event_type": "perception_event",
@@ -161,14 +168,17 @@ class PoseStreamNode(Node):
                 "seq_stable_fall_detected": False,
                 "seq_fall_state_changed": False,
                 "seq_fall_score": 0.0,
-            }
+                },
+                visible_keypoint_threshold=self._reobserve_visible_keypoint_threshold,
+            )
         )
 
     def _publish_terminal_heartbeat(self) -> None:
         if self._pipeline_state not in TERMINAL_PIPELINE_STATES:
             return
         self._publish_payload(
-            {
+            enrich_observation(
+                {
                 "ts": self._timestamp(),
                 "role": "pose_stream_node",
                 "event_type": "perception_status",
@@ -181,12 +191,15 @@ class PoseStreamNode(Node):
                 "stable_person_present": None,
                 "stable_fall_detected": False,
                 "seq_stable_fall_detected": False,
-            }
+                },
+                visible_keypoint_threshold=self._reobserve_visible_keypoint_threshold,
+            )
         )
 
     def _publish_ros_image_waiting_status(self, reason: str, pipeline_state: str) -> None:
         self._publish_payload(
-            {
+            enrich_observation(
+                {
                 "ts": self._timestamp(),
                 "role": "pose_stream_node",
                 "event_type": "perception_status",
@@ -199,7 +212,9 @@ class PoseStreamNode(Node):
                 "stable_person_present": None,
                 "stable_fall_detected": False,
                 "seq_stable_fall_detected": False,
-            }
+                },
+                visible_keypoint_threshold=self._reobserve_visible_keypoint_threshold,
+            )
         )
 
     def _resolve_path(self, value: str) -> Path:
@@ -407,6 +422,11 @@ class PoseStreamNode(Node):
                 f"action={supervisor_action} "
                 f"reason={supervisor_reason}"
             ),
+            (
+                "observe "
+                f"state={record.get('observation_state', '-')} "
+                f"reason={record.get('observation_reason', '-')}"
+            ),
         ]
         for idx, line in enumerate(lines):
             y = 28 + idx * 24
@@ -470,6 +490,10 @@ class PoseStreamNode(Node):
         payload["perception_available"] = True
         payload["person_present"] = payload.get("stable_person_present")
         payload["source"] = payload.get("source", self._resolved_source)
+        payload = enrich_observation(
+            payload,
+            visible_keypoint_threshold=self._reobserve_visible_keypoint_threshold,
+        )
         self._publish_payload(payload)
 
     def _run_runner(self, runner: Any) -> None:
