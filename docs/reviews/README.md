@@ -28,3 +28,4 @@
 - [感知接口评审](perception_interface_review_2026-04-10.md)
 - [Phase 4a 验收](phase4a_acceptance_2026-04-16.md)
 - [Phase 4b Nav2 前置检查](phase4b_nav2_precheck_2026-04-17.md)
+- [Phase 5 Planner 到 Nav2 受控派发](phase5_planner_nav2_dispatch_2026-04-17.md)

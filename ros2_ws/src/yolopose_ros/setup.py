@@ -26,6 +26,7 @@ setup(
             "pose_stream_node = yolopose_ros.pose_stream_node:main",
             "system_supervisor_node = yolopose_ros.system_supervisor_node:main",
             "task_planner_bridge_node = yolopose_ros.task_planner_bridge_node:main",
+            "planner_nav2_dispatcher_node = yolopose_ros.planner_nav2_dispatcher_node:main",
         ],
     },
 )

@@ -57,6 +57,10 @@ system_supervisor_node
 task_planner_bridge_node
         ↓  /task_planner/status
 future planner layer
+        ↓
+planner_nav2_dispatcher_node (optional Phase 5, default dispatch disabled)
+        ↓  /navigate_to_pose
+Nav2
 ```
 
 当前最小闭环已经打通：
@@ -67,6 +71,7 @@ future planner layer
 - `planner_status` 已经作为未来规划层替换前的过渡反馈边界存在
 - `ros_image` 模式可用 `camera_stream_node` 把电脑摄像头接成 ROS2 真图像流
 - 可选发布 `/perception/debug_image`，可直接用 `rqt_image_view` 观察骨架和状态叠加
+- Phase 5 可选启动 `planner_nav2_dispatcher_node`，默认只观察 `/task_planner/request` 并拒绝派发，不产生机器人运动
 
 ## 4. 启动方式
 
@@ -142,6 +147,7 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - `pose_stream_node`
 - `system_supervisor_node`
 - `task_planner_bridge_node`
+- `planner_nav2_dispatcher_node`
 
 `system_supervisor_node` 当前提供 `need_reobserve` 边界稳定化参数：
 
@@ -257,6 +263,27 @@ export KAITI_PROJECT_ROOT=/absolute/path/to/kaiti_yolopose_framework
 - 由 `task_planner_bridge_node` 发布占位反馈
 - 用于确认任务层最小消费者已经接到 supervisor request
 - 暂不作为冻结核心契约
+
+### `/navigate_to_pose`
+
+逻辑消息：
+
+- `nav2_msgs/action/NavigateToPose`
+
+当前用途：
+
+- Phase 4b 中只允许 RViz2 或 CLI 手动发送短距离 goal。
+- Phase 5 中只有 `planner_nav2_dispatcher_node` 可以在显式开启后调用。
+- `/task_planner/request` 不允许直通该 action。
+
+Phase 5 受控派发边界：
+
+- 默认 `dispatch_enabled=false`
+- 默认 `allowed_actions=""`
+- `trigger_safe_mode` 仅在 `fall_detected / fall_detected_rule_fallback` 下可映射到 `safe_mode_staging`
+- `need_reobserve` 仅在遮挡 / 低可见度类 reason 下可映射到 `reobserve_vantage`
+- `temporal_window_not_ready` 默认不触发移动
+- `hold` 只取消 dispatcher 自己派发的 active goal
 
 当前字段会区分：
 
@@ -430,12 +457,44 @@ ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
 
 该入口不是完整导航闭环，也不是最终 Nav2 调参配置。若 costmap、TF 或 `/cmd_vel` 不稳定，应先回到 Phase 4a 空间层复查，不应回改 perception / supervisor / planner placeholder 语义。
 
-## 11. 下一阶段
+## 11. Phase 5 Planner 到 Nav2 受控派发
+
+Phase 5 在 Phase 4b 基线之上新增受控 dispatcher，但仍不接真实 `PlanSys2 / LTL`，也不改 `task_planner_bridge_node` 的 placeholder 职责。
+
+默认只观察、不派发：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros phase5_nav2_dispatcher.launch.py dispatch_enabled:=false
+```
+
+显式开启单动作 smoke test：
+
+```bash
+ros2 launch yolopose_ros phase5_nav2_dispatcher.launch.py \
+  dispatch_enabled:=true \
+  allowed_actions:='[trigger_safe_mode]'
+```
+
+发布一次受控请求：
+
+```bash
+ros2 topic pub --once /task_planner/request std_msgs/msg/String \
+  "{data: '{\"ts\":\"manual\",\"role\":\"system_supervisor\",\"planner_mode\":\"plansys2_placeholder\",\"requested_action\":\"trigger_safe_mode\",\"reason\":\"fall_detected\"}'}"
+```
+
+本阶段仍只说明“受控派发边界成立”，不等价于完整任务规划闭环。
+
+## 12. 下一阶段
 
 后续系统主线应保持这个顺序：
 
 1. 先把当前 schema v1 和实现完全对齐
 2. 验证 Phase 4a `RTAB-Map` 最小挂载
 3. 使用 Phase 4b 入口完成 Nav2 precheck
-4. 再进入完整 `Nav2` 导航闭环
-5. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo
+4. 使用 Phase 5 入口验证受控导航派发边界
+5. 再进入完整 `Nav2` 导航闭环
+6. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo

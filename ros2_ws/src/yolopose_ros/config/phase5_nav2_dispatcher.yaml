@@ -1,0 +1,30 @@
+planner_nav2_dispatcher_node:
+  ros__parameters:
+    planner_request_topic: /task_planner/request
+    nav2_action_name: /navigate_to_pose
+
+    # Safety gate: keep false unless a human intentionally enables Phase 5 dispatch.
+    dispatch_enabled: false
+    allowed_actions: ""
+
+    goal_frame_id: map
+    cooldown_sec: 5.0
+
+    trigger_safe_mode_allowed_reasons:
+      - fall_detected
+      - fall_detected_rule_fallback
+    need_reobserve_allowed_reasons:
+      - low_visibility
+      - occluded
+      - occluded_or_no_visible_keypoints
+      - feature_not_reliable
+      - need_reobserve
+
+    # Named goal registry. Pose arrays are [x, y, z, qx, qy, qz, qw].
+    safe_mode_staging_frame_id: map
+    safe_mode_staging_pose_xyzw: [1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+    safe_mode_staging_behavior_tree: ""
+
+    reobserve_vantage_frame_id: map
+    reobserve_vantage_pose_xyzw: [0.5, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0]
+    reobserve_vantage_behavior_tree: ""
