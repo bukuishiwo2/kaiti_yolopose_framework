@@ -60,6 +60,7 @@
 - `ros2_ws/src/yolopose_ros/config/phase5_nav2_dispatcher.yaml`
 - `ros2_ws/src/yolopose_ros/launch/phase5_nav2_dispatcher.launch.py`
 - `scripts/verify_planner_nav2_dispatcher.py`
+- `scripts/phase5_nav2_dispatch_smoke.py`
 
 更新文件：
 
@@ -116,6 +117,13 @@ timeout 5s ros2 launch yolopose_ros phase5_nav2_dispatcher.launch.py \
 - active goal 期间 `hold` 进入 cancel 分支
 - Phase 5 dispatcher 单独启动成功，默认禁用和显式白名单两种参数形式均可解析
 
+运行态 smoke 结论：
+
+- `trigger_safe_mode -> safe_mode_staging` 运行态通过，dispatcher 可将合规 `/task_planner/request` 映射为 Nav2 `/navigate_to_pose` goal。
+- `hold` cancel 运行态通过，已观察到 `cancel requested`、`goals_canceling=1` 与 `goal finished status=5`。
+- 手工 `ros2 topic pub --once /task_planner/request` 存在时序噪声，可能因 DDS discovery、dispatcher/Nav2 readiness 或 active goal 尚未建立，导致需要重复发布 `trigger_safe_mode` 或 `hold`。
+- 后续标准 Phase 5 运行态测试推荐使用 `scripts/phase5_nav2_dispatch_smoke.py`，由脚本等待 request subscriber、Nav2 action server 和 active goal 状态后再发送 `hold`。
+
 ## 6. 风险
 
 - Phase 5 不解决 RTAB-Map 长时漂移、地图质量或动态家居导航稳定性。
@@ -140,15 +148,18 @@ ros2 launch yolopose_ros phase5_nav2_dispatcher.launch.py dispatch_enabled:=fals
 
 ```bash
 ros2 launch yolopose_ros phase5_nav2_dispatcher.launch.py \
+  launch_phase4b:=false \
   dispatch_enabled:=true \
   allowed_actions:='[trigger_safe_mode]'
 ```
 
-发布一次受控请求：
+标准运行态 smoke test：
 
 ```bash
-ros2 topic pub --once /task_planner/request std_msgs/msg/String \
-  "{data: '{\"ts\":\"manual\",\"role\":\"system_supervisor\",\"planner_mode\":\"plansys2_placeholder\",\"requested_action\":\"trigger_safe_mode\",\"reason\":\"fall_detected\"}'}"
+cd /home/yhc/kaiti_yolopose_framework
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+python3 scripts/phase5_nav2_dispatch_smoke.py
 ```
 
 观察 Nav2：
