@@ -169,3 +169,23 @@ ros2 action info /navigate_to_pose
 ros2 topic echo --once /plan
 ros2 topic echo /cmd_vel
 ```
+
+## 8. 冻结结论
+
+Phase 5 受控派发边界可以冻结为“planner request 到 Nav2 的显式授权派发层”，不扩大为完整任务规划闭环。
+
+已确认：
+
+- `scripts/phase5_nav2_dispatch_smoke.py` 运行态通过。
+- `trigger_safe_mode / fall_detected -> safe_mode_staging` 运行态通过，机器人可响应受控请求并进入 Nav2 目标点导航。
+- `hold` cancel 运行态通过，可取消 dispatcher 自己派发的 active Nav2 goal。
+- 手工 `ros2 topic pub --once /task_planner/request` 存在时序噪声，不作为后续标准验收方式。
+
+冻结边界：
+
+- `/task_planner/request` 不直通 `/navigate_to_pose`。
+- dispatcher 仍由 `dispatch_enabled` 和 `allowed_actions` 显式开启，默认不产生机器人运动。
+- `task_planner_bridge_node` 继续保持 placeholder 语义。
+- 不接 PlanSys2 / LTL。
+- 不扩展 `PlannerRequest` schema。
+- 不修改 perception / supervisor 语义。
