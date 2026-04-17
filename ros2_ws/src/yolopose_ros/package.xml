@@ -15,6 +15,8 @@
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>launch</exec_depend>
   <exec_depend>launch_ros</exec_depend>
+  <exec_depend>nav2_bringup</exec_depend>
+  <exec_depend>nav2_msgs</exec_depend>
   <exec_depend>rtabmap_launch</exec_depend>
   <!-- Phase 4a runtime simulator dependency: install either turtlebot4_ignition_bringup
        or turtlebot4_gz_bringup with the TurtleBot4 simulator packages. -->

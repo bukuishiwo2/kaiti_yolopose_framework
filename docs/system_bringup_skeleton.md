@@ -14,10 +14,12 @@ ros2_ws/
     └── yolopose_ros/
         ├── config/
         │   ├── perception_bridge.yaml
+        │   ├── phase4b_nav2_precheck.yaml
         │   ├── phase4a_turtlebot4_rtabmap.yaml
         │   └── system_stack.yaml
         ├── launch/
         │   ├── perception_bridge.launch.py
+        │   ├── phase4b_nav2_precheck.launch.py
         │   ├── phase4a_turtlebot4_rtabmap.launch.py
         │   ├── pose_stream.launch.py
         │   └── system_stack.launch.py
@@ -66,7 +68,20 @@ ros2_ws/
 - 默认禁用 RTAB-Map visual odometry，只使用 TurtleBot4 `/odom`
 - 不改变 `/perception/events -> /system/supervisor/status -> /task_planner/request -> /task_planner/status` 语义
 
-### 2.5 `config/perception_bridge.yaml`
+### 2.5 `launch/phase4b_nav2_precheck.launch.py`
+
+作用：
+- Phase 4b 专用最小 Nav2 precheck 入口
+- 默认先拉起 Phase 4a TurtleBot4 + RTAB-Map 基线
+- 再通过 `nav2_bringup` 的 `navigation_launch.py` 启动 Nav2 navigation servers
+- 不启动 Nav2 `localization_launch.py`，不额外启动 `map_server / AMCL`
+- 继续使用 RTAB-Map 输出的 `/map` 与 `map -> odom`
+- 默认关闭 TurtleBot4 simulator 自带 `nav2`
+- 只允许人工向 `/navigate_to_pose` 发送短距离固定 goal
+- 不从 `/task_planner/request` 自动派发 goal
+- 不改变 perception / supervisor / planner placeholder 语义
+
+### 2.6 `config/perception_bridge.yaml`
 
 作用：
 - 给感知桥接节点提供参数默认值
@@ -75,7 +90,7 @@ ros2_ws/
 - 显式保留 `video_file_path`、`camera_device`、`camera_index`、`ros_image_topic` 等输入参数
 - 可选保留 `visualization_enabled`、`visualization_topic`、`supervisor_status_topic` 等调试参数
 
-### 2.6 `config/system_stack.yaml`
+### 2.7 `config/system_stack.yaml`
 
 作用：
 - 给相机节点、系统监督节点和任务层占位节点提供参数默认值
@@ -83,7 +98,7 @@ ros2_ws/
 - 定义感知超时、请求超时和周期性状态发布参数
 - 定义 `need_reobserve` 的最小进入 / 退出滞回参数
 
-### 2.7 `config/phase4a_turtlebot4_rtabmap.yaml`
+### 2.8 `config/phase4a_turtlebot4_rtabmap.yaml`
 
 作用：
 - 记录 Phase 4a 默认仿真和 RTAB-Map topic 口径
@@ -94,7 +109,18 @@ ros2_ws/
 - 默认 perception 输入为 `ros_image`
 - 该文件作为人工维护的集成配置说明，具体 launch 参数仍可在命令行覆盖
 
-### 2.8 `yolopose_ros/system_supervisor_node.py`
+### 2.9 `config/phase4b_nav2_precheck.yaml`
+
+作用：
+- Phase 4b Nav2 最小参数文件
+- 面向 TurtleBot4 standard + 简单静态短距离场景
+- `global_frame=map`、`odom_topic=/odom`、`robot_base_frame=base_link`
+- local/global costmap 使用 `/scan` 作为最小障碍输入
+- global costmap 订阅 `/map`，当前按 RTAB-Map 在线地图处理，`map_subscribe_transient_local=false`
+- 速度和加速度限制采用保守值，只用于 smoke test
+- 不包含 `AMCL / map_server` 参数，不作为最终导航调参配置
+
+### 2.10 `yolopose_ros/system_supervisor_node.py`
 
 作用：
 - 订阅感知事件
@@ -104,7 +130,7 @@ ros2_ws/
 
 当前它不负责真正规划，只负责把系统边界先打通。
 
-### 2.9 `yolopose_ros/camera_stream_node.py`
+### 2.11 `yolopose_ros/camera_stream_node.py`
 
 作用：
 - 从电脑摄像头读取实时图像
@@ -113,7 +139,7 @@ ros2_ws/
 
 当前它只负责最小图像发布，不负责 `camera_info`、标定或图像压缩。
 
-### 2.10 `yolopose_ros/pose_stream_node.py` 可视化调试能力
+### 2.12 `yolopose_ros/pose_stream_node.py` 可视化调试能力
 
 当前额外支持：
 - 可选发布调试图像 topic
@@ -122,7 +148,7 @@ ros2_ws/
 - 图像中叠加 `observation_state / observation_reason`
 - 通过订阅 supervisor status 叠加 `planner_action / reason`
 
-### 2.11 `yolopose_ros/task_planner_bridge_node.py`
+### 2.13 `yolopose_ros/task_planner_bridge_node.py`
 
 作用：
 - 订阅 `/task_planner/request`
@@ -221,6 +247,42 @@ ros2 launch yolopose_ros phase4a_turtlebot4_rtabmap.launch.py \
 3. RTAB-Map 消费同一组仿真传感器流并输出 `/map`、`/localization_pose`、`/tf`
 4. `task_planner_bridge_node` 仍是 placeholder，不消费地图或定位输出
 5. `/odom` 必须只有 `diffdrive_controller` 一个 publisher，当前默认不启动 `/rgbd_odometry`
+
+### 3.8 Phase 4b Nav2 最小 precheck
+
+Phase 4b 在 Phase 4a 基线之上启动 Nav2 navigation servers，用于检查 lifecycle、costmap、`/plan`、`/cmd_vel` 与 1 个短距离固定 goal。
+
+先确保 Nav2 运行依赖存在：
+
+```bash
+sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
+```
+
+构建并启动：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros phase4b_nav2_precheck.launch.py
+```
+
+该入口默认：
+
+1. 启动 Phase 4a TurtleBot4 + RTAB-Map + perception 基线
+2. 保持 TurtleBot4 自带 `nav2=false`
+3. 保持 RTAB-Map `visual_odometry=false`、`publish_tf_odom=false`
+4. 启动 Nav2 `navigation_launch.py`
+5. 不启动 `map_server / AMCL`
+6. 不让 `task_planner_bridge_node` 调用 `/navigate_to_pose`
+
+第一轮只允许手动 goal：
+
+```bash
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+  "{pose: {header: {frame_id: map}, pose: {position: {x: 1.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}"
+```
 
 ## 4. 当前消息流
 
@@ -430,6 +492,7 @@ nav2 / rtabmap / task execution
 - 系统监督占位节点
 - 任务层占位节点
 - Phase 4a TurtleBot4 + RTAB-Map 最小接入 launch/config
+- Phase 4b Nav2 precheck launch/config
 - 参数化 YAML 配置
 - `mock / video_file / camera / ros_image` 四种输入模式骨架
 - 无摄像头环境下可跑通的最小闭环
@@ -438,7 +501,8 @@ nav2 / rtabmap / task execution
 
 - 保持当前 perception / supervisor / planner request / planner status 语义不回改
 - Phase 4a 按最小接入目标冻结，验收结论见 `docs/reviews/phase4a_acceptance_2026-04-16.md`
-- 后续若进入 `Nav2` 或 `PlanSys2 / LTL`，应另起阶段并重新定义验收标准
+- Phase 4b 已新增最小 Nav2 precheck 入口，验收口径见 `docs/reviews/phase4b_nav2_precheck_2026-04-17.md`
+- 后续若进入完整 `Nav2` 导航闭环或 `PlanSys2 / LTL`，应另起阶段并重新定义验收标准
 - 当前 `task_planner_bridge_node` 仍保持 placeholder，不消费 `/map` 或 `/localization_pose`
 
 ## 8. 后续系统挂载边界
@@ -455,11 +519,12 @@ nav2 / rtabmap / task execution
 
 ### 8.2 `Nav2 / 导航执行层`
 
-当前不接入 `/navigate_to_pose` action，只冻结未来挂载点：
+当前 Phase 4b 只接入 Nav2 precheck，不接完整任务闭环：
 
-- 未来输入：真实 planner 发出的导航目标或恢复动作
-- 未来输出：导航状态、到达结果、失败原因
+- 当前输入：人工发送的短距离固定 `/navigate_to_pose` goal
+- 当前输出：Nav2 lifecycle、costmap、`/plan`、`/cmd_vel` 与 smoke test 结果
 - 当前关系：`task_planner_bridge_node` 不调用 Nav2，只作为 planner placeholder
+- 当前限制：不启动 `map_server / AMCL`，继续复用 RTAB-Map `/map` 与 `map -> odom`
 - 后续职责：执行由真实 planner 产生的空间动作
 
 ### 8.3 `PlanSys2 / LTL / 任务规划层`
@@ -474,9 +539,9 @@ nav2 / rtabmap / task execution
 
 ### 8.4 当前明确不做
 
-- 不接真实 `Nav2`
+- 不接完整 `Nav2` 任务闭环
 - 不接真实 `PlanSys2 / LTL`
-- 不新增 action/service 调用
+- 不从 `/task_planner/request` 自动派发 action goal
 - 不新增消息类型体系
 - 不做大规模家居仿真环境
 - 不做 Kalibr 标定流程

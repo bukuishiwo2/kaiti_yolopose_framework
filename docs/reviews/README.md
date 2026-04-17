@@ -27,3 +27,4 @@
 - [接口迁移汇总](interface_migration_summary_2026-04-10.md)
 - [感知接口评审](perception_interface_review_2026-04-10.md)
 - [Phase 4a 验收](phase4a_acceptance_2026-04-16.md)
+- [Phase 4b Nav2 前置检查](phase4b_nav2_precheck_2026-04-17.md)

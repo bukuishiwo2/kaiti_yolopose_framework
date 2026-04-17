@@ -386,11 +386,56 @@ ros2 run tf2_ros tf2_echo odom base_link
 
 该入口不启动 Nav2 完整闭环，不接 PlanSys2 / LTL，不新增消息类型，也不让 planner placeholder 消费地图或定位输出。
 
-## 10. 下一阶段
+## 10. Phase 4b Nav2 最小 precheck
+
+Phase 4b 在 Phase 4a 基线之上启动 Nav2 navigation servers，只用于检查 lifecycle、costmap、`/plan`、`/cmd_vel` 和 1 个短距离固定 goal。
+
+构建并启动：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros phase4b_nav2_precheck.launch.py
+```
+
+该入口默认：
+
+- 启动 Phase 4a TurtleBot4 + RTAB-Map + perception 基线
+- 保持 TurtleBot4 自带 `nav2=false`
+- 保持 RTAB-Map `visual_odometry=false`、`publish_tf_odom=false`
+- 启动 `nav2_bringup` 的 `navigation_launch.py`
+- 不启动 `map_server / AMCL`
+- 不接 `PlanSys2 / LTL`
+- 不让 `task_planner_bridge_node` 调用 `/navigate_to_pose`
+
+观察 Nav2 precheck 输出：
+
+```bash
+ros2 lifecycle nodes
+ros2 action info /navigate_to_pose
+ros2 topic echo --once /global_costmap/costmap
+ros2 topic echo --once /local_costmap/costmap
+ros2 topic echo --once /plan
+ros2 topic echo /cmd_vel
+```
+
+第一轮只允许手动发送短距离 goal：
+
+```bash
+ros2 action send_goal /navigate_to_pose nav2_msgs/action/NavigateToPose \
+  "{pose: {header: {frame_id: map}, pose: {position: {x: 1.0, y: 0.0, z: 0.0}, orientation: {w: 1.0}}}}"
+```
+
+该入口不是完整导航闭环，也不是最终 Nav2 调参配置。若 costmap、TF 或 `/cmd_vel` 不稳定，应先回到 Phase 4a 空间层复查，不应回改 perception / supervisor / planner placeholder 语义。
+
+## 11. 下一阶段
 
 后续系统主线应保持这个顺序：
 
 1. 先把当前 schema v1 和实现完全对齐
 2. 验证 Phase 4a `RTAB-Map` 最小挂载
-3. 再接 `Nav2`
-4. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo
+3. 使用 Phase 4b 入口完成 Nav2 precheck
+4. 再进入完整 `Nav2` 导航闭环
+5. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo
