@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="360" viewBox="0 0 1180 360">
+<title>dynamic replanning gantt</title>
+<style>text{font-family:monospace;font-size:12px;fill:#1f2937} .small{font-size:11px} .axis{stroke:#64748b;stroke-width:1} .grid{stroke:#cbd5e1;stroke-width:1;stroke-dasharray:4 4}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40" y="24" font-size="18">dynamic replanning gantt: before vs after t=45</text>
+<line class="grid" x1="120.0" y1="40" x2="120.0" y2="330"/>
+<text class="small" x="120.0" y="348" text-anchor="middle">0</text>
+<line class="grid" x1="233.3" y1="40" x2="233.3" y2="330"/>
+<text class="small" x="233.3" y="348" text-anchor="middle">10</text>
+<line class="grid" x1="346.7" y1="40" x2="346.7" y2="330"/>
+<text class="small" x="346.7" y="348" text-anchor="middle">20</text>
+<line class="grid" x1="460.0" y1="40" x2="460.0" y2="330"/>
+<text class="small" x="460.0" y="348" text-anchor="middle">30</text>
+<line class="grid" x1="573.3" y1="40" x2="573.3" y2="330"/>
+<text class="small" x="573.3" y="348" text-anchor="middle">40</text>
+<line class="grid" x1="686.7" y1="40" x2="686.7" y2="330"/>
+<text class="small" x="686.7" y="348" text-anchor="middle">50</text>
+<line class="grid" x1="800.0" y1="40" x2="800.0" y2="330"/>
+<text class="small" x="800.0" y="348" text-anchor="middle">60</text>
+<line class="grid" x1="913.3" y1="40" x2="913.3" y2="330"/>
+<text class="small" x="913.3" y="348" text-anchor="middle">70</text>
+<line class="grid" x1="1026.7" y1="40" x2="1026.7" y2="330"/>
+<text class="small" x="1026.7" y="348" text-anchor="middle">80</text>
+<line class="grid" x1="1140.0" y1="40" x2="1140.0" y2="330"/>
+<text class="small" x="1140.0" y="348" text-anchor="middle">90</text>
+<text x="30" y="72" font-size="15">initial</text>
+<text x="104" y="72" text-anchor="end">R1</text>
+<rect x="120" y="50" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="54" width="226.7" height="28" fill="#93c5fd" stroke="#475569"/>
+<text x="233.3" y="72" text-anchor="middle">T1</text>
+<rect x="550.7" y="54" width="170.0" height="28" fill="#fca5a5" stroke="#475569"/>
+<text x="635.7" y="72" text-anchor="middle">T3</text>
+<text x="104" y="124" text-anchor="end">R2</text>
+<rect x="120" y="102" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="106" width="226.7" height="28" fill="#a7f3d0" stroke="#475569"/>
+<text x="233.3" y="124" text-anchor="middle">T2</text>
+<rect x="720.7" y="106" width="283.3" height="28" fill="#fcd34d" stroke="#475569"/>
+<text x="862.3" y="124" text-anchor="middle">T4</text>
+<text x="104" y="176" text-anchor="end">R3</text>
+<rect x="120" y="154" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="158" width="453.3" height="28" fill="#c4b5fd" stroke="#475569"/>
+<text x="346.7" y="176" text-anchor="middle">T5</text>
+<text x="30" y="228" font-size="15">replan@45</text>
+<text x="104" y="228" text-anchor="end">R1</text>
+<rect x="120" y="206" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="210" width="226.7" height="28" fill="#93c5fd" stroke="#475569"/>
+<text x="233.3" y="228" text-anchor="middle">T1</text>
+<rect x="550.7" y="210" width="170.0" height="28" fill="#fca5a5" stroke="#475569"/>
+<text x="635.7" y="228" text-anchor="middle">T3</text>
+<text x="104" y="280" text-anchor="end">R2</text>
+<rect x="120" y="258" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="262" width="226.7" height="28" fill="#a7f3d0" stroke="#475569"/>
+<text x="233.3" y="280" text-anchor="middle">T2</text>
+<rect x="856.7" y="262" width="283.3" height="28" fill="#fcd34d" stroke="#475569"/>
+<text x="998.3" y="280" text-anchor="middle">T4</text>
+<text x="104" y="332" text-anchor="end">R3</text>
+<rect x="120" y="310" width="1020" height="36" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="120.0" y="314" width="453.3" height="28" fill="#c4b5fd" stroke="#475569"/>
+<text x="346.7" y="332" text-anchor="middle">T5</text>
+</svg>

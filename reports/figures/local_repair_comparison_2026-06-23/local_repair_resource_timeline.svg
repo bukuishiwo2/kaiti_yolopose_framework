@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360">
+<title>Local repair resource timeline</title>
+<style>text{font-family:monospace;font-size:12px;fill:#1f2937} .small{font-size:11px;fill:#475569} .axis{stroke:#64748b;stroke-width:1} .grid{stroke:#cbd5e1;stroke-width:1;stroke-dasharray:4 4}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40" y="28" font-size="18">local repair resource timeline: corridor_H and supply_point_S</text>
+<text class="small" x="40" y="48">resource trigger changes corridor_H at t=45; supply_point_S occupancy order reveals the difference between full replanning and local repair</text>
+<line class="grid" x1="160.0" y1="60" x2="160.0" y2="294"/>
+<text class="small" x="160.0" y="316" text-anchor="middle">0</text>
+<line class="grid" x1="246.4" y1="60" x2="246.4" y2="294"/>
+<text class="small" x="246.4" y="316" text-anchor="middle">10</text>
+<line class="grid" x1="332.8" y1="60" x2="332.8" y2="294"/>
+<text class="small" x="332.8" y="316" text-anchor="middle">20</text>
+<line class="grid" x1="419.2" y1="60" x2="419.2" y2="294"/>
+<text class="small" x="419.2" y="316" text-anchor="middle">30</text>
+<line class="grid" x1="505.6" y1="60" x2="505.6" y2="294"/>
+<text class="small" x="505.6" y="316" text-anchor="middle">40</text>
+<line class="grid" x1="592.0" y1="60" x2="592.0" y2="294"/>
+<text class="small" x="592.0" y="316" text-anchor="middle">50</text>
+<line class="grid" x1="678.4" y1="60" x2="678.4" y2="294"/>
+<text class="small" x="678.4" y="316" text-anchor="middle">60</text>
+<line class="grid" x1="764.8" y1="60" x2="764.8" y2="294"/>
+<text class="small" x="764.8" y="316" text-anchor="middle">70</text>
+<line class="grid" x1="851.2" y1="60" x2="851.2" y2="294"/>
+<text class="small" x="851.2" y="316" text-anchor="middle">80</text>
+<line class="grid" x1="937.6" y1="60" x2="937.6" y2="294"/>
+<text class="small" x="937.6" y="316" text-anchor="middle">90</text>
+<line class="grid" x1="1024.0" y1="60" x2="1024.0" y2="294"/>
+<text class="small" x="1024.0" y="316" text-anchor="middle">100</text>
+<line class="grid" x1="1110.4" y1="60" x2="1110.4" y2="294"/>
+<text class="small" x="1110.4" y="316" text-anchor="middle">110</text>
+<line class="grid" x1="1196.8" y1="60" x2="1196.8" y2="294"/>
+<text class="small" x="1196.8" y="316" text-anchor="middle">120</text>
+<line x1="548.8" y1="56" x2="548.8" y2="294" stroke="#dc2626" stroke-width="2"/>
+<text class="small" x="554.8" y="52">trigger @ 45</text>
+<text x="144" y="92" text-anchor="end">corridor_H state</text>
+<rect x="160" y="70" width="1080" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="160.0" y="74" width="388.8" height="26" fill="#9bd3ae" stroke="#475569"/>
+<text x="354.4" y="92" text-anchor="middle">free</text>
+<rect x="548.8" y="74" width="302.4" height="26" fill="#f6c177" stroke="#475569"/>
+<text x="700.0" y="92" text-anchor="middle">temporary_occupied</text>
+<rect x="851.2" y="74" width="388.8" height="26" fill="#9bd3ae" stroke="#475569"/>
+<text x="1045.6" y="92" text-anchor="middle">free</text>
+<text x="144" y="144" text-anchor="end">baseline supply_point_S</text>
+<rect x="160" y="122" width="1080" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="592.0" y="126" width="216.0" height="26" fill="#86efac" stroke="#475569"/>
+<text x="700.0" y="144" text-anchor="middle">T7</text>
+<rect x="808.0" y="126" width="216.0" height="26" fill="#fcd34d" stroke="#475569"/>
+<text x="916.0" y="144" text-anchor="middle">T4</text>
+<rect x="1024.0" y="126" width="216.0" height="26" fill="#fdba74" stroke="#475569"/>
+<text x="1132.0" y="144" text-anchor="middle">T6</text>
+<text x="144" y="196" text-anchor="end">full_replan supply_point_S</text>
+<rect x="160" y="174" width="1080" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="592.0" y="178" width="216.0" height="26" fill="#fdba74" stroke="#475569"/>
+<text x="700.0" y="196" text-anchor="middle">T6</text>
+<rect x="808.0" y="178" width="216.0" height="26" fill="#fcd34d" stroke="#475569"/>
+<text x="916.0" y="196" text-anchor="middle">T4</text>
+<rect x="1024.0" y="178" width="216.0" height="26" fill="#86efac" stroke="#475569"/>
+<text x="1132.0" y="196" text-anchor="middle">T7</text>
+<text x="144" y="248" text-anchor="end">local_repair supply_point_S</text>
+<rect x="160" y="226" width="1080" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="592.0" y="230" width="216.0" height="26" fill="#86efac" stroke="#475569"/>
+<text x="700.0" y="248" text-anchor="middle">T7</text>
+<rect x="808.0" y="230" width="216.0" height="26" fill="#fcd34d" stroke="#475569"/>
+<text x="916.0" y="248" text-anchor="middle">T4</text>
+<rect x="1024.0" y="230" width="216.0" height="26" fill="#fdba74" stroke="#475569"/>
+<text x="1132.0" y="248" text-anchor="middle">T6</text>
+</svg>

@@ -6,6 +6,9 @@ torchvision==0.20.1+cu121
 
 ultralytics>=8.3.0
 opencv-python>=4.8.0
-numpy>=1.24.0
+numpy>=1.24.0,<2.0.0
+matplotlib>=3.8.0
+scipy>=1.10.0
 PyYAML>=6.0
 lap>=0.5.12
+PuLP>=2.8.0

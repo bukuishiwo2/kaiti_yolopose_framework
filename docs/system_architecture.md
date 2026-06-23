@@ -238,6 +238,15 @@ Phase 3 已冻结挂载边界。Phase 4a 在不回改 perception / supervisor / 
 - 允许新增内部计划、动作分发或执行反馈 topic，但不要求上游 `pose_stream_node` 或 `system_supervisor_node` 改语义
 - 未来 planner 应只依赖 `requested_action / reason` 与 supervisor 的冻结状态，不直接硬编码 perception 的调试字段
 
+当前新增的最小规划侧链路为：
+
+- `semantic_state_node -> /planning/semantic_state`
+- `spatial_state_node -> /planning/spatial_state`
+- `milp_planner_node -> /planning/plan`
+- `execution_feedback_bridge_node -> /planning/execution_feedback`
+
+这条链路用于冻结毕业设计规划主线，不替换现有 `system_supervisor_node` 和 `task_planner_bridge_node` 的 skeleton 角色。
+
 ## 4. LTL 与自动机映射
 
 开题目标里的 `LTL + 自动机`，在工程上建议这样落地：

@@ -498,3 +498,40 @@ ros2 topic pub --once /task_planner/request std_msgs/msg/String \
 4. 使用 Phase 5 入口验证受控导航派发边界
 5. 再进入完整 `Nav2` 导航闭环
 6. 用真实 `PlanSys2 / LTL` 替换当前占位任务层，再推进 Gazebo
+
+## 12. Planning Stack
+
+本轮新增最小规划链路，不替换现有 placeholder，只新增 `/planning/*` 话题：
+
+- `/planning/semantic_state`
+- `/planning/spatial_state`
+- `/planning/plan`
+- `/planning/execution_feedback`
+
+对应节点：
+
+- `semantic_state_node`
+- `spatial_state_node`
+- `milp_planner_node`
+- `execution_feedback_bridge_node`
+
+启动：
+
+```bash
+ros2 launch yolopose_ros planning_stack.launch.py
+```
+
+观测：
+
+```bash
+ros2 topic echo /planning/semantic_state
+ros2 topic echo /planning/spatial_state
+ros2 topic echo /planning/plan
+ros2 topic echo /planning/execution_feedback
+```
+
+说明：
+
+- 该入口默认只发布冻结版规划实验所需的状态与计划摘要。
+- `PlanSys2` 仍不负责全局分配。
+- `Nav2` 仍不直接消费感知调试字段。

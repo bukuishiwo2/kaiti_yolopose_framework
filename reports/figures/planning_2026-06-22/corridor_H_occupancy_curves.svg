@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="980" height="320" viewBox="0 0 980 320">
+<title>corridor_H occupancy curves</title>
+<style>text{font-family:monospace;font-size:12px;fill:#1f2937} .small{font-size:11px} .axis{stroke:#64748b;stroke-width:1} .grid{stroke:#cbd5e1;stroke-width:1;stroke-dasharray:4 4}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40" y="24" font-size="18">corridor_H occupancy ratio / EMA</text>
+<rect x="90" y="40" width="850" height="230" fill="#f8fafc" stroke="#cbd5e1"/>
+<line class="grid" x1="90" y1="270.0" x2="940" y2="270.0"/>
+<text class="small" x="78" y="274.0" text-anchor="end">0.0</text>
+<line class="grid" x1="90" y1="224.0" x2="940" y2="224.0"/>
+<text class="small" x="78" y="228.0" text-anchor="end">0.2</text>
+<line class="grid" x1="90" y1="178.0" x2="940" y2="178.0"/>
+<text class="small" x="78" y="182.0" text-anchor="end">0.4</text>
+<line class="grid" x1="90" y1="132.0" x2="940" y2="132.0"/>
+<text class="small" x="78" y="136.0" text-anchor="end">0.6</text>
+<line class="grid" x1="90" y1="86.0" x2="940" y2="86.0"/>
+<text class="small" x="78" y="90.0" text-anchor="end">0.8</text>
+<line class="grid" x1="90" y1="40.0" x2="940" y2="40.0"/>
+<text class="small" x="78" y="44.0" text-anchor="end">1.0</text>
+<line class="grid" x1="90.0" y1="40" x2="90.0" y2="270"/>
+<text class="small" x="90.0" y="290" text-anchor="middle">0</text>
+<line class="grid" x1="196.2" y1="40" x2="196.2" y2="270"/>
+<text class="small" x="196.2" y="290" text-anchor="middle">10</text>
+<line class="grid" x1="302.5" y1="40" x2="302.5" y2="270"/>
+<text class="small" x="302.5" y="290" text-anchor="middle">20</text>
+<line class="grid" x1="408.8" y1="40" x2="408.8" y2="270"/>
+<text class="small" x="408.8" y="290" text-anchor="middle">30</text>
+<line class="grid" x1="515.0" y1="40" x2="515.0" y2="270"/>
+<text class="small" x="515.0" y="290" text-anchor="middle">40</text>
+<line class="grid" x1="621.2" y1="40" x2="621.2" y2="270"/>
+<text class="small" x="621.2" y="290" text-anchor="middle">50</text>
+<line class="grid" x1="727.5" y1="40" x2="727.5" y2="270"/>
+<text class="small" x="727.5" y="290" text-anchor="middle">60</text>
+<line class="grid" x1="833.8" y1="40" x2="833.8" y2="270"/>
+<text class="small" x="833.8" y="290" text-anchor="middle">70</text>
+<line class="grid" x1="940.0" y1="40" x2="940.0" y2="270"/>
+<text class="small" x="940.0" y="290" text-anchor="middle">80</text>
+<polyline fill="none" stroke="#2563eb" stroke-width="3" points="90.0,270.0 568.1,116.7 940.0,270.0"/>
+<polyline fill="none" stroke="#dc2626" stroke-width="3" points="90.0,270.0 568.1,178.0 940.0,233.2"/>
+<text x="760" y="36" fill="#2563eb">occupancy_ratio</text>
+<text x="760" y="56" fill="#dc2626">occupancy_ratio_ema</text>
+</svg>

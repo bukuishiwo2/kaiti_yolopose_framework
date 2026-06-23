@@ -16,3 +16,7 @@
 
 - [UR Fall 基准摘要](urfall_comparison_2026-04-09.md)
 - [UR Fall Rule / LSTM / TCN 对比摘要](urfall_rule_lstm_tcn_comparison_2026-04-10.md)
+- [Planner Static Baselines](planner_static_baselines_2026-06-22.md)
+- [Dynamic Replan](dynamic_replan_2026-06-22.md)
+- [Local Repair Vs Full Replan](local_repair_vs_full_replan_2026-06-22.md)
+- [Local Repair Comparison](local_repair_comparison_2026-06-23.md)

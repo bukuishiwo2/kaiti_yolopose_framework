@@ -1,0 +1,33 @@
+semantic_state_node:
+  ros__parameters:
+    planner_config_path: configs/planner_minimal_experiment.yaml
+    perception_event_topic: /perception/events
+    semantic_state_topic: /planning/semantic_state
+    publish_period_sec: 1.0
+    perception_timeout_sec: 3.0
+
+spatial_state_node:
+  ros__parameters:
+    planner_config_path: configs/planner_minimal_experiment.yaml
+    region_config_path: configs/planner_regions.yaml
+    spatial_state_topic: /planning/spatial_state
+    publish_period_sec: 1.0
+    costmap_topic: /global_costmap/costmap
+    costmap_timeout_sec: 5.0
+    use_costmap_topic: true
+
+milp_planner_node:
+  ros__parameters:
+    planner_config_path: configs/planner_minimal_experiment.yaml
+    semantic_state_topic: /planning/semantic_state
+    spatial_state_topic: /planning/spatial_state
+    plan_topic: /planning/plan
+    publish_period_sec: 2.0
+    backend: pulp
+
+execution_feedback_bridge_node:
+  ros__parameters:
+    planner_status_topic: /task_planner/status
+    execution_feedback_topic: /planning/execution_feedback
+    publish_period_sec: 1.0
+    status_timeout_sec: 5.0

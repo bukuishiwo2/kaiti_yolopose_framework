@@ -1,0 +1,188 @@
+meta:
+  name: graduation_local_repair_comparison
+  description: Extended frozen scenario for distinguishing local repair from full replanning.
+
+weights:
+  alpha_travel: 1.0
+  beta_delay: 4.0
+  gamma_interrupt: 2.0
+  delta_resource: 1.5
+  eta_energy: 3.0
+  mu_change: 2.5
+
+energy:
+  safe_battery: 20.0
+  full_battery: 90.0
+  move_cost_per_sec: 0.3
+  task_costs:
+    patrol: 2.0
+    observe: 2.5
+    verify_fall: 3.0
+    deliver_supply: 5.0
+    charge: 0.0
+  charge_gain:
+    T5: 60.0
+
+robots:
+  - id: R1
+    start: A
+    battery: 80.0
+    capabilities: [move, camera, patrol]
+    current_task: patrol_A
+  - id: R2
+    start: C
+    battery: 70.0
+    capabilities: [move, camera, patrol, carry]
+    current_task: patrol_C
+  - id: R3
+    start: D
+    battery: 35.0
+    capabilities: [move, charge]
+    current_task: standby
+
+tasks:
+  - id: T1
+    type: patrol
+    location: A
+    release: 0
+    duration: 20
+    deadline: 120
+    priority_weight: 1
+    capabilities: [move, patrol]
+    resources: []
+    must_complete: true
+    interrupt_penalty: 1.0
+  - id: T2
+    type: patrol
+    location: C
+    release: 0
+    duration: 20
+    deadline: 120
+    priority_weight: 1
+    capabilities: [move, patrol]
+    resources: [corridor_H]
+    must_complete: true
+    interrupt_penalty: 1.0
+  - id: T3
+    type: verify_fall
+    location: B
+    release: 30
+    duration: 15
+    deadline: 90
+    priority_weight: 10
+    capabilities: [move, camera]
+    resources: [corridor_H, event_zone_B]
+    must_complete: true
+    event_task: true
+  - id: T4
+    type: deliver_supply
+    location: B
+    pickup_location: S
+    release: 30
+    duration: 25
+    deadline: 120
+    priority_weight: 8
+    capabilities: [move, carry]
+    resources: [corridor_H, supply_point_S, event_zone_B]
+    must_complete: true
+    event_task: true
+  - id: T5
+    type: charge
+    location: D
+    release: 0
+    duration: 40
+    deadline: 180
+    priority_weight: 4
+    capabilities: [move, charge]
+    resources: [charger_D]
+    must_complete: true
+  - id: T6
+    type: patrol
+    location: A
+    release: 50
+    duration: 25
+    deadline: 180
+    priority_weight: 2
+    capabilities: [move, patrol]
+    resources: [supply_point_S]
+    must_complete: true
+    interrupt_penalty: 1.0
+  - id: T7
+    type: patrol
+    location: A
+    release: 50
+    duration: 25
+    deadline: 180
+    priority_weight: 2
+    capabilities: [move, patrol]
+    resources: [supply_point_S]
+    must_complete: true
+    interrupt_penalty: 1.0
+
+precedence:
+  - before: T3
+    after: T4
+
+resources:
+  - id: corridor_H
+    kind: corridor
+    capacity: 1
+    state: free
+    release_buffer: 0
+  - id: charger_D
+    kind: charger
+    capacity: 1
+    state: available
+    release_buffer: 0
+  - id: event_zone_B
+    kind: event_zone
+    capacity: 1
+    state: available
+    release_buffer: 0
+  - id: supply_point_S
+    kind: supply_point
+    capacity: 1
+    state: available
+    release_buffer: 0
+
+travel_times:
+  A: {A: 0, B: 18, C: 25, D: 30, S: 22}
+  B: {A: 18, B: 0, C: 20, D: 28, S: 12}
+  C: {A: 25, B: 20, C: 0, D: 16, S: 24}
+  D: {A: 30, B: 28, C: 16, D: 0, S: 20}
+  S: {A: 22, B: 12, C: 24, D: 20, S: 0}
+
+semantic:
+  theta_low: 0.45
+  theta_high: 0.75
+  quality_min: 0.55
+  min_confirm_windows: 2
+  min_clear_windows: 2
+  hold_frames: 3
+  cooldown_frames: 2
+  visible_keypoint_threshold: 6
+
+spatial:
+  occupancy_threshold_free: 0.25
+  occupancy_threshold_blocked: 0.65
+  min_passage_width: 0.8
+  ema_lambda: 0.6
+
+dynamic_script:
+  - time: 30
+    kind: semantic
+    state: event_confirmed
+    predicate: fall_confirmed
+    location: B
+    event_id: FALL_B_001
+  - time: 45
+    kind: resource
+    resource_id: corridor_H
+    state: temporary_occupied
+    available_from: 80
+    wait_time: 35
+  - time: 80
+    kind: resource
+    resource_id: corridor_H
+    state: free
+    available_from: 80

@@ -1,0 +1,4 @@
+navigation_stack:
+  ros__parameters:
+    compatibility_note: "Legacy placeholder preserved for historical build compatibility."
+    recommended_launch: phase4b_nav2_precheck.launch.py

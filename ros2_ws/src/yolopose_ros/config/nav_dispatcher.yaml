@@ -1,0 +1,8 @@
+planner_nav2_dispatcher_node:
+  ros__parameters:
+    planner_request_topic: /task_planner/request
+    nav2_action_name: /navigate_to_pose
+    dispatch_enabled: false
+    allowed_actions: ""
+    goal_frame_id: map
+    cooldown_sec: 5.0

@@ -1,0 +1,25 @@
+grid:
+  width: 14
+  height: 12
+  resolution: 0.5
+  origin_x: 0.0
+  origin_y: 0.0
+  default_value: 0
+
+frames:
+  - time: 0
+    notes: baseline free corridor and free charger
+    obstacles: []
+
+  - time: 45
+    notes: temporary corridor occupancy caused by a passing obstacle
+    obstacles:
+      - x_min: 1.0
+        x_max: 2.1
+        y_min: 1.0
+        y_max: 3.0
+        value: 100
+
+  - time: 80
+    notes: corridor recovered to free
+    obstacles: []

@@ -55,6 +55,7 @@ class SequenceFallDetector:
         self.model_loaded = False
         self.model_device = 'cpu'
         self.feature_dim = POSE_FEATURE_DIM
+        self._last_top_track_id: int | None = None
         self._load_model()
 
     def _load_model(self) -> None:
@@ -126,11 +127,16 @@ class SequenceFallDetector:
             'seq_stable_fall_detected': False,
             'seq_fall_state_changed': False,
             'seq_fall_score': 0.0,
+            'seq_probability_calibrated': 0.0,
             'seq_fall_threshold': float(self.cfg.score_threshold),
             'seq_fall_person_candidates': 0,
             'seq_fall_top_candidate': None,
             'seq_active_track_ids': [],
             'seq_active_track_count': 0,
+            'seq_track_continuity': 0.0,
+            'seq_window_completeness': 0.0,
+            'seq_visibility_ratio': 0.0,
+            'seq_geometry_valid': False,
         }
 
     def _infer_global(self, result: Any) -> dict[str, Any]:
@@ -174,8 +180,13 @@ class SequenceFallDetector:
                 'seq_stable_fall_detected': bool(stable),
                 'seq_fall_state_changed': bool(changed),
                 'seq_fall_score': float(score),
+                'seq_probability_calibrated': float(score),
                 'seq_fall_person_candidates': int(1 if meta is not None else 0),
                 'seq_fall_top_candidate': None if meta is None else {'track_id': meta.get('track_id'), 'score': float(score), 'area': float(meta.get('area', 0.0))},
+                'seq_track_continuity': 1.0 if meta is not None and meta.get('track_id') is not None else 0.0,
+                'seq_window_completeness': min(1.0, float(window_size) / float(max(1, self.cfg.seq_len))),
+                'seq_visibility_ratio': 0.0 if meta is None else min(1.0, float(meta.get('visible_keypoint_count', 0)) / 17.0),
+                'seq_geometry_valid': False if meta is None else bool(meta.get('feature_valid', False)),
             }
         )
         return out
@@ -236,6 +247,11 @@ class SequenceFallDetector:
             skip_reason = "waiting_for_window"
         else:
             skip_reason = ""
+        continuity = 0.0
+        if top_candidate is not None:
+            current_track_id = top_candidate.get('track_id')
+            continuity = 1.0 if current_track_id == self._last_top_track_id else 0.6
+            self._last_top_track_id = current_track_id
 
         out = self._base_output()
         out.update(
@@ -258,10 +274,15 @@ class SequenceFallDetector:
                 'seq_stable_fall_detected': bool(stable_state),
                 'seq_fall_state_changed': bool(any_changed or changed_global),
                 'seq_fall_score': float(top_score),
+                'seq_probability_calibrated': float(top_score),
                 'seq_fall_person_candidates': int(len([p for p in candidates if p.get('track_id') is not None])),
                 'seq_fall_top_candidate': top_candidate,
                 'seq_active_track_ids': active_track_ids,
                 'seq_active_track_count': int(len(active_track_ids)),
+                'seq_track_continuity': float(continuity),
+                'seq_window_completeness': min(1.0, float(top_window_size) / float(max(1, self.cfg.seq_len))),
+                'seq_visibility_ratio': 0.0 if top_candidate_meta is None else min(1.0, float(top_candidate_meta.get('visible_keypoint_count', 0)) / 17.0),
+                'seq_geometry_valid': False if top_candidate_meta is None else bool(top_candidate_meta.get('feature_valid', False)),
             }
         )
         return out

@@ -1,0 +1,106 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1320" height="520" viewBox="0 0 1320 520">
+<title>Full-Replan vs LocalRepair gantt</title>
+<style>text{font-family:monospace;font-size:12px;fill:#1f2937} .small{font-size:11px;fill:#475569} .axis{stroke:#64748b;stroke-width:1} .grid{stroke:#cbd5e1;stroke-width:1;stroke-dasharray:4 4}</style>
+<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="40" y="28" font-size="18">local repair comparison gantt: baseline vs full replanning vs local repair</text>
+<text class="small" x="40" y="48">trigger=t=45 corridor_H temporary_occupied | affected=T3,T4,T6 | frozen=T1,T2,T5,T3,T7</text>
+<line class="grid" x1="130.0" y1="68" x2="130.0" y2="432"/>
+<text class="small" x="130.0" y="454" text-anchor="middle">0</text>
+<line class="grid" x1="222.0" y1="68" x2="222.0" y2="432"/>
+<text class="small" x="222.0" y="454" text-anchor="middle">10</text>
+<line class="grid" x1="314.0" y1="68" x2="314.0" y2="432"/>
+<text class="small" x="314.0" y="454" text-anchor="middle">20</text>
+<line class="grid" x1="406.0" y1="68" x2="406.0" y2="432"/>
+<text class="small" x="406.0" y="454" text-anchor="middle">30</text>
+<line class="grid" x1="498.0" y1="68" x2="498.0" y2="432"/>
+<text class="small" x="498.0" y="454" text-anchor="middle">40</text>
+<line class="grid" x1="590.0" y1="68" x2="590.0" y2="432"/>
+<text class="small" x="590.0" y="454" text-anchor="middle">50</text>
+<line class="grid" x1="682.0" y1="68" x2="682.0" y2="432"/>
+<text class="small" x="682.0" y="454" text-anchor="middle">60</text>
+<line class="grid" x1="774.0" y1="68" x2="774.0" y2="432"/>
+<text class="small" x="774.0" y="454" text-anchor="middle">70</text>
+<line class="grid" x1="866.0" y1="68" x2="866.0" y2="432"/>
+<text class="small" x="866.0" y="454" text-anchor="middle">80</text>
+<line class="grid" x1="958.0" y1="68" x2="958.0" y2="432"/>
+<text class="small" x="958.0" y="454" text-anchor="middle">90</text>
+<line class="grid" x1="1050.0" y1="68" x2="1050.0" y2="432"/>
+<text class="small" x="1050.0" y="454" text-anchor="middle">100</text>
+<line class="grid" x1="1142.0" y1="68" x2="1142.0" y2="432"/>
+<text class="small" x="1142.0" y="454" text-anchor="middle">110</text>
+<line class="grid" x1="1234.0" y1="68" x2="1234.0" y2="432"/>
+<text class="small" x="1234.0" y="454" text-anchor="middle">120</text>
+<line x1="544.0" y1="62" x2="544.0" y2="432" stroke="#dc2626" stroke-width="2"/>
+<text class="small" x="550.0" y="56">trigger @ 45</text>
+<text x="32" y="100" font-size="15">baseline</text>
+<text x="114" y="100" text-anchor="end">R1</text>
+<rect x="130" y="78" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="82" width="184.0" height="26" fill="#93c5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="100" text-anchor="middle">T1</text>
+<rect x="590.0" y="82" width="230.0" height="26" fill="#86efac" stroke="#0f766e" stroke-width="2.0"/>
+<text x="705.0" y="100" text-anchor="middle">T7</text>
+<rect x="1050.0" y="82" width="230.0" height="26" fill="#fdba74" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="1165.0" y="100" text-anchor="middle">T6</text>
+<text x="114" y="148" text-anchor="end">R2</text>
+<rect x="130" y="126" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="130" width="184.0" height="26" fill="#a7f3d0" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="148" text-anchor="middle">T2</text>
+<rect x="498.0" y="130" width="138.0" height="26" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="567.0" y="148" text-anchor="middle">T3</text>
+<rect x="820.0" y="130" width="230.0" height="26" fill="#fcd34d" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="935.0" y="148" text-anchor="middle">T4</text>
+<text x="114" y="196" text-anchor="end">R3</text>
+<rect x="130" y="174" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="178" width="368.0" height="26" fill="#c4b5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="314.0" y="196" text-anchor="middle">T5</text>
+<text x="32" y="268" font-size="15">full_replan@45</text>
+<text x="114" y="268" text-anchor="end">R1</text>
+<rect x="130" y="246" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="250" width="184.0" height="26" fill="#93c5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="268" text-anchor="middle">T1</text>
+<rect x="590.0" y="250" width="230.0" height="26" fill="#fdba74" stroke="#b91c1c" stroke-width="2.4" stroke-dasharray="5 3"/>
+<text x="705.0" y="268" text-anchor="middle">T6</text>
+<rect x="1050.0" y="250" width="230.0" height="26" fill="#86efac" stroke="#0f766e" stroke-width="2.0" stroke-dasharray="5 3"/>
+<text x="1165.0" y="268" text-anchor="middle">T7</text>
+<text x="114" y="316" text-anchor="end">R2</text>
+<rect x="130" y="294" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="298" width="184.0" height="26" fill="#a7f3d0" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="316" text-anchor="middle">T2</text>
+<rect x="498.0" y="298" width="138.0" height="26" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="567.0" y="316" text-anchor="middle">T3</text>
+<rect x="820.0" y="298" width="230.0" height="26" fill="#fcd34d" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="935.0" y="316" text-anchor="middle">T4</text>
+<text x="114" y="364" text-anchor="end">R3</text>
+<rect x="130" y="342" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="346" width="368.0" height="26" fill="#c4b5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="314.0" y="364" text-anchor="middle">T5</text>
+<text x="32" y="436" font-size="15">local_repair@45</text>
+<text x="114" y="436" text-anchor="end">R1</text>
+<rect x="130" y="414" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="418" width="184.0" height="26" fill="#93c5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="436" text-anchor="middle">T1</text>
+<rect x="590.0" y="418" width="230.0" height="26" fill="#86efac" stroke="#0f766e" stroke-width="2.0"/>
+<text x="705.0" y="436" text-anchor="middle">T7</text>
+<rect x="1050.0" y="418" width="230.0" height="26" fill="#fdba74" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="1165.0" y="436" text-anchor="middle">T6</text>
+<text x="114" y="484" text-anchor="end">R2</text>
+<rect x="130" y="462" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="466" width="184.0" height="26" fill="#a7f3d0" stroke="#0f766e" stroke-width="2.0"/>
+<text x="222.0" y="484" text-anchor="middle">T2</text>
+<rect x="498.0" y="466" width="138.0" height="26" fill="#fca5a5" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="567.0" y="484" text-anchor="middle">T3</text>
+<rect x="820.0" y="466" width="230.0" height="26" fill="#fcd34d" stroke="#b91c1c" stroke-width="2.4"/>
+<text x="935.0" y="484" text-anchor="middle">T4</text>
+<text x="114" y="532" text-anchor="end">R3</text>
+<rect x="130" y="510" width="1150" height="34" fill="#f8fafc" stroke="#e2e8f0"/>
+<rect x="130.0" y="514" width="368.0" height="26" fill="#c4b5fd" stroke="#0f766e" stroke-width="2.0"/>
+<text x="314.0" y="532" text-anchor="middle">T5</text>
+<rect x="40" y="448" width="16" height="12" fill="#f8fafc" stroke="#0f766e" stroke-width="2"/>
+<text class="small" x="66" y="458">frozen task</text>
+<rect x="180" y="448" width="16" height="12" fill="#f8fafc" stroke="#b91c1c" stroke-width="2.4"/>
+<text class="small" x="206" y="458">affected task</text>
+<line x1="330" y1="454" x2="346" y2="454" stroke="#dc2626" stroke-width="2"/>
+<text class="small" x="356" y="458">resource trigger</text>
+<line x1="470" y1="454" x2="490" y2="454" stroke="#334155" stroke-width="2" stroke-dasharray="5 3"/>
+<text class="small" x="500" y="458">modified vs baseline</text>
+</svg>

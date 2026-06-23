@@ -18,6 +18,11 @@ classifiers = [
   "Operating System :: POSIX :: Linux"
 ]
 
+[project.optional-dependencies]
+planning = [
+  "PuLP>=2.8.0",
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
