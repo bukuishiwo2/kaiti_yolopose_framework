@@ -1,0 +1,94 @@
+kaiti_house_scene:
+  ros__parameters:
+    simulator: gazebo
+    world_file: worlds/kaiti_house_world.sdf
+    reference_world: aws-robomaker-small-house-world
+    recommended_robot_model: turtlebot4_standard
+    recommended_robot_count: 3
+    staged_robot_counts: [1, 2, 3]
+
+    robots:
+      - id: R1
+        namespace: r1
+        model: standard
+        x: 0.8
+        y: 0.8
+        yaw: 0.0
+        semantic_role: patrol_A
+      - id: R2
+        namespace: r2
+        model: standard
+        x: 0.8
+        y: 2.6
+        yaw: 0.0
+        semantic_role: patrol_C
+      - id: R3
+        namespace: r3
+        model: standard
+        x: 5.5
+        y: 1.0
+        yaw: 3.14
+        semantic_role: charger_D
+
+    regions:
+      - id: A
+        kind: service_room
+        x_min: 0.2
+        x_max: 2.2
+        y_min: 0.2
+        y_max: 1.7
+      - id: C
+        kind: service_room
+        x_min: 0.2
+        x_max: 2.2
+        y_min: 1.7
+        y_max: 3.3
+      - id: corridor_H
+        kind: corridor
+        x_min: 1.0
+        x_max: 2.4
+        y_min: 1.0
+        y_max: 3.0
+      - id: B
+        kind: event_room
+        x_min: 2.8
+        x_max: 4.2
+        y_min: 2.8
+        y_max: 4.2
+      - id: event_zone_B
+        kind: event_zone
+        x_min: 3.0
+        x_max: 4.0
+        y_min: 3.0
+        y_max: 4.0
+      - id: D
+        kind: charger_room
+        x_min: 4.8
+        x_max: 6.2
+        y_min: 0.2
+        y_max: 1.8
+      - id: charger_D
+        kind: charger
+        x_min: 5.0
+        x_max: 6.0
+        y_min: 0.5
+        y_max: 1.5
+      - id: S
+        kind: supply_room
+        x_min: 0.2
+        x_max: 1.8
+        y_min: 3.8
+        y_max: 5.2
+      - id: supply_point_S
+        kind: supply_point
+        x_min: 0.5
+        x_max: 1.5
+        y_min: 4.0
+        y_max: 5.0
+
+    event_actor:
+      actor_id: resident_1
+      start_x: 3.3
+      start_y: 3.6
+      start_yaw: -1.57
+      target_region: event_zone_B

@@ -1,0 +1,46 @@
+kaiti_house_event_script:
+  ros__parameters:
+    use_sim_time: true
+
+    semantic_events:
+      - time: 30.0
+        event_id: FALL_B_001
+        semantic_state: event_confirmed
+        predicate: fall_confirmed
+        location: B
+        actor_id: resident_1
+        visual_posture: fallen_supine
+
+    dynamic_obstacles:
+      - time: 45.0
+        obstacle_id: corridor_blocker_1
+        action: spawn
+        resource_id: corridor_H
+        state: temporary_occupied
+        x_min: 1.0
+        x_max: 2.1
+        y_min: 1.0
+        y_max: 3.0
+      - time: 80.0
+        obstacle_id: corridor_blocker_1
+        action: remove
+        resource_id: corridor_H
+        state: free
+
+    actor_timeline:
+      - time: 0.0
+        actor_id: resident_1
+        mode: walk
+        waypoint: entrance_B
+      - time: 28.0
+        actor_id: resident_1
+        mode: unstable
+        waypoint: event_zone_B
+      - time: 30.0
+        actor_id: resident_1
+        mode: fall
+        waypoint: event_zone_B
+      - time: 32.0
+        actor_id: resident_1
+        mode: lying
+        waypoint: event_zone_B

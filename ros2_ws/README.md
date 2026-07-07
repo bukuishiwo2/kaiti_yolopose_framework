@@ -72,6 +72,8 @@ Nav2
 - `ros_image` 模式可用 `camera_stream_node` 把电脑摄像头接成 ROS2 真图像流
 - 可选发布 `/perception/debug_image`，可直接用 `rqt_image_view` 观察骨架和状态叠加
 - Phase 5 可选启动 `planner_nav2_dispatcher_node`，默认只观察 `/task_planner/request` 并拒绝派发，不产生机器人运动
+- Gazebo 仿真下 `ros2_control` 现由 `controller_ready_node` 做最终 active 检查，避免 TurtleBot4 / Create3 controller 因启动时序抖动产生误报
+- 家居联调入口现由 `robot_ready_gate_node` 放行 `Nav2`，会等待 `joint_states`、`/odom`、`odom -> base_link`，并在预检查链路中额外等待 `/map` 与 `map -> base_link`
 
 ## 4. 启动方式
 
@@ -123,6 +125,48 @@ ros2 launch yolopose_ros system_stack.launch.py \
 ```
 
 如果摄像头不存在，`pose_stream_node` 不会直接崩溃，而是进入 `unavailable` 状态并继续发布状态事件。
+
+单机器人自定义家居仿真：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_sim.launch.py
+```
+
+单机器人家居仿真 + RTAB-Map：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_rtabmap.launch.py
+```
+
+单机器人家居仿真 + RTAB-Map + Nav2 + `/planning/*` 预检查：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_planning_precheck.launch.py
+```
+
+该入口中 `nav2_start_delay` 代表 gate 最长等待超时，而不是到时直接拉起 `Nav2`。
+
+如需放宽 `Nav2` gate 的最长等待时间：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_planning_precheck.launch.py \
+  nav2_start_delay:=60.0
+```
+
+如需显式调整 sidecar 建图延迟：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_rtabmap.launch.py \
+  rtabmap_start_delay:=12.0
+```
+
+验证四条规划 topic：
+
+```bash
+source /opt/ros/humble/setup.bash
+source ros2_ws/install/setup.bash
+python3 scripts/verify_house_planning_topics.py --timeout-sec 20
+```
 
 ## 5. 环境变量
 
@@ -535,3 +579,110 @@ ros2 topic echo /planning/execution_feedback
 - 该入口默认只发布冻结版规划实验所需的状态与计划摘要。
 - `PlanSys2` 仍不负责全局分配。
 - `Nav2` 仍不直接消费感知调试字段。
+
+## 13. Custom House Simulation
+
+为冻结版毕业设计场景，当前已新增一个最小家居世界骨架：
+
+- world: `ros2_ws/src/yolopose_ros/worlds/kaiti_house_world.sdf`
+- scene config: `ros2_ws/src/yolopose_ros/config/kaiti_house_scene.yaml`
+- event script: `ros2_ws/src/yolopose_ros/config/kaiti_house_event_script.yaml`
+- launch: `kaiti_house_sim.launch.py`
+
+该场景与规划区域一一对应：
+
+- `A`
+- `C`
+- `B`
+- `D`
+- `S`
+- `corridor_H`
+- `event_zone_B`
+- `charger_D`
+- `supply_point_S`
+
+当前推荐仿真平台：
+
+- `Gazebo / Gazebo Sim`
+- `TurtleBot4 standard`
+
+当前推荐机器人数量分层：
+
+- bringup: `1 -> 2 -> 3`
+- 论文主实验: `3`
+
+最小拉起命令：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros kaiti_house_sim.launch.py
+```
+
+当前边界：
+
+- 该入口只启动自定义 world，不自动生成多机器人闭环
+- 跌倒事件当前以脚本化时间线定义，不等价于已完成 actor 控制
+- `PlanSys2` 与 `Nav2` 的正式挂接方案见 `../docs/plansys2_nav2_integration_plan.md`
+
+## 14. Custom House + TurtleBot4 + RTAB-Map
+
+在 `world-only` 入口之外，当前已新增一个单机器人 house-world bringup：
+
+- launch: `kaiti_house_turtlebot4_sim.launch.py`
+- launch: `kaiti_house_turtlebot4_rtabmap.launch.py`
+
+默认用途：
+
+- 在 `kaiti_house_world` 中生成 `TurtleBot4 standard`
+- 让 `pose_stream_node(input_mode=ros_image)` 继续消费仿真 RGB
+- 让 `RTAB-Map` 消费同一组 RGB/Depth/Scan/Odom
+
+启动单机器人 house + RTAB-Map：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_rtabmap.launch.py
+```
+
+当前默认出生点与冻结实验 `R1@A` 对齐：
+
+- `x=0.8`
+- `y=0.8`
+- `yaw=0.0`
+
+如需手工覆盖：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_rtabmap.launch.py \
+  turtlebot4_x:=0.8 \
+  turtlebot4_y:=2.6 \
+  turtlebot4_yaw:=0.0
+```
+
+## 15. Custom House Nav2 Precheck
+
+当前还新增了 house-world 的 Nav2 最小预检入口：
+
+- launch: `kaiti_house_nav2_precheck.launch.py`
+
+启动：
+
+```bash
+cd ros2_ws
+source /opt/ros/humble/setup.bash
+colcon build --symlink-install --packages-select yolopose_ros
+source install/setup.bash
+ros2 launch yolopose_ros kaiti_house_nav2_precheck.launch.py
+```
+
+该入口的边界仍然是：
+
+- 允许手动向 `/navigate_to_pose` 发送短距离 goal
+- 不允许 `task_planner_bridge_node` 或 MILP 计划直接派发导航
+- 不等价于已经完成 `PlanSys2` 生命周期接入
