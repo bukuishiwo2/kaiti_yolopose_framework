@@ -1,5 +1,6 @@
 meta:
   name: graduation_v2_event_driven
+  model_version: sequence_arc_v2
   description: Event-driven three-robot scenario; event tasks are created only by WorldState.
   event_task_policy:
     supply_location: S
@@ -20,7 +21,7 @@ meta:
       deadline_offset: 120.0
       priority_weight: 8.0
     location_resources:
-      B: [corridor_H, event_zone_B]
+      B: [event_zone_B]
     supply_resources: [supply_point_S]
 
 weights:
@@ -30,6 +31,11 @@ weights:
   delta_resource: 1.5
   eta_energy: 3.0
   mu_change: 2.5
+
+solver:
+  time_limit: 5.0
+  mip_gap: 0.01
+  planning_horizon: 300.0
 
 energy:
   safe_battery: 20.0
@@ -82,7 +88,7 @@ tasks:
     deadline: 120
     priority_weight: 1
     capabilities: [move, patrol]
-    resources: [corridor_H]
+    resources: []
     must_complete: true
     interrupt_penalty: 1.0
   - id: T5
@@ -126,6 +132,33 @@ travel_times:
   C: {A: 25, B: 20, C: 0, D: 16, S: 24}
   D: {A: 30, B: 28, C: 16, D: 0, S: 20}
   S: {A: 22, B: 12, C: 24, D: 20, S: 0}
+
+route_resources:
+  A:
+    B:
+      - {resource_id: corridor_H, enter_fraction: 0.25, exit_fraction: 0.75, safety_buffer: 1.0}
+    C:
+      - {resource_id: corridor_H, enter_fraction: 0.20, exit_fraction: 0.80, safety_buffer: 1.0}
+  B:
+    A:
+      - {resource_id: corridor_H, enter_fraction: 0.25, exit_fraction: 0.75, safety_buffer: 1.0}
+    C:
+      - {resource_id: corridor_H, enter_fraction: 0.15, exit_fraction: 0.85, safety_buffer: 1.0}
+    D:
+      - {resource_id: corridor_H, enter_fraction: 0.40, exit_fraction: 0.80, safety_buffer: 1.0}
+    S:
+      - {resource_id: corridor_H, enter_fraction: 0.20, exit_fraction: 0.80, safety_buffer: 1.0}
+  C:
+    A:
+      - {resource_id: corridor_H, enter_fraction: 0.20, exit_fraction: 0.80, safety_buffer: 1.0}
+    B:
+      - {resource_id: corridor_H, enter_fraction: 0.15, exit_fraction: 0.85, safety_buffer: 1.0}
+  D:
+    B:
+      - {resource_id: corridor_H, enter_fraction: 0.20, exit_fraction: 0.60, safety_buffer: 1.0}
+  S:
+    B:
+      - {resource_id: corridor_H, enter_fraction: 0.20, exit_fraction: 0.80, safety_buffer: 1.0}
 
 semantic:
   theta_low: 0.45

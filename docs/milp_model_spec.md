@@ -1,120 +1,117 @@
-# MILP Model Spec
+# 序列 MILP 模型规范 v2
 
-## 1. Core Sets And Parameters
+本文件描述 `model_version: sequence_arc_v2` 的正式模型。六月历史配置仍走 legacy solver，只用于复现旧 benchmark，不再代表论文最终模型。
 
-- `I`: 机器人集合
-- `J`: 任务集合
-- `R`: 共享资源集合
-- `P`: 前驱关系集合，`(j, j') in P` 表示 `j` 必须先于 `j'`
-- `c_i0j`: 机器人 `i` 从初始位置到任务 `j` 的路径代价
-- `c_jj'`: 任务 `j` 到任务 `j'` 的路径代价
-- `d_j`: 任务持续时间
-- `D_j`: 任务截止时间
-- `w_j`: 任务延误权重
-- `E_i`: 机器人初始电量
-- `e_task_j`: 任务服务能耗
-- `e_move`: 单位时间行驶能耗
-- `M`: Big-M
+## 1. 集合与数据语义
 
-## 2. Frozen Variables
+- `I`：机器人；`J`：当前活动服务任务；`R`：共享资源；
+- 每台机器人有虚拟起点 `0_i` 和虚拟终点 `n_i`；
+- `c_uv`：节点 u 到 v 的实际 travel time；
+- `route_resources[u,v]`：路径与资源 region 相交得到的进入/离开比例和安全缓冲；
+- task 的 `resources` 只表示服务阶段占用，走廊等移动资源写在 route arc；
+- `P`：任务前驱；动态 event task 由 WorldState 创建，不预置在初始问题中。
 
-- `x_ij in {0,1}`: 机器人 `i` 是否执行任务 `j`
-- `s_j >= 0`: 任务 `j` 开始时间
-- `f_j >= 0`: 任务 `j` 完成时间
-- `L_j >= 0`: 任务 `j` 延误量
-- `y_jj'^i in {0,1}`: 在机器人 `i` 上 `j` 是否先于 `j'`
-- `z_jj'^r in {0,1}`: 在资源 `r` 上 `j` 是否先于 `j'`
-- `b_i >= 0`: 机器人 `i` 计划末尾剩余电量
-- `m_j in {0,1}`: 任务 `j` 是否偏离旧计划
-- `delta_j >= 0`: 任务 `j` 相对旧计划的时间偏移
+solver 与 validator 共用 `PlanningProblem`、`TaskAssignment` 和 `ResourceReservation`，不再分别解释 YAML。
 
-## 3. Objective
+## 2. 变量
 
-最小化：
+- `x_ij ∈ {0,1}`：任务分配；
+- `a_iuv ∈ {0,1}`：直接后继 arc，包括 start→task、task→task、task→end 和 start→end；
+- `q_ij`：MTZ 顺序；
+- `s_j/f_j/L_j`：开始、完成和加权延误；
+- `E_before_ij/E_after_ij`：逐任务电量；
+- `charge_ij`：不超过充电任务最大增益的实际充电量；
+- `wait_iuvr`：选中路径在资源 r 前的等待；
+- `z_kk'`：两个候选预约区间的顺序；
+- `reassigned_j/shift_j`：相对 incumbent plan 的分配和时间变化。
 
-`J = alpha*C_travel + beta*C_delay + gamma*C_interrupt + delta*C_resource + eta*C_energy + mu*C_change`
+## 3. 序列、时间与同机配送
 
-其中：
+每个被分配任务恰有一个前驱和一个后继：
 
-- `C_travel`: 分配与排序引起的总行驶代价
-- `C_delay`: 按优先级加权的截止时间延误
-- `C_interrupt`: 中断巡检等常规任务的代价
-- `C_resource`: 资源等待或冲突代价
-- `C_energy`: 低电量风险与充电代价
-- `C_change`: 完整重规划或局部修复时的计划偏移代价
+```text
+Σ_u a_iuj = x_ij
+Σ_v a_ijv = x_ij
+Σ_v a_i0v = 1
+Σ_u a_iun = 1
+```
 
-## 4. Frozen Constraints
+MTZ 与正 travel/service time 共同消除子回路。选中 arc 时：
 
-### 4.1 Unique Assignment
+```text
+s_v ≥ f_u + c_uv + Σ_r wait_iuvr
+```
 
-`sum_i x_ij = 1`，对所有必须完成任务成立。
+任务前驱仍满足 `s_after ≥ f_before`。对于同一 event：
 
-### 4.2 Capability Matching
+```text
+x_i,pickup(event) = x_i,deliver(event), ∀i
+```
 
-若 `C_j` 不是 `C_i` 的子集，则 `x_ij = 0`。
+因此模型不允许隐式物资交接。
 
-### 4.3 Time Consistency
+## 4. 路径资源预约
 
-- `f_j = s_j + d_j`
-- `L_j >= f_j - D_j`
-- `L_j >= 0`
+路径资源进入/离开时间由 departure、travel offset 和累计等待计算：
 
-### 4.4 Initial Travel
+```text
+enter_iuvr = departure_iu + enter_fraction_uvr * c_uv + cumulative_wait
+exit_iuvr  = enter_iuvr + (exit_fraction_uvr-enter_fraction_uvr) * c_uv
+```
 
-若 `x_ij = 1`，则：
+服务资源使用 `[s_j,f_j]`。两类区间统一输出为：
 
-`s_j >= c_i0j - M * (1 - x_ij)`
+```text
+resource_id, robot_id, task_id, route_arc,
+enter_time, exit_time, safety_buffer
+```
 
-### 4.5 Precedence
+容量为 1 的资源对选中的预约区间做 disjunctive 互斥。temporary resource 的 `available_from/wait_time` 进入约束与路径相关目标；persistent blocked 且无模型内替代路径时返回 `INFEASIBLE_ROUTE_BLOCKED`，不抛异常。
 
-若 `(j, j') in P`，则：
+## 5. 逐任务电量
 
-`s_j' >= f_j`
+选中 start→j 或 u→v 时，电量沿直接后继递推：
 
-### 4.6 Same-Robot Non-Overlap
+```text
+E_before_v = E_initial - e_move*c_0v
+E_before_v = E_after_u - e_move*c_uv
+E_after_v  = E_before_v - e_service_v + charge_v
+```
 
-若 `j != j'` 且二者均分配给机器人 `i`，则：
+并满足：
 
-- `s_j' >= f_j + c_jj' - M * (3 - x_ij - x_ij' - y_jj'^i)`
-- `s_j >= f_j' + c_j'j - M * (2 - x_ij - x_ij' + y_jj'^i)`
+```text
+E_safe ≤ E_before/E_after ≤ E_full
+E_after_last - e_return_to_nearest_charger ≥ E_safe
+```
 
-### 4.7 Shared Resource Non-Overlap
+充电量是有上界的决策变量，因此不会超过满电上限，也不会因固定增益导致虚假不可行。
 
-若任务 `j` 和 `j'` 均占用资源 `r`，则：
+## 6. 目标与求解状态
 
-- `s_j' >= f_j + g_r - M * (1 - z_jj'^r)`
-- `s_j >= f_j' + g_r - M * z_jj'^r`
+目标包含选中 arc 的 travel、优先级延误、路径相关 resource wait、低电量风险，以及 incumbent 的 reassigned/shifted/order-changed 代价。结果逐项报告 `objective_components`。
 
-其中 `g_r` 是资源释放缓冲。
+Big-M 根据 planning horizon、任务时长和最大 travel 自动计算；正式三车配置默认 CBC `time_limit=5s`、`mip_gap=1%`。输出状态限定为：
 
-### 4.8 Dynamic Resource Availability
+```text
+OPTIMAL
+FEASIBLE
+TIME_LIMIT_FEASIBLE
+WAITING_FOR_RESOURCE
+INFEASIBLE_ROUTE_BLOCKED
+INFEASIBLE
+ERROR
+```
 
-- `blocked`：对应资源时间窗内禁止任务开始。
-- `temporary_occupied`：任务开始时间必须不早于该资源当前的 `available_from`。
-- `free`：不增加额外等待。
+同时记录 runtime、time limit、gap 和 best bound；CBC 日志无法提供字段时使用 `null`，不伪造数值。
 
-### 4.9 Energy Safety
+## 7. Validator 反例门禁
 
-- `b_i = E_i - sum_j (e_task_j + e_move * c_i0j) * x_ij + e_charge_i`
-- `b_i >= E_safe`
+validator 必须拒绝：缺失/重复分配、能力不符、前驱错误、机器人时空重叠、pickup/deliver 跨车、预约重叠、blocked/未开放资源、电量递推错误、截止时间错误和冻结前缀变化。
 
-第一版采用保守近似，将任务分配的起点路径代价计入能耗，后续可再细化为顺序相关能耗。
+运行正式 demo：
 
-### 4.10 Event Response And Recovery
-
-- 对 `verify_fall`：`s_verify <= t_event + D_response`
-- 对被中断但未取消的巡检任务：动态重规划后仍必须回到任务集合。
-
-## 5. Local Repair Rules
-
-- 已完成任务：冻结，不再参与优化。
-- 已开始且允许继续执行的任务前缀：冻结。
-- 未受影响任务：默认冻结旧分配与旧开始时间。
-- 受影响任务：允许重新分配、重排和资源重预约。
-- 若局部子问题不可行：回退到完整重规划。
-
-## 6. Solver Policy
-
-- 默认后端：`PuLP + CBC`
-- 可选后端：若本机存在 `Gurobi`，允许作为可选求解器
-- 不将 `CP-SAT` 作为第一实现主线
+```bash
+make sequence-milp-demo
+make test
+```

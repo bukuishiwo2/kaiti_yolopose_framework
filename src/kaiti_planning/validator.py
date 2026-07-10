@@ -3,7 +3,7 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import Any
 
-from .models import PlanningProblem, ResourceState, TaskAssignment
+from .models import PlanningProblem, ResourceReservation, ResourceState, TaskAssignment
 from .milp_solver import initial_resource_states, task_assignment_map
 
 
@@ -18,6 +18,8 @@ def validate_plan(
     current_time: float = 0.0,
     resource_states: dict[str, ResourceState] | None = None,
     frozen_assignments: list[TaskAssignment] | None = None,
+    resource_reservations: list[ResourceReservation] | None = None,
+    selected_arcs: list[dict[str, str]] | None = None,
 ) -> dict[str, Any]:
     resource_states = resource_states or initial_resource_states(problem)
     frozen_assignments = frozen_assignments or []
@@ -37,6 +39,9 @@ def validate_plan(
         "event_response": [],
         "deadline": [],
         "frozen": [],
+        "pickup_delivery": [],
+        "energy_trace": [],
+        "arc_structure": [],
     }
 
     assignment_counts = defaultdict(int)
@@ -136,8 +141,43 @@ def validate_plan(
                     }
                 )
             battery -= float(problem.energy.move_cost_per_sec) * travel_time
-            battery -= float(problem.energy.task_costs.get(task.type, 0.0))
-            battery += float(problem.energy.charge_gain.get(task.id, 0.0))
+            expected_before = battery
+            if assignment.energy_before is not None and abs(float(assignment.energy_before) - expected_before) > 1e-3:
+                violations["energy_trace"].append(
+                    {
+                        "robot": robot_id,
+                        "task": assignment.task,
+                        "field": "energy_before",
+                        "reported": float(assignment.energy_before),
+                        "expected": round(expected_before, 3),
+                    }
+                )
+            actual_before = (
+                float(assignment.energy_before)
+                if assignment.energy_before is not None
+                else expected_before
+            )
+            service_cost = float(problem.energy.task_costs.get(task.type, 0.0))
+            maximum_gain = float(problem.energy.charge_gain.get(task.id, 0.0))
+            minimum_after = actual_before - service_cost
+            maximum_after = min(
+                float(problem.energy.full_battery), minimum_after + maximum_gain
+            )
+            if assignment.energy_before is not None and assignment.energy_after is not None:
+                reported_after = float(assignment.energy_after)
+                if reported_after + 1e-3 < minimum_after or reported_after > maximum_after + 1e-3:
+                    violations["energy_trace"].append(
+                        {
+                            "robot": robot_id,
+                            "task": assignment.task,
+                            "field": "energy_after",
+                            "reported": reported_after,
+                            "expected_range": [round(minimum_after, 3), round(maximum_after, 3)],
+                        }
+                    )
+                battery = reported_after
+            else:
+                battery = maximum_after
             if battery + 1e-6 < float(problem.energy.safe_battery):
                 violations["battery"].append(
                     {
@@ -158,21 +198,123 @@ def validate_plan(
                     }
                 )
 
-    for resource_id, items in by_resource.items():
-        items.sort(key=lambda item: (item.start, item.finish, item.task))
-        release_buffer = float(resource_map[resource_id].release_buffer)
-        for idx in range(1, len(items)):
-            left = items[idx - 1]
-            right = items[idx]
-            if right.start + 1e-6 < left.finish + release_buffer:
-                violations["resource_conflict"].append(
+    if resource_reservations:
+        reservations_by_resource = defaultdict(list)
+        for reservation in resource_reservations:
+            reservations_by_resource[reservation.resource_id].append(reservation)
+            state = resource_states.get(reservation.resource_id)
+            if reservation.exit_time + 1e-6 < reservation.enter_time:
+                violations["resource_window"].append(
+                    {"resource": reservation.resource_id, "reason": "negative_interval"}
+                )
+            if state and state.state == "blocked":
+                violations["resource_window"].append(
+                    {"resource": reservation.resource_id, "state": "blocked"}
+                )
+            elif state and reservation.enter_time + 1e-6 < float(state.available_from):
+                violations["resource_window"].append(
                     {
-                        "resource": resource_id,
-                        "left_task": left.task,
-                        "right_task": right.task,
-                        "left_finish": float(left.finish),
-                        "right_start": float(right.start),
-                        "required_not_before": float(left.finish + release_buffer),
+                        "resource": reservation.resource_id,
+                        "enter_time": reservation.enter_time,
+                        "available_from": float(state.available_from),
+                    }
+                )
+        for resource_id, items in reservations_by_resource.items():
+            if resource_map[resource_id].capacity != 1:
+                continue
+            items.sort(key=lambda item: (item.enter_time, item.exit_time, item.robot_id))
+            for left, right in zip(items, items[1:]):
+                required = left.exit_time + max(left.safety_buffer, right.safety_buffer)
+                if right.enter_time + 1e-6 < required:
+                    violations["resource_conflict"].append(
+                        {
+                            "resource": resource_id,
+                            "left_task": left.task_id,
+                            "right_task": right.task_id,
+                            "left_exit": float(left.exit_time),
+                            "right_enter": float(right.enter_time),
+                            "required_not_before": float(required),
+                        }
+                    )
+    else:
+        for resource_id, items in by_resource.items():
+            items.sort(key=lambda item: (item.start, item.finish, item.task))
+            release_buffer = float(resource_map[resource_id].release_buffer)
+            for idx in range(1, len(items)):
+                left = items[idx - 1]
+                right = items[idx]
+                if right.start + 1e-6 < left.finish + release_buffer:
+                    violations["resource_conflict"].append(
+                        {
+                            "resource": resource_id,
+                            "left_task": left.task,
+                            "right_task": right.task,
+                            "left_finish": float(left.finish),
+                            "right_start": float(right.start),
+                            "required_not_before": float(left.finish + release_buffer),
+                        }
+                    )
+
+    for pickup_id in sorted(task_id for task_id in task_map if task_id.startswith("pickup:")):
+        deliver_id = f"deliver:{pickup_id.split(':', 1)[1]}"
+        pickup = assignment_map.get(pickup_id)
+        deliver = assignment_map.get(deliver_id)
+        if pickup and deliver and pickup.robot != deliver.robot:
+            violations["pickup_delivery"].append(
+                {
+                    "pickup": pickup_id,
+                    "deliver": deliver_id,
+                    "pickup_robot": pickup.robot,
+                    "deliver_robot": deliver.robot,
+                }
+            )
+
+    if selected_arcs is not None:
+        assignments_by_robot = defaultdict(set)
+        for assignment in assignments:
+            assignments_by_robot[assignment.robot].add(assignment.task)
+        arcs_by_robot = defaultdict(list)
+        for arc in selected_arcs:
+            arcs_by_robot[str(arc["robot"])].append((str(arc["from"]), str(arc["to"])))
+        for robot_id in robot_map:
+            robot_arcs = arcs_by_robot[robot_id]
+            start_nodes = [origin for origin, _ in robot_arcs if origin.startswith("__start__")]
+            end_nodes = [destination for _, destination in robot_arcs if destination.startswith("__end__")]
+            if len(start_nodes) != 1 or len(end_nodes) != 1:
+                violations["arc_structure"].append(
+                    {"robot": robot_id, "reason": "invalid_start_or_end_degree"}
+                )
+                continue
+            outgoing = defaultdict(list)
+            incoming = defaultdict(list)
+            for origin, destination in robot_arcs:
+                outgoing[origin].append(destination)
+                incoming[destination].append(origin)
+            for task_id in assignments_by_robot[robot_id]:
+                if len(incoming[task_id]) != 1 or len(outgoing[task_id]) != 1:
+                    violations["arc_structure"].append(
+                        {"robot": robot_id, "task": task_id, "reason": "invalid_task_degree"}
+                    )
+            start = next(origin for origin, _ in robot_arcs if origin.startswith("__start__"))
+            visited_tasks = set()
+            visited_nodes = set()
+            current = start
+            while not current.startswith("__end__"):
+                if current in visited_nodes or len(outgoing[current]) != 1:
+                    violations["arc_structure"].append(
+                        {"robot": robot_id, "node": current, "reason": "cycle_or_branch"}
+                    )
+                    break
+                visited_nodes.add(current)
+                current = outgoing[current][0]
+                if current in task_map:
+                    visited_tasks.add(current)
+            if visited_tasks != assignments_by_robot[robot_id]:
+                violations["arc_structure"].append(
+                    {
+                        "robot": robot_id,
+                        "reason": "disconnected_tasks",
+                        "missing": sorted(assignments_by_robot[robot_id] - visited_tasks),
                     }
                 )
 
@@ -204,6 +346,9 @@ def validate_plan(
         "event_response_violation_count": float(len(violations["event_response"])),
         "deadline_violation_count": float(len(violations["deadline"])),
         "frozen_violation_count": float(len(violations["frozen"])),
+        "pickup_delivery_violation_count": float(len(violations["pickup_delivery"])),
+        "energy_trace_violation_count": float(len(violations["energy_trace"])),
+        "arc_structure_violation_count": float(len(violations["arc_structure"])),
     }
     counts["is_valid"] = float(sum(int(value) for key, value in counts.items() if key != "is_valid")) == 0.0
 

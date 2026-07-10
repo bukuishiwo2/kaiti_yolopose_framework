@@ -82,6 +82,32 @@ class ResourceState:
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
+@dataclass(frozen=True)
+class RouteResourceUse:
+    resource_id: str
+    enter_fraction: float
+    exit_fraction: float
+    safety_buffer: float = 0.0
+
+
+@dataclass
+class ResourceReservation:
+    resource_id: str
+    robot_id: str
+    task_id: str
+    route_arc: str
+    enter_time: float
+    exit_time: float
+    safety_buffer: float = 0.0
+
+
+@dataclass
+class SolverConfig:
+    time_limit: float = 5.0
+    mip_gap: float = 0.01
+    planning_horizon: float = 300.0
+
+
 @dataclass
 class DynamicEvent:
     time: float
@@ -122,6 +148,8 @@ class PlanningProblem:
     dynamic_events: list[DynamicEvent]
     semantic: SemanticConfig
     spatial: SpatialConfig
+    solver: SolverConfig = field(default_factory=SolverConfig)
+    route_resources: dict[str, dict[str, list[RouteResourceUse]]] = field(default_factory=dict)
 
     def task_by_id(self) -> dict[str, Task]:
         return {task.id: task for task in self.tasks}
@@ -132,6 +160,9 @@ class PlanningProblem:
     def resource_by_id(self) -> dict[str, Resource]:
         return {resource.id: resource for resource in self.resources}
 
+    def route_resource_uses(self, origin: str, destination: str) -> list[RouteResourceUse]:
+        return list(self.route_resources.get(origin, {}).get(destination, []))
+
 
 @dataclass
 class TaskAssignment:
@@ -141,6 +172,7 @@ class TaskAssignment:
     finish: float
     location: str
     resources: list[str]
+    energy_before: float | None = None
     energy_after: float | None = None
 
 
@@ -155,6 +187,12 @@ class PlanResult:
     current_time: float = 0.0
     notes: list[str] = field(default_factory=list)
     diagnostics: dict[str, Any] = field(default_factory=dict)
+    resource_reservations: list[ResourceReservation] = field(default_factory=list)
+    objective_components: dict[str, float] = field(default_factory=dict)
+    solver_runtime: float | None = None
+    mip_gap: float | None = None
+    best_bound: float | None = None
+    time_limit: float | None = None
 
     def to_dict(self) -> dict[str, Any]:
         status = (
@@ -172,6 +210,14 @@ class PlanResult:
             "metrics": self.metrics,
             "notes": self.notes,
             "diagnostics": self.diagnostics,
+            "resource_reservations": [
+                asdict(item) for item in self.resource_reservations
+            ],
+            "objective_components": self.objective_components,
+            "solver_runtime": self.solver_runtime,
+            "mip_gap": self.mip_gap,
+            "best_bound": self.best_bound,
+            "time_limit": self.time_limit,
         }
 
 
@@ -229,6 +275,14 @@ def load_problem_from_yaml(path: str | Path) -> PlanningProblem:
 
     semantic = SemanticConfig(**raw["semantic"])
     spatial = SpatialConfig(**raw["spatial"])
+    solver = SolverConfig(**raw.get("solver", {}))
+    route_resources: dict[str, dict[str, list[RouteResourceUse]]] = {}
+    for origin, destinations in raw.get("route_resources", {}).items():
+        route_resources[str(origin)] = {}
+        for destination, uses in destinations.items():
+            route_resources[str(origin)][str(destination)] = [
+                RouteResourceUse(**item) for item in uses
+            ]
 
     return PlanningProblem(
         meta=dict(raw.get("meta", {})),
@@ -242,4 +296,6 @@ def load_problem_from_yaml(path: str | Path) -> PlanningProblem:
         dynamic_events=dynamic_events,
         semantic=semantic,
         spatial=spatial,
+        solver=solver,
+        route_resources=route_resources,
     )

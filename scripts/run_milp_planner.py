@@ -25,7 +25,13 @@ def main() -> None:
     problem = load_problem_from_yaml(Path(args.config))
     result = solve_milp(problem, backend=args.backend, plan_kind="static")
     payload = result.to_dict()
-    payload["validation"] = validate_plan(problem, result.assignments, current_time=0.0)
+    payload["validation"] = validate_plan(
+        problem,
+        result.assignments,
+        current_time=0.0,
+        resource_reservations=result.resource_reservations,
+        selected_arcs=result.diagnostics.get("selected_arcs"),
+    )
     print(json.dumps(payload, ensure_ascii=True, indent=2))
 
 

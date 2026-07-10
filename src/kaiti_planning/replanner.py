@@ -129,6 +129,8 @@ def run_dynamic_replanning(
                 base_plan.assignments,
                 current_time=0.0,
                 resource_states=initial_states,
+                resource_reservations=base_plan.resource_reservations,
+                selected_arcs=base_plan.diagnostics.get("selected_arcs"),
             ),
         }
     ]
@@ -208,6 +210,8 @@ def run_dynamic_replanning(
                     current_time=event.time,
                     resource_states=current_resource_states,
                     frozen_assignments=committed,
+                    resource_reservations=replan.resource_reservations,
+                    selected_arcs=replan.diagnostics.get("selected_arcs"),
                 ),
             }
         )

@@ -48,13 +48,28 @@
 
 门禁结果：事件前无事件任务；重复输入不重复创建；degraded 保留 active episode；verify 执行失败不关闭事件。
 
-## 5. 验收命令基线
+## 5. Week 3–4 任务
+
+- [x] 虚拟起点/终点与直接后继 arc
+- [x] flow/MTZ 子回路消除
+- [x] pickup-deliver 同机约束
+- [x] 逐任务电量、充电上限与返航储备
+- [x] 路径/服务资源预约区间
+- [x] planning horizon 自动 Big-M
+- [x] 路径相关 wait/change objective
+- [x] CBC time limit/gap/status/runtime/bound 输出
+- [x] validator 跨车配送、预约重叠和电量反例
+
+门禁结果：正式 v2 demo 为 `OPTIMAL`，solver/validator 零违规；手工跨车配送、资源重叠和电量篡改均被捕获。六月 legacy benchmark 保留原求解路径，不与最终模型结果混写。
+
+## 6. 验收命令基线
 
 ```bash
 .venv/bin/python scripts/check_graduation_plan_sync.py
 .venv/bin/python -m pytest -q
 .venv/bin/python scripts/run_planning_smoke.py
 .venv/bin/python scripts/replay_world_state_case.py
+.venv/bin/python scripts/run_sequence_milp_demo.py
 ```
 
 ```bash
@@ -65,7 +80,7 @@ colcon test --event-handlers console_direct+
 colcon test-result --verbose
 ```
 
-## 6. 变更控制
+## 7. 变更控制
 
 - 数据、模型、地图和 outputs 默认不删除；
 - 不覆盖未审计的用户修改；

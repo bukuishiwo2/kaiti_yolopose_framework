@@ -175,6 +175,8 @@ def run_local_repair(
         current_time=event_time,
         resource_states=target_resource_states,
         frozen_assignments=committed,
+        resource_reservations=full_replan.resource_reservations,
+        selected_arcs=full_replan.diagnostics.get("selected_arcs"),
     )
     local_validation = validate_plan(
         problem,
@@ -182,6 +184,8 @@ def run_local_repair(
         current_time=event_time,
         resource_states=target_resource_states,
         frozen_assignments=local_fixed_assignments,
+        resource_reservations=local_repair.resource_reservations,
+        selected_arcs=local_repair.diagnostics.get("selected_arcs"),
     )
 
     return {

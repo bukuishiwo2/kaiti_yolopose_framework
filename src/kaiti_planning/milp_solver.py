@@ -259,6 +259,20 @@ def solve_milp(
     incumbent_assignments = incumbent_assignments or []
     excluded_task_ids = excluded_task_ids or set()
 
+    if problem.meta.get("model_version") == "sequence_arc_v2":
+        from .sequence_milp import solve_sequence_milp
+
+        return solve_sequence_milp(
+            problem,
+            lib=lib,
+            current_time=current_time,
+            resource_states=resource_states,
+            committed_assignments=committed_assignments,
+            incumbent_assignments=incumbent_assignments,
+            excluded_task_ids=excluded_task_ids,
+            plan_kind=plan_kind,
+        )
+
     tasks = [task for task in problem.tasks if task.id not in excluded_task_ids]
     task_map = {task.id: task for task in tasks}
     task_ids = [task.id for task in tasks]
