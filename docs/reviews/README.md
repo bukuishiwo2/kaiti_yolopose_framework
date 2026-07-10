@@ -20,6 +20,7 @@
 
 ## 当前文档
 
+- [毕业设计研究方案与仓库现状审计（2026-07-10）](graduation_plan_repo_audit_2026-07-10.md)
 - [感知审计](perception_audit_2026-04-10.md)
 - [系统审计](system_audit_2026-04-10.md)
 - [架构汇总](architect_summary_2026-04-10.md)
