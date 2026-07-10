@@ -37,12 +37,24 @@
 - [x] blocked resource 结构化结果
 - [x] LTLf 独立环境一日 spike
 
-## 4. 验收命令基线
+## 4. Week 2 任务
+
+- [x] robot/task/resource/event registry
+- [x] `EventEpisode` 与 task lifecycle
+- [x] event/world/plan revision
+- [x] observe/verify/pickup/deliver 动态任务工厂
+- [x] event close、degraded、retry 与幂等规则
+- [x] 正式 v2 初始问题不预置事件任务
+
+门禁结果：事件前无事件任务；重复输入不重复创建；degraded 保留 active episode；verify 执行失败不关闭事件。
+
+## 5. 验收命令基线
 
 ```bash
 .venv/bin/python scripts/check_graduation_plan_sync.py
 .venv/bin/python -m pytest -q
 .venv/bin/python scripts/run_planning_smoke.py
+.venv/bin/python scripts/replay_world_state_case.py
 ```
 
 ```bash
@@ -53,7 +65,7 @@ colcon test --event-handlers console_direct+
 colcon test-result --verbose
 ```
 
-## 5. 变更控制
+## 6. 变更控制
 
 - 数据、模型、地图和 outputs 默认不删除；
 - 不覆盖未审计的用户修改；

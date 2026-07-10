@@ -61,11 +61,10 @@ class SemanticStateMachine:
             self._counters.confirm_hits = 0
             self._counters.clear_hits = 0
             self._counters.hold_remaining = 0
-            self._event_id = None
             return SemanticStateOutput(
                 semantic_state=self._state,
                 predicate=predicate,
-                event_id=None,
+                event_id=self._event_id,
                 event_location=location,
                 fall_score=round(raw_score, 4),
                 quality_score=round(quality_score, 4),

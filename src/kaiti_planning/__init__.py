@@ -16,6 +16,14 @@ from .models import (
     load_problem_from_yaml,
 )
 from .ltlf_monitor import LtlfTraceMonitor, TraceVerdict, TransitionTable, load_transition_tables
+from .world_state import (
+    EpisodeState,
+    EventEpisode,
+    PerceptionState,
+    TaskLifecycle,
+    WorldState,
+    WorldUpdate,
+)
 
 __all__ = [
     "DynamicEvent",
@@ -35,4 +43,10 @@ __all__ = [
     "TraceVerdict",
     "TransitionTable",
     "load_transition_tables",
+    "EpisodeState",
+    "EventEpisode",
+    "PerceptionState",
+    "TaskLifecycle",
+    "WorldState",
+    "WorldUpdate",
 ]

@@ -3,7 +3,7 @@ PIP ?= .venv/bin/pip
 CONDA ?= $(HOME)/anaconda3/condabin/conda
 SPOT_PYTHON ?= $(HOME)/anaconda3/envs/kaiti-ltlf-spot/bin/python
 
-.PHONY: help setup install-editable dev-setup test planning-smoke docs-setup docs-build docs-check ltlf-env ltlf-build ltlf-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
+.PHONY: help setup install-editable dev-setup test planning-smoke world-state-demo docs-setup docs-build docs-check ltlf-env ltlf-build ltlf-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
 
 help:
 	@echo "Targets:"
@@ -12,6 +12,7 @@ help:
 	@echo "  dev-setup        Install documentation and test dependencies"
 	@echo "  test             Run the Python test suite"
 	@echo "  planning-smoke   Run static, dynamic, repair, and blocked planning checks"
+	@echo "  world-state-demo Replay the event episode and dynamic-task lifecycle"
 	@echo "  docs-setup       Install research-plan DOCX generation dependencies"
 	@echo "  docs-build       Generate the research-plan DOCX and manifest"
 	@echo "  docs-check       Verify Markdown / DOCX / manifest synchronization"
@@ -45,6 +46,9 @@ test:
 
 planning-smoke:
 	$(PYTHON) scripts/run_planning_smoke.py
+
+world-state-demo:
+	$(PYTHON) scripts/replay_world_state_case.py
 
 docs-setup:
 	$(PIP) install -r requirements-docs.txt
