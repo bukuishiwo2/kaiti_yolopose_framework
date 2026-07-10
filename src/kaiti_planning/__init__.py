@@ -27,6 +27,7 @@ from .world_state import (
     WorldState,
     WorldUpdate,
 )
+from .dynamic_repair import RevisionPlanningCoordinator, affected_tasks, repair_after_disturbance
 
 __all__ = [
     "DynamicEvent",
@@ -55,4 +56,7 @@ __all__ = [
     "TaskLifecycle",
     "WorldState",
     "WorldUpdate",
+    "RevisionPlanningCoordinator",
+    "affected_tasks",
+    "repair_after_disturbance",
 ]

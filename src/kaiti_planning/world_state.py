@@ -302,6 +302,8 @@ class WorldState:
             episode = self.events.get(external_event_id)
             if episode and episode.state not in TERMINAL_EPISODE_STATES:
                 return episode
+        if track_id is not None:
+            return None
         candidates = [
             episode
             for episode in self.events.values()

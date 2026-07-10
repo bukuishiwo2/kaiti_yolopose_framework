@@ -62,7 +62,17 @@
 
 门禁结果：正式 v2 demo 为 `OPTIMAL`，solver/validator 零违规；手工跨车配送、资源重叠和电量篡改均被捕获。六月 legacy benchmark 保留原求解路径，不与最终模型结果混写。
 
-## 6. 验收命令基线
+## 6. Week 5 任务
+
+- [x] 五类扰动 seed 与受影响任务传播
+- [x] completed/active prefix 状态推进
+- [x] LocalRepair 与 Full-Replan fallback
+- [x] world revision 过期结果丢弃
+- [x] LTLf 三值运行时 monitor
+
+门禁结果：五类扰动均产生非空 affected set；persistent blocked 的 local infeasible 进入结构化 fallback；temporary corridor 的选中计划 validator 零违规；过期 revision 不发布。
+
+## 7. 验收命令基线
 
 ```bash
 .venv/bin/python scripts/check_graduation_plan_sync.py
@@ -70,6 +80,7 @@
 .venv/bin/python scripts/run_planning_smoke.py
 .venv/bin/python scripts/replay_world_state_case.py
 .venv/bin/python scripts/run_sequence_milp_demo.py
+.venv/bin/python scripts/run_dynamic_repair_matrix.py
 ```
 
 ```bash
@@ -80,7 +91,7 @@ colcon test --event-handlers console_direct+
 colcon test-result --verbose
 ```
 
-## 7. 变更控制
+## 8. 变更控制
 
 - 数据、模型、地图和 outputs 默认不删除；
 - 不覆盖未审计的用户修改；
