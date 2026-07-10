@@ -298,9 +298,23 @@ class SpatialStateEstimator:
             return 0.0
         free_widths = []
         for line in lines:
-            free_count = sum(1 for value in line if not self._cell_is_occupied(value, spec))
-            free_widths.append(free_count * resolution)
-        return min(free_widths) if free_widths else 0.0
+            longest_run = 0
+            current_run = 0
+            for value in line:
+                if self._cell_is_occupied(value, spec):
+                    current_run = 0
+                    continue
+                current_run += 1
+                longest_run = max(longest_run, current_run)
+            free_widths.append(longest_run * resolution)
+
+        positive_widths = sorted(width for width in free_widths if width > 0.0)
+        if not positive_widths:
+            return 0.0
+
+        # Use the median non-zero free run so edge-wall rows don't collapse the
+        # entire corridor estimate to zero in a known environment.
+        return positive_widths[len(positive_widths) // 2]
 
     def _path_cost_for_region(self, resource_id: str) -> float:
         if resource_id == "corridor_H":
@@ -341,13 +355,13 @@ class SpatialStateEstimator:
 
         if state == "temporary_occupied":
             wait_time = max(float(spec.temporary_wait_sec), occupied_duration)
-            available_from = float(current_time) + wait_time
+            available_from = wait_time
         elif state in {"blocked", "occupied"}:
             wait_time = max(float(spec.blocked_wait_sec), occupied_duration)
-            available_from = float(current_time) + wait_time
+            available_from = wait_time
         else:
             wait_time = 0.0
-            available_from = float(current_time)
+            available_from = 0.0
 
         region.update(
             {

@@ -95,29 +95,33 @@
       <static>true</static>
       <link name="inner_walls_link">
         <collision name="room_split_1">
-          <pose>2.45 1.0 1.0 0 0 0</pose>
-          <geometry><box><size>0.1 1.8 2.0</size></box></geometry>
+          <pose>2.45 0.85 1.0 0 0 0</pose>
+          <geometry><box><size>0.1 1.5 2.0</size></box></geometry>
         </collision>
         <collision name="room_split_2">
-          <pose>2.45 4.0 1.0 0 0 0</pose>
-          <geometry><box><size>0.1 3.8 2.0</size></box></geometry>
+          <pose>2.45 4.25 1.0 0 0 0</pose>
+          <geometry><box><size>0.1 3.3 2.0</size></box></geometry>
         </collision>
         <collision name="room_split_3">
           <pose>4.55 2.0 1.0 0 0 0</pose>
           <geometry><box><size>0.1 4.0 2.0</size></box></geometry>
         </collision>
-        <collision name="room_split_4">
-          <pose>1.25 3.55 1.0 0 0 0</pose>
-          <geometry><box><size>2.3 0.1 2.0</size></box></geometry>
+        <collision name="room_split_4_left">
+          <pose>0.6 3.55 1.0 0 0 0</pose>
+          <geometry><box><size>1.0 0.1 2.0</size></box></geometry>
+        </collision>
+        <collision name="room_split_4_right">
+          <pose>2.15 3.55 1.0 0 0 0</pose>
+          <geometry><box><size>0.5 0.1 2.0</size></box></geometry>
         </collision>
         <visual name="room_split_1_visual">
-          <pose>2.45 1.0 1.0 0 0 0</pose>
-          <geometry><box><size>0.1 1.8 2.0</size></box></geometry>
+          <pose>2.45 0.85 1.0 0 0 0</pose>
+          <geometry><box><size>0.1 1.5 2.0</size></box></geometry>
           <material><ambient>0.84 0.84 0.86 1</ambient><diffuse>0.84 0.84 0.86 1</diffuse></material>
         </visual>
         <visual name="room_split_2_visual">
-          <pose>2.45 4.0 1.0 0 0 0</pose>
-          <geometry><box><size>0.1 3.8 2.0</size></box></geometry>
+          <pose>2.45 4.25 1.0 0 0 0</pose>
+          <geometry><box><size>0.1 3.3 2.0</size></box></geometry>
           <material><ambient>0.84 0.84 0.86 1</ambient><diffuse>0.84 0.84 0.86 1</diffuse></material>
         </visual>
         <visual name="room_split_3_visual">
@@ -125,9 +129,14 @@
           <geometry><box><size>0.1 4.0 2.0</size></box></geometry>
           <material><ambient>0.84 0.84 0.86 1</ambient><diffuse>0.84 0.84 0.86 1</diffuse></material>
         </visual>
-        <visual name="room_split_4_visual">
-          <pose>1.25 3.55 1.0 0 0 0</pose>
-          <geometry><box><size>2.3 0.1 2.0</size></box></geometry>
+        <visual name="room_split_4_left_visual">
+          <pose>0.6 3.55 1.0 0 0 0</pose>
+          <geometry><box><size>1.0 0.1 2.0</size></box></geometry>
+          <material><ambient>0.84 0.84 0.86 1</ambient><diffuse>0.84 0.84 0.86 1</diffuse></material>
+        </visual>
+        <visual name="room_split_4_right_visual">
+          <pose>2.15 3.55 1.0 0 0 0</pose>
+          <geometry><box><size>0.5 0.1 2.0</size></box></geometry>
           <material><ambient>0.84 0.84 0.86 1</ambient><diffuse>0.84 0.84 0.86 1</diffuse></material>
         </visual>
       </link>

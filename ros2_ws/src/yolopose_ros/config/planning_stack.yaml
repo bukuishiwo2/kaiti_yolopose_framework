@@ -1,5 +1,6 @@
 semantic_state_node:
   ros__parameters:
+    use_sim_time: true
     planner_config_path: configs/planner_minimal_experiment.yaml
     perception_event_topic: /perception/events
     semantic_state_topic: /planning/semantic_state
@@ -8,16 +9,18 @@ semantic_state_node:
 
 spatial_state_node:
   ros__parameters:
+    use_sim_time: true
     planner_config_path: configs/planner_minimal_experiment.yaml
     region_config_path: configs/planner_regions.yaml
     spatial_state_topic: /planning/spatial_state
     publish_period_sec: 1.0
-    costmap_topic: /global_costmap/costmap
+    costmap_topic: /map
     costmap_timeout_sec: 5.0
     use_costmap_topic: true
 
 milp_planner_node:
   ros__parameters:
+    use_sim_time: true
     planner_config_path: configs/planner_minimal_experiment.yaml
     semantic_state_topic: /planning/semantic_state
     spatial_state_topic: /planning/spatial_state
@@ -25,9 +28,32 @@ milp_planner_node:
     publish_period_sec: 2.0
     backend: pulp
 
+milp_plan_executor_node:
+  ros__parameters:
+    use_sim_time: true
+    planner_config_path: configs/planner_minimal_experiment.yaml
+    waypoint_config_path: configs/planner_waypoints.yaml
+    plan_topic: /planning/plan
+    planner_status_topic: /planning/executor_status
+    nav2_action_name: /navigate_to_pose
+    map_topic: /map
+    controlled_robot_id: R2
+    execution_enabled: false
+    allow_plan_refresh_during_execution: false
+    require_tf_ready: true
+    require_waypoint_in_map: true
+    waypoint_map_margin_m: 0.10
+    base_frame_id: base_link
+    tf_wait_timeout_sec: 0.2
+    publish_period_sec: 1.0
+    task_hold_sec: 1.0
+    plan_stale_sec: 10.0
+    max_nav_retries_per_step: 0
+
 execution_feedback_bridge_node:
   ros__parameters:
-    planner_status_topic: /task_planner/status
+    use_sim_time: true
+    planner_status_topic: /planning/executor_status
     execution_feedback_topic: /planning/execution_feedback
     publish_period_sec: 1.0
     status_timeout_sec: 5.0

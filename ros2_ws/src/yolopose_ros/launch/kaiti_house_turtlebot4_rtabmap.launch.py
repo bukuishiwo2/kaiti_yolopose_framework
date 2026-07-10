@@ -1,3 +1,19 @@
+"""Phase 4a house stack with TurtleBot4 sim, perception bridge, and RTAB-Map sidecar.
+
+主要功能:
+- 以上一层 kaiti_house_turtlebot4_sim 为底座启动家居仿真。
+- 启动 yolopose_ros 的 system stack，复用 ROS 图像输入链路。
+- 延迟拉起 RTAB-Map，验证 RGBD / LiDAR / odom 到 map 的建图链。
+
+适用阶段:
+- 研究内容一的空间状态上游数据采集。
+- Nav2 接入前的建图与地图话题健康检查。
+
+不负责:
+- 不直接启动 Nav2 生命周期。
+- 不负责 /planning/* 规划接口联调。
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -46,6 +62,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("camera_info_topic", default_value="/oakd/rgb/preview/camera_info"),
             DeclareLaunchArgument("scan_topic", default_value="/scan"),
             DeclareLaunchArgument("odom_topic", default_value="/odom"),
+            DeclareLaunchArgument("odom_frame_id", default_value="odom"),
             DeclareLaunchArgument("base_frame_id", default_value="base_link"),
             DeclareLaunchArgument("use_sim_time", default_value="true"),
             DeclareLaunchArgument("approx_sync", default_value="true"),
@@ -62,6 +79,12 @@ def generate_launch_description() -> LaunchDescription:
                     "House Phase 4a stack: custom house + TurtleBot4 + yolopose_ros ros_image + ",
                     "RTAB-Map sidecar mapping. Nav2 and PlanSys2 lifecycle remain outside this launch.",
                 ]
+            ),
+            LogInfo(
+                msg=(
+                    "This launch already starts the house simulation. If a house sim is already "
+                    "running, relaunch with launch_turtlebot4:=false."
+                )
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(custom_sim_launch),
@@ -103,6 +126,8 @@ def generate_launch_description() -> LaunchDescription:
                             "camera_info_topic": LaunchConfiguration("camera_info_topic"),
                             "frame_id": LaunchConfiguration("base_frame_id"),
                             "odom_topic": LaunchConfiguration("odom_topic"),
+                            "odom_frame_id": LaunchConfiguration("odom_frame_id"),
+                            "publish_tf_map": "true",
                             "approx_sync": LaunchConfiguration("approx_sync"),
                             "subscribe_scan": LaunchConfiguration("subscribe_scan"),
                             "scan_topic": LaunchConfiguration("scan_topic"),

@@ -1,3 +1,20 @@
+"""Phase 5 planning precheck entry for house sim, Nav2, and /planning/* topics.
+
+主要功能:
+- 在家居仿真 + RTAB-Map + Nav2 基础上启动 planning stack。
+- 对外暴露 /planning/semantic_state、/planning/spatial_state、/planning/plan、
+  /planning/execution_feedback 等主题。
+- 可选拉起 planner_nav2_dispatcher_node，但默认保持 dispatch 关闭，仅做接口预检查。
+
+适用阶段:
+- 研究内容三进入 ROS2 在线联调前的总入口。
+- 验证“空间/语义/计划/反馈”四类接口是否已经挂齐。
+
+不负责:
+- 不让 PlanSys2 代替 MILP 做全局分配。
+- 默认不自动驱动机器人执行真实计划动作。
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -36,7 +53,7 @@ def generate_launch_description() -> LaunchDescription:
             ),
             DeclareLaunchArgument("launch_nav2_precheck", default_value="true"),
             DeclareLaunchArgument("launch_planning_stack", default_value="true"),
-            DeclareLaunchArgument("launch_dispatcher", default_value="true"),
+            DeclareLaunchArgument("launch_dispatcher", default_value="false"),
             DeclareLaunchArgument("dispatcher_config", default_value=dispatcher_config),
             DeclareLaunchArgument("dispatch_enabled", default_value="false"),
             DeclareLaunchArgument("allowed_actions", default_value=""),
@@ -61,6 +78,12 @@ def generate_launch_description() -> LaunchDescription:
                     "House planning precheck: custom world + TurtleBot4 + RTAB-Map + Nav2 + ",
                     "/planning/* topics. Dispatcher stays disabled by default.",
                 ]
+            ),
+            LogInfo(
+                msg=(
+                    "This launch already includes Nav2 precheck and its lower house stack. If "
+                    "Nav2 precheck is already running, relaunch with launch_nav2_precheck:=false."
+                )
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(nav2_precheck_launch),

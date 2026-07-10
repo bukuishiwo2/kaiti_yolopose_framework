@@ -1,3 +1,18 @@
+"""Spawn and robot-side bringup layer for TurtleBot4 in the custom house world.
+
+主要功能:
+- 在 Ignition world 中生成 TurtleBot4 与 dock 实体。
+- 启动 robot_description、ros_gz bridge、turtlebot4 node、Create3 nodes。
+- 以延迟方式拉起 ros2_control 相关节点，降低控制器早启动失败概率。
+
+适用阶段:
+- 作为 kaiti_house_turtlebot4_sim 的中间层。
+- 负责“机器人已生成且机器人侧节点在线”，但不负责 world 进程本身。
+
+不负责:
+- 不做 RTAB-Map、Nav2、planning stack 的生命周期管理。
+"""
+
 from __future__ import annotations
 
 from irobot_create_common_bringup.namespace import GetNamespacedName
@@ -142,6 +157,9 @@ def generate_launch_description() -> LaunchDescription:
                             ),
                             "switch_timeout": LaunchConfiguration("switch_timeout"),
                             "service_call_timeout": LaunchConfiguration("service_call_timeout"),
+                            "controller_activation_settle_sec": LaunchConfiguration(
+                                "controller_activation_settle_sec"
+                            ),
                         }.items(),
                     ),
                     IncludeLaunchDescription(
@@ -204,6 +222,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("controller_manager_timeout", default_value="60"),
             DeclareLaunchArgument("switch_timeout", default_value="30"),
             DeclareLaunchArgument("service_call_timeout", default_value="30"),
+            DeclareLaunchArgument("controller_activation_settle_sec", default_value="2.0"),
             DeclareLaunchArgument("controller_start_delay", default_value="8.0"),
             spawn_robot_group_action,
             IncludeLaunchDescription(

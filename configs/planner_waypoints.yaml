@@ -1,0 +1,53 @@
+meta:
+  description: Navigation waypoint registry for the single-robot online MILP-to-Nav2 loop.
+
+waypoints:
+  A:
+    frame_id: map
+    x: 1.0
+    y: 1.0
+    z: 0.0
+    qx: 0.0
+    qy: 0.0
+    qz: 0.0
+    qw: 1.0
+
+  B:
+    frame_id: map
+    x: 3.35
+    y: 2.55
+    z: 0.0
+    qx: 0.0
+    qy: 0.0
+    qz: 0.0
+    qw: 1.0
+
+  C:
+    frame_id: map
+    x: 5.45
+    y: 4.65
+    z: 0.0
+    qx: 0.0
+    qy: 0.0
+    qz: 1.0
+    qw: 0.0
+
+  D:
+    frame_id: map
+    x: 5.5
+    y: 1.0
+    z: 0.0
+    qx: 0.0
+    qy: 0.0
+    qz: 1.0
+    qw: 0.0
+
+  S:
+    frame_id: map
+    x: 1.15
+    y: 4.65
+    z: 0.0
+    qx: 0.0
+    qy: 0.0
+    qz: 0.0
+    qw: 1.0

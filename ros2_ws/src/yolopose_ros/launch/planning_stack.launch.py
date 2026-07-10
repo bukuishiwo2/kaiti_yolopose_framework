@@ -62,6 +62,16 @@ def generate_launch_description() -> LaunchDescription:
             ),
             Node(
                 package="yolopose_ros",
+                executable="milp_plan_executor_node",
+                name="milp_plan_executor_node",
+                output="screen",
+                parameters=[
+                    LaunchConfiguration("planning_config"),
+                    {"project_root": LaunchConfiguration("project_root")},
+                ],
+            ),
+            Node(
+                package="yolopose_ros",
                 executable="execution_feedback_bridge_node",
                 name="execution_feedback_bridge_node",
                 output="screen",
@@ -70,7 +80,7 @@ def generate_launch_description() -> LaunchDescription:
             LogInfo(
                 msg=[
                     "Planning topics: /planning/semantic_state, /planning/spatial_state, ",
-                    "/planning/plan, /planning/execution_feedback.",
+                    "/planning/plan, /planning/execution_feedback, /planning/executor_status.",
                 ]
             ),
         ]

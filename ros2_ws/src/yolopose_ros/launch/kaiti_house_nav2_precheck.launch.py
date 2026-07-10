@@ -1,3 +1,19 @@
+"""Phase 4b house stack with RTAB-Map baseline and Nav2 readiness gate.
+
+主要功能:
+- 复用 phase4a house stack，确保家居仿真、传感器、RTAB-Map 已就绪。
+- 通过 robot_ready_gate_node 检查 /joint_states、/odom、/map、TF 是否可用。
+- 仅在底层状态满足后再启动 Nav2，避免 Nav2 在半就绪图上启动失败。
+
+适用阶段:
+- Nav2 接入预检查。
+- 为后续 planner dispatcher / execution feedback 链提供导航执行底座。
+
+不负责:
+- 不做全局任务规划。
+- 不自动把 MILP 结果下发给 Nav2。
+"""
+
 from __future__ import annotations
 
 from pathlib import Path
@@ -93,6 +109,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("camera_info_topic", default_value="/oakd/rgb/preview/camera_info"),
             DeclareLaunchArgument("scan_topic", default_value="/scan"),
             DeclareLaunchArgument("odom_topic", default_value="/odom"),
+            DeclareLaunchArgument("odom_frame_id", default_value="odom"),
             DeclareLaunchArgument("base_frame_id", default_value="base_link"),
             DeclareLaunchArgument("visualization_enabled", default_value="true"),
             LogInfo(
@@ -100,6 +117,12 @@ def generate_launch_description() -> LaunchDescription:
                     "House Phase 4b Nav2 precheck: custom house + TurtleBot4 + RTAB-Map baseline + ",
                     "Nav2 servers. Planner still must not dispatch goals automatically in this phase.",
                 ]
+            ),
+            LogInfo(
+                msg=(
+                    "This launch already includes the Phase 4a house stack. If sim/RTAB-Map is "
+                    "already running, relaunch with launch_phase4a_house:=false."
+                )
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(phase4a_house_launch),
@@ -119,6 +142,7 @@ def generate_launch_description() -> LaunchDescription:
                     "camera_info_topic": LaunchConfiguration("camera_info_topic"),
                     "scan_topic": LaunchConfiguration("scan_topic"),
                     "odom_topic": LaunchConfiguration("odom_topic"),
+                    "odom_frame_id": LaunchConfiguration("odom_frame_id"),
                     "base_frame_id": LaunchConfiguration("base_frame_id"),
                     "use_sim_time": LaunchConfiguration("use_sim_time"),
                     "visual_odometry": "false",

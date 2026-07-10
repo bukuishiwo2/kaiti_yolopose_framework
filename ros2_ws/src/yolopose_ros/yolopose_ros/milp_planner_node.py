@@ -60,6 +60,17 @@ class MilpPlannerNode(Node):
         except json.JSONDecodeError:
             return {"raw": payload}
 
+    @staticmethod
+    def _relative_available_from(payload: dict[str, Any]) -> float:
+        available_from = float(payload.get("available_from", 0.0))
+        wait_time = max(0.0, float(payload.get("wait_time", 0.0)))
+        state = str(payload.get("state", ""))
+        if state in {"free", "available", "reachable"}:
+            return 0.0
+        if available_from > 10_000_000.0:
+            return wait_time
+        return max(0.0, available_from)
+
     def _on_semantic(self, msg: String) -> None:
         self._latest_semantic = self._parse_payload(msg.data)
 
@@ -78,7 +89,7 @@ class MilpPlannerNode(Node):
                 resource_id=str(payload.get("resource_id", resource_id)),
                 predicate=str(payload.get("predicate", "")),
                 state=str(payload.get("state", "")),
-                available_from=float(payload.get("available_from", 0.0)),
+                available_from=self._relative_available_from(payload),
                 wait_time=float(payload.get("wait_time", 0.0)),
                 metadata=dict(payload.get("metadata", {})),
             )
@@ -99,6 +110,7 @@ class MilpPlannerNode(Node):
                 "source_spatial_state": self._latest_spatial,
                 **result.to_dict(),
             }
+            payload["tasks"] = list(payload.get("assignments", []))
         except Exception as exc:  # pylint: disable=broad-except
             payload = {
                 "ts": self._timestamp(),
@@ -113,6 +125,7 @@ class MilpPlannerNode(Node):
                 "source_semantic_state": self._latest_semantic,
                 "source_spatial_state": self._latest_spatial,
             }
+            payload["tasks"] = []
         msg = String()
         msg.data = json.dumps(payload, ensure_ascii=True)
         self._publisher.publish(msg)

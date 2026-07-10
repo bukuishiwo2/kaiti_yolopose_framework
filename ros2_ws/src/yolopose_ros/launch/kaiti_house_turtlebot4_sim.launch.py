@@ -1,16 +1,84 @@
+"""House sim root launch for TurtleBot4 manual-control bringup.
+
+主要功能:
+- 启动自定义家居 world 的 Ignition Gazebo 仿真。
+- 启动 TurtleBot4 / Create3 相关桥接、底盘控制器、基础传感器节点。
+- 额外提供 clean-start 检查，阻止上一轮残留进程和本轮重复启动叠加。
+- 默认增加 /cmd_vel 到 diff-drive controller 的兜底直连，保证手动键盘控制优先可用。
+
+适用阶段:
+- Phase 4a/4b/5 的底层仿真基座。
+- 手动验证 Gazebo、底盘控制、/odom、/joint_states、/scan、/rgbd 是否正常。
+
+不负责:
+- 不直接启动 RTAB-Map、Nav2、PlanSys2、planning stack。
+"""
+
 from __future__ import annotations
 
 import os
+import subprocess
 
 from pathlib import Path
 
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, SetEnvironmentVariable
+from launch.actions import (
+    DeclareLaunchArgument,
+    IncludeLaunchDescription,
+    LogInfo,
+    OpaqueFunction,
+    SetEnvironmentVariable,
+)
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.actions import Node
+from launch.conditions import IfCondition
+
+
+STALE_PROCESS_PATTERNS = [
+    "ign gazebo",
+    "rtabmap",
+    "controller_ready_node",
+    "robot_ready_gate_node",
+    "ros_gz_bridge parameter_bridge",
+    "irobot_create_nodes",
+    "turtlebot4_node",
+]
+
+
+def _check_clean_start(context, *_args, **_kwargs):
+    require_clean_start = (
+        str(LaunchConfiguration("require_clean_start").perform(context)).strip().lower() == "true"
+    )
+    if not require_clean_start:
+        return []
+
+    matches = []
+    for pattern in STALE_PROCESS_PATTERNS:
+        completed = subprocess.run(
+            ["pgrep", "-fa", pattern],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        for line in completed.stdout.splitlines():
+            normalized = line.strip()
+            if not normalized:
+                continue
+            if "pgrep -fa" in normalized:
+                continue
+            matches.append(normalized)
+
+    if matches:
+        raise RuntimeError(
+            "Detected stale simulation-related processes before launch:\n"
+            + "\n".join(matches)
+            + "\nRun `bash scripts/cleanup_house_sim_processes.sh` and relaunch, or pass "
+            + "`require_clean_start:=false` only if you intentionally reuse an existing sim."
+        )
+    return []
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -88,6 +156,9 @@ def generate_launch_description() -> LaunchDescription:
             "controller_manager_timeout": LaunchConfiguration("controller_manager_timeout"),
             "switch_timeout": LaunchConfiguration("switch_timeout"),
             "service_call_timeout": LaunchConfiguration("service_call_timeout"),
+            "controller_activation_settle_sec": LaunchConfiguration(
+                "controller_activation_settle_sec"
+            ),
             "controller_start_delay": LaunchConfiguration("controller_start_delay"),
             "rviz": LaunchConfiguration("turtlebot4_rviz"),
             "x": LaunchConfiguration("turtlebot4_x"),
@@ -95,6 +166,20 @@ def generate_launch_description() -> LaunchDescription:
             "z": LaunchConfiguration("turtlebot4_z"),
             "yaw": LaunchConfiguration("turtlebot4_yaw"),
         }.items(),
+    )
+
+    cmd_vel_direct_bridge = Node(
+        package="yolopose_ros",
+        executable="cmd_vel_direct_bridge_node",
+        name="cmd_vel_direct_bridge_node",
+        output="screen",
+        condition=IfCondition(LaunchConfiguration("direct_cmd_vel_bridge_enabled")),
+        parameters=[
+            {
+                "input_topic": "/cmd_vel",
+                "output_topic": "/diffdrive_controller/cmd_vel_unstamped",
+            }
+        ],
     )
 
     return LaunchDescription(
@@ -107,11 +192,15 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("controller_manager_timeout", default_value="60"),
             DeclareLaunchArgument("switch_timeout", default_value="30"),
             DeclareLaunchArgument("service_call_timeout", default_value="30"),
+            DeclareLaunchArgument("controller_activation_settle_sec", default_value="2.0"),
             DeclareLaunchArgument("controller_start_delay", default_value="8.0"),
+            DeclareLaunchArgument("require_clean_start", default_value="true"),
+            DeclareLaunchArgument("direct_cmd_vel_bridge_enabled", default_value="true"),
             DeclareLaunchArgument("turtlebot4_x", default_value="0.8"),
             DeclareLaunchArgument("turtlebot4_y", default_value="0.8"),
             DeclareLaunchArgument("turtlebot4_z", default_value="0.0"),
             DeclareLaunchArgument("turtlebot4_yaw", default_value="0.0"),
+            OpaqueFunction(function=_check_clean_start),
             LogInfo(
                 msg=[
                     "Launching TurtleBot4 in custom house world ",
@@ -130,5 +219,6 @@ def generate_launch_description() -> LaunchDescription:
             ignition_gazebo,
             clock_bridge,
             turtlebot4_spawn,
+            cmd_vel_direct_bridge,
         ]
     )

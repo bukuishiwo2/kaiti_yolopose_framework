@@ -1,3 +1,18 @@
+"""Create3 auxiliary node bundle for the simulated TurtleBot4 base.
+
+主要功能:
+- 启动 hazards、IR intensity、wheel status、robot state、kidnap estimator、UI 等节点。
+- 组合 kaiti_create3_control.launch.py，确保 diff-drive 控制器检查流程被一并拉起。
+- 为上层仿真和 Nav2 提供 Create3 兼容的状态与安全接口。
+
+适用阶段:
+- 作为 spawn 层的底盘侧功能包。
+
+不负责:
+- 不直接决定控制器激活顺序细节。
+- 不负责 RTAB-Map、Nav2、规划层联调。
+"""
+
 from __future__ import annotations
 
 from launch import LaunchDescription
@@ -41,6 +56,9 @@ def generate_launch_description() -> LaunchDescription:
             "controller_manager_timeout": LaunchConfiguration("controller_manager_timeout"),
             "switch_timeout": LaunchConfiguration("switch_timeout"),
             "service_call_timeout": LaunchConfiguration("service_call_timeout"),
+            "controller_activation_settle_sec": LaunchConfiguration(
+                "controller_activation_settle_sec"
+            ),
         }.items(),
     )
 
@@ -113,6 +131,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("controller_manager_timeout", default_value="60"),
             DeclareLaunchArgument("switch_timeout", default_value="30"),
             DeclareLaunchArgument("service_call_timeout", default_value="30"),
+            DeclareLaunchArgument("controller_activation_settle_sec", default_value="2.0"),
             diffdrive_controller,
             hazards_vector_node,
             ir_intensity_vector_node,

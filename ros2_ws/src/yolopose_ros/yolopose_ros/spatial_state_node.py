@@ -9,6 +9,7 @@ from pathlib import Path
 import rclpy
 from nav_msgs.msg import OccupancyGrid
 from rclpy.node import Node
+from rclpy.qos import DurabilityPolicy, HistoryPolicy, QoSProfile, ReliabilityPolicy
 from std_msgs.msg import String
 
 
@@ -52,7 +53,13 @@ class SpatialStateNode(Node):
         self._last_snapshot_source = "bootstrap"
 
         if self._use_costmap_topic:
-            self.create_subscription(OccupancyGrid, self._costmap_topic, self._on_costmap, 10)
+            costmap_qos = QoSProfile(
+                history=HistoryPolicy.KEEP_LAST,
+                depth=1,
+                reliability=ReliabilityPolicy.RELIABLE,
+                durability=DurabilityPolicy.TRANSIENT_LOCAL,
+            )
+            self.create_subscription(OccupancyGrid, self._costmap_topic, self._on_costmap, costmap_qos)
 
     @staticmethod
     def _timestamp() -> str:

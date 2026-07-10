@@ -1,3 +1,19 @@
+"""ros2_control activation helper for the simulated house robot base.
+
+主要功能:
+- 查询 controller_manager 当前控制器状态。
+- 按 load -> configure -> activate 顺序推进必需控制器。
+- 在超时前输出最终 active / inactive 结果，供 launch 判断底盘是否 ready。
+
+适用阶段:
+- Phase 4a/4b/5 仿真底盘 bringup。
+- 排查“车不动”“diffdrive_controller inactive”“joint_states 不出”等问题。
+
+不负责:
+- 不发送运动指令。
+- 不做 Nav2、RTAB-Map、规划层逻辑。
+"""
+
 from __future__ import annotations
 
 import sys
@@ -30,6 +46,7 @@ class ControllerReadyNode(Node):
         )
         self.declare_parameter("wait_timeout_sec", 90.0, dynamic_number)
         self.declare_parameter("command_timeout_sec", 20.0, dynamic_number)
+        self.declare_parameter("switch_timeout_sec", 20.0, dynamic_number)
         self.declare_parameter("poll_period_sec", 1.0, dynamic_number)
         self.declare_parameter("activation_settle_sec", 2.0, dynamic_number)
 
@@ -44,6 +61,9 @@ class ControllerReadyNode(Node):
         self._wait_timeout_sec = max(1.0, float(self.get_parameter("wait_timeout_sec").value))
         self._command_timeout_sec = max(
             1.0, float(self.get_parameter("command_timeout_sec").value)
+        )
+        self._switch_timeout_sec = max(
+            1.0, float(self.get_parameter("switch_timeout_sec").value)
         )
         self._poll_period_sec = max(0.2, float(self.get_parameter("poll_period_sec").value))
         self._activation_settle_sec = max(
@@ -121,7 +141,7 @@ class ControllerReadyNode(Node):
         request.activate_controllers = [name]
         request.strictness = SwitchController.Request.STRICT
         request.activate_asap = True
-        request.timeout = Duration(sec=int(self._command_timeout_sec), nanosec=0)
+        request.timeout = Duration(sec=int(self._switch_timeout_sec), nanosec=0)
         response = self._call_service(
             self._switch_client,
             request,
