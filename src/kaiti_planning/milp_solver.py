@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from typing import Any
 
-from .models import PlanResult, PlanningProblem, ResourceState, TaskAssignment
+from .models import PlanResult, PlanningProblem, ResourceState, SolverStatus, TaskAssignment
 
 try:
     import pulp
@@ -51,6 +51,56 @@ def _task_finish_map(assignments: list[TaskAssignment]) -> dict[str, float]:
 
 def _task_start_map(assignments: list[TaskAssignment]) -> dict[str, float]:
     return {item.task: float(item.start) for item in assignments}
+
+
+def _blocked_resource_result(
+    tasks: list[Any],
+    resource_states: dict[str, ResourceState],
+    *,
+    committed_task_ids: set[str],
+    current_time: float,
+    plan_kind: str,
+) -> PlanResult | None:
+    blocking_tasks: list[dict[str, Any]] = []
+    blocking_resource_ids: set[str] = set()
+    retry_candidates: list[float] = []
+
+    for task in tasks:
+        if not task.must_complete or task.id in committed_task_ids:
+            continue
+        blocked = []
+        for resource_id in task.resources:
+            state = resource_states.get(resource_id)
+            if state is None or state.state != "blocked":
+                continue
+            blocked.append(resource_id)
+            blocking_resource_ids.add(resource_id)
+            retry_at = state.metadata.get("earliest_retry_time")
+            if retry_at is not None:
+                retry_candidates.append(float(retry_at))
+        if blocked:
+            blocking_tasks.append({"task_id": task.id, "resource_ids": sorted(blocked)})
+
+    if not blocking_tasks:
+        return None
+
+    return PlanResult(
+        solver_status=SolverStatus.INFEASIBLE_ROUTE_BLOCKED.value,
+        objective_value=None,
+        assignments=[],
+        metrics={"task_count": float(len(tasks)), "assigned_task_count": 0.0},
+        planner_mode="milp",
+        plan_kind=plan_kind,
+        current_time=current_time,
+        notes=["required_route_uses_persistently_blocked_resource"],
+        diagnostics={
+            "reason_code": "ROUTE_BLOCKED_NO_ALTERNATIVE",
+            "blocking_tasks": blocking_tasks,
+            "blocking_resources": sorted(blocking_resource_ids),
+            "earliest_retry_time": min(retry_candidates) if retry_candidates else None,
+            "alternative_route_available": False,
+        },
+    )
 
 
 def explain_plan_timing(
@@ -220,6 +270,16 @@ def solve_milp(
     committed_map = {assignment.task: assignment for assignment in committed_assignments}
     incumbent_map = {assignment.task: assignment for assignment in incumbent_assignments}
 
+    blocked_result = _blocked_resource_result(
+        tasks,
+        resource_map,
+        committed_task_ids=committed_ids,
+        current_time=current_time,
+        plan_kind=plan_kind,
+    )
+    if blocked_result is not None:
+        return blocked_result
+
     model = lib.LpProblem("graduation_design_milp", lib.LpMinimize)
     big_m = 10_000.0
 
@@ -319,22 +379,14 @@ def solve_milp(
             model += shift_delta[task.id] >= s[task.id] - incumbent_start
             model += shift_delta[task.id] >= incumbent_start - s[task.id]
 
-        state_requirements = []
         for resource_id in task.resources:
             resource_state = resource_map.get(resource_id)
             if resource_state is None:
                 continue
             if task.id in committed_ids:
                 continue
-            if resource_state.state == "blocked":
-                state_requirements.append(f"blocked:{resource_id}")
-            else:
-                available_from = max(current_time, float(resource_state.available_from))
-                model += s[task.id] >= available_from
-        if state_requirements:
-            raise ValueError(
-                f"task {task.id} requires blocked resources: {', '.join(state_requirements)}"
-            )
+            available_from = max(current_time, float(resource_state.available_from))
+            model += s[task.id] >= available_from
 
     for before, after in problem.precedence:
         if before in task_map and after in task_map:
@@ -442,18 +494,23 @@ def solve_milp(
     solver = lib.PULP_CBC_CMD(msg=False)
     model.solve(solver)
 
-    status = lib.LpStatus[model.status]
-    if status != "Optimal":
+    raw_status = lib.LpStatus[model.status]
+    if raw_status != "Optimal":
+        normalized_status = (
+            SolverStatus.INFEASIBLE.value
+            if raw_status in {"Infeasible", "Unbounded"}
+            else SolverStatus.ERROR.value
+        )
         return PlanResult(
-            solver_status=status,
+            solver_status=normalized_status,
             objective_value=None,
             assignments=[],
             metrics={"task_count": float(len(tasks))},
             planner_mode="milp",
             plan_kind=plan_kind,
             current_time=current_time,
-            notes=["solver_did_not_find_optimal_solution"],
-            diagnostics={},
+            notes=["solver_did_not_find_feasible_solution"],
+            diagnostics={"raw_solver_status": raw_status},
         )
 
     assignments: list[TaskAssignment] = []
@@ -502,7 +559,7 @@ def solve_milp(
     }
 
     return PlanResult(
-        solver_status=status,
+        solver_status=SolverStatus.OPTIMAL.value,
         objective_value=round(objective_numeric, 3),
         assignments=assignments,
         metrics=metrics,
@@ -510,13 +567,16 @@ def solve_milp(
         plan_kind=plan_kind,
         current_time=current_time,
         notes=[],
-        diagnostics=explain_plan_timing(
-            problem,
-            assignments,
-            current_time=current_time,
-            resource_states=resource_states,
-            committed_assignments=committed_assignments,
-        ),
+        diagnostics={
+            "raw_solver_status": raw_status,
+            **explain_plan_timing(
+                problem,
+                assignments,
+                current_time=current_time,
+                resource_states=resource_states,
+                committed_assignments=committed_assignments,
+            ),
+        },
     )
 
 

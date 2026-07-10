@@ -11,7 +11,7 @@ spatial_state_node:
   ros__parameters:
     use_sim_time: true
     planner_config_path: configs/planner_minimal_experiment.yaml
-    region_config_path: configs/planner_regions.yaml
+    region_config_path: configs/planner_regions_house.yaml
     spatial_state_topic: /planning/spatial_state
     publish_period_sec: 1.0
     costmap_topic: /map

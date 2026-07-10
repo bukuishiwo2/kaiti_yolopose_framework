@@ -1,7 +1,7 @@
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
 
-.PHONY: help setup install-editable dev-setup test docs-setup docs-build docs-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
+.PHONY: help setup install-editable dev-setup test planning-smoke docs-setup docs-build docs-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
 
 help:
 	@echo "Targets:"
@@ -9,6 +9,7 @@ help:
 	@echo "  install-editable Install the src package in editable mode"
 	@echo "  dev-setup        Install documentation and test dependencies"
 	@echo "  test             Run the Python test suite"
+	@echo "  planning-smoke   Run static, dynamic, repair, and blocked planning checks"
 	@echo "  docs-setup       Install research-plan DOCX generation dependencies"
 	@echo "  docs-build       Generate the research-plan DOCX and manifest"
 	@echo "  docs-check       Verify Markdown / DOCX / manifest synchronization"
@@ -36,6 +37,9 @@ dev-setup:
 
 test:
 	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $(PYTHON) -m pytest -q
+
+planning-smoke:
+	$(PYTHON) scripts/run_planning_smoke.py
 
 docs-setup:
 	$(PIP) install -r requirements-docs.txt

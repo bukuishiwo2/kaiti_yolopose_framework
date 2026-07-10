@@ -1,10 +1,21 @@
 from __future__ import annotations
 
 from dataclasses import asdict, dataclass, field
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+
+class SolverStatus(str, Enum):
+    OPTIMAL = "OPTIMAL"
+    FEASIBLE = "FEASIBLE"
+    TIME_LIMIT_FEASIBLE = "TIME_LIMIT_FEASIBLE"
+    WAITING_FOR_RESOURCE = "WAITING_FOR_RESOURCE"
+    INFEASIBLE_ROUTE_BLOCKED = "INFEASIBLE_ROUTE_BLOCKED"
+    INFEASIBLE = "INFEASIBLE"
+    ERROR = "ERROR"
 
 
 @dataclass
@@ -146,8 +157,13 @@ class PlanResult:
     diagnostics: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
+        status = (
+            self.solver_status.value
+            if isinstance(self.solver_status, SolverStatus)
+            else str(self.solver_status)
+        )
         return {
-            "solver_status": self.solver_status,
+            "solver_status": status,
             "objective_value": self.objective_value,
             "planner_mode": self.planner_mode,
             "plan_kind": self.plan_kind,

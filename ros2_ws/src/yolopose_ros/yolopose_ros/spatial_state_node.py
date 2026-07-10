@@ -22,7 +22,7 @@ class SpatialStateNode(Node):
         super().__init__("spatial_state_node")
         self.declare_parameter("project_root", _default_project_root())
         self.declare_parameter("planner_config_path", "configs/planner_minimal_experiment.yaml")
-        self.declare_parameter("region_config_path", "configs/planner_regions.yaml")
+        self.declare_parameter("region_config_path", "configs/planner_regions_house.yaml")
         self.declare_parameter("spatial_state_topic", "/planning/spatial_state")
         self.declare_parameter("costmap_topic", "/global_costmap/costmap")
         self.declare_parameter("publish_period_sec", 1.0)

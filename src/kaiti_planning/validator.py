@@ -87,9 +87,13 @@ def validate_plan(
                     }
                 )
 
-    for task_id, count in assignment_counts.items():
-        if count != 1:
-            violations["unique_assignment"].append({"task": task_id, "count": count})
+    for task in problem.tasks:
+        count = assignment_counts[task.id]
+        expected = 1 if task.must_complete else 0
+        if count != expected:
+            violations["unique_assignment"].append(
+                {"task": task.id, "count": count, "expected": expected}
+            )
 
     for before, after in problem.precedence:
         before_assignment = assignment_map.get(before)

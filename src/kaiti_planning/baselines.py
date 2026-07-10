@@ -3,7 +3,14 @@ from __future__ import annotations
 from collections import defaultdict
 from typing import Callable
 
-from .models import PlanResult, PlanningProblem, ResourceState, Task, TaskAssignment
+from .models import (
+    PlanResult,
+    PlanningProblem,
+    ResourceState,
+    SolverStatus,
+    Task,
+    TaskAssignment,
+)
 from .milp_solver import initial_resource_states
 from .task_graph import topological_task_order
 
@@ -47,7 +54,7 @@ def _greedy_schedule(
         ]
         if not compatible:
             return PlanResult(
-                solver_status="Infeasible",
+                solver_status=SolverStatus.INFEASIBLE.value,
                 objective_value=None,
                 assignments=[],
                 metrics={"task_count": 0.0},
@@ -84,7 +91,7 @@ def _greedy_schedule(
 
         if chosen_payload is None:
             return PlanResult(
-                solver_status="Infeasible",
+                solver_status=SolverStatus.INFEASIBLE.value,
                 objective_value=None,
                 assignments=assignments,
                 metrics={"task_count": float(len(assignments))},
@@ -127,7 +134,7 @@ def _greedy_schedule(
         "makespan": round(max([item.finish for item in assignments] or [0.0]), 3),
     }
     return PlanResult(
-        solver_status="Heuristic",
+        solver_status=SolverStatus.FEASIBLE.value,
         objective_value=None,
         assignments=assignments,
         metrics=metrics,

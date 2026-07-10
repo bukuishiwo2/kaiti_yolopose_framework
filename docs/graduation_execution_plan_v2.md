@@ -32,9 +32,9 @@
 - [x] 审计与复用边界受控提交
 - [x] 创建 `feat/graduation-v2`
 - [x] 建立 Markdown→DOCX→manifest 生成与同步检查
-- [ ] 拆分 replay/house region 配置
-- [ ] 新增 planning smoke 与 pytest 门禁
-- [ ] blocked resource 结构化结果
+- [x] 拆分 replay/house region 配置
+- [x] 新增 planning smoke 与 pytest 门禁
+- [x] blocked resource 结构化结果
 - [ ] LTLf 独立环境一日 spike
 
 ## 4. 验收命令基线

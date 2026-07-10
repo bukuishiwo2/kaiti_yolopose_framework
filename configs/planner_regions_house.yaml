@@ -1,0 +1,72 @@
+meta:
+  profile: house
+  description: House-map planning regions calibrated for the July Nav2 integration.
+
+regions:
+  - id: corridor_H
+    kind: corridor
+    resource_id: corridor_H
+    bounds:
+      x_min: 1.15
+      x_max: 2.15
+      y_min: 1.10
+      y_max: 2.90
+    width_axis: x
+    min_passage_width: 0.5
+    free_threshold: 0.25
+    blocked_threshold: 0.65
+    temporary_wait_sec: 20.0
+    blocked_wait_sec: 60.0
+    occupied_value_threshold: 50
+    unknown_as_occupied: false
+
+  - id: charger_D
+    kind: charger
+    resource_id: charger_D
+    bounds:
+      x_min: 5.15
+      x_max: 5.85
+      y_min: 0.65
+      y_max: 1.35
+    width_axis: x
+    min_passage_width: 0.6
+    free_threshold: 0.30
+    blocked_threshold: 0.75
+    temporary_wait_sec: 10.0
+    blocked_wait_sec: 40.0
+    occupied_value_threshold: 50
+    unknown_as_occupied: false
+
+  - id: event_zone_B
+    kind: region
+    resource_id: event_zone_B
+    bounds:
+      x_min: 3.10
+      x_max: 3.90
+      y_min: 3.10
+      y_max: 3.90
+    width_axis: y
+    min_passage_width: 0.6
+    free_threshold: 0.30
+    blocked_threshold: 0.75
+    temporary_wait_sec: 10.0
+    blocked_wait_sec: 40.0
+    occupied_value_threshold: 50
+    unknown_as_occupied: false
+
+  - id: supply_point_S
+    kind: region
+    resource_id: supply_point_S
+    bounds:
+      x_min: 0.65
+      x_max: 1.35
+      y_min: 4.10
+      y_max: 4.90
+    width_axis: y
+    min_passage_width: 0.6
+    free_threshold: 0.30
+    blocked_threshold: 0.75
+    temporary_wait_sec: 10.0
+    blocked_wait_sec: 40.0
+    occupied_value_threshold: 50
+    unknown_as_occupied: false

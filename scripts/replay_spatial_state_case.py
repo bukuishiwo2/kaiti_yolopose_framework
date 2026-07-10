@@ -23,7 +23,7 @@ from kaiti_planning.spatial_state import (
 def main() -> None:
     parser = argparse.ArgumentParser(description="Replay occupancy-grid-derived spatial states.")
     parser.add_argument("--config", required=True)
-    parser.add_argument("--regions", default="configs/planner_regions.yaml")
+    parser.add_argument("--regions", default="configs/planner_regions_replay.yaml")
     parser.add_argument("--replay", default="configs/planner_spatial_replay.yaml")
     args = parser.parse_args()
 

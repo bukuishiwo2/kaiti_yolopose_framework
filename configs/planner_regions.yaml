@@ -1,5 +1,7 @@
 meta:
-  description: Task-relevant planning regions for costmap-to-resource abstraction.
+  profile: legacy_house_compat
+  canonical_profile: configs/planner_regions_house.yaml
+  description: Backward-compatible copy of the July house regions; new commands must select an explicit profile.
 
 regions:
   - id: corridor_H
