@@ -17,6 +17,7 @@ setup(
         ("share/" + package_name + "/worlds", glob("worlds/*.sdf")),
     ],
     install_requires=["setuptools"],
+    tests_require=["pytest"],
     zip_safe=True,
     maintainer="yhc",
     maintainer_email="you@example.com",

@@ -1,5 +1,7 @@
 # Kaiti House MILP-to-Nav2 Route Analysis - 2026-07-08
 
+> 历史证据说明：本报告对应旧的周期 planner 和旧 region 边界。2026-07-10 的 Nav2 path audit 已确认当前 saved map 无法稳定生成 A→C，图中的 C 路线不能继续作为正式验收证据。v2 结论见 `docs/world_mapping_and_visual_acceptance.md`。
+
 ## Scope
 
 This note explains the route observed in RViz during the single-robot online execution test and separates three layers that can look similar in the UI:

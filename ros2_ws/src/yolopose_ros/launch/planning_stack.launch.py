@@ -24,6 +24,12 @@ def generate_launch_description() -> LaunchDescription:
                 default_value=EnvironmentVariable("KAITI_PROJECT_ROOT", default_value=REPO_ROOT),
             ),
             DeclareLaunchArgument("planning_config", default_value=planning_config),
+            DeclareLaunchArgument(
+                "planner_problem_config",
+                default_value="configs/planner_graduation_v2.yaml",
+            ),
+            DeclareLaunchArgument("execution_enabled", default_value="false"),
+            DeclareLaunchArgument("verification_result_on_success", default_value=""),
             LogInfo(
                 msg=[
                     "Planning stack is starting. ",
@@ -37,7 +43,10 @@ def generate_launch_description() -> LaunchDescription:
                 output="screen",
                 parameters=[
                     LaunchConfiguration("planning_config"),
-                    {"project_root": LaunchConfiguration("project_root")},
+                    {
+                        "project_root": LaunchConfiguration("project_root"),
+                        "planner_config_path": LaunchConfiguration("planner_problem_config"),
+                    },
                 ],
             ),
             Node(
@@ -47,7 +56,10 @@ def generate_launch_description() -> LaunchDescription:
                 output="screen",
                 parameters=[
                     LaunchConfiguration("planning_config"),
-                    {"project_root": LaunchConfiguration("project_root")},
+                    {
+                        "project_root": LaunchConfiguration("project_root"),
+                        "planner_config_path": LaunchConfiguration("planner_problem_config"),
+                    },
                 ],
             ),
             Node(
@@ -57,7 +69,13 @@ def generate_launch_description() -> LaunchDescription:
                 output="screen",
                 parameters=[
                     LaunchConfiguration("planning_config"),
-                    {"project_root": LaunchConfiguration("project_root")},
+                    {
+                        "project_root": LaunchConfiguration("project_root"),
+                        "planner_config_path": LaunchConfiguration("planner_problem_config"),
+                        "verification_result_on_success": LaunchConfiguration(
+                            "verification_result_on_success"
+                        ),
+                    },
                 ],
             ),
             Node(
@@ -68,6 +86,8 @@ def generate_launch_description() -> LaunchDescription:
                 parameters=[
                     LaunchConfiguration("planning_config"),
                     {"project_root": LaunchConfiguration("project_root")},
+                    {"planner_config_path": LaunchConfiguration("planner_problem_config")},
+                    {"execution_enabled": LaunchConfiguration("execution_enabled")},
                 ],
             ),
             Node(

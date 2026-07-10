@@ -65,6 +65,12 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("map", default_value=[LaunchConfiguration("project_root"), "/maps/kaiti_house.yaml"]),
             DeclareLaunchArgument("localization_params", default_value=localization_params),
             DeclareLaunchArgument("planning_config", default_value=planning_config),
+            DeclareLaunchArgument(
+                "planner_problem_config",
+                default_value="configs/planner_graduation_v2.yaml",
+            ),
+            DeclareLaunchArgument("execution_enabled", default_value="false"),
+            DeclareLaunchArgument("verification_result_on_success", default_value=""),
             DeclareLaunchArgument("namespace", default_value=""),
             DeclareLaunchArgument("use_sim_time", default_value="true"),
             DeclareLaunchArgument("turtlebot4_model", default_value="standard"),
@@ -132,6 +138,11 @@ def generate_launch_description() -> LaunchDescription:
                         launch_arguments={
                             "project_root": LaunchConfiguration("project_root"),
                             "planning_config": LaunchConfiguration("planning_config"),
+                            "planner_problem_config": LaunchConfiguration("planner_problem_config"),
+                            "execution_enabled": LaunchConfiguration("execution_enabled"),
+                            "verification_result_on_success": LaunchConfiguration(
+                                "verification_result_on_success"
+                            ),
                         }.items(),
                     )
                 ],

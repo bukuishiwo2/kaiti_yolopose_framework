@@ -20,6 +20,8 @@
   <exec_depend>nav2_bringup</exec_depend>
   <exec_depend>nav2_msgs</exec_depend>
   <exec_depend>rtabmap_launch</exec_depend>
+  <test_depend>ament_pytest</test_depend>
+  <test_depend>python3-pytest</test_depend>
   <!-- Phase 4a runtime simulator dependency: install either turtlebot4_ignition_bringup
        or turtlebot4_gz_bringup with the TurtleBot4 simulator packages. -->
 

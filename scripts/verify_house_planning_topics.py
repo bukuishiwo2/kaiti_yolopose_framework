@@ -25,7 +25,18 @@ DEFAULT_EXPECTATIONS = [
         ("ts", "semantic_state", "predicate", "quality_score"),
     ),
     TopicExpectation("/planning/spatial_state", ("ts", "resource_states", "source")),
-    TopicExpectation("/planning/plan", ("ts", "solver_status", "assignments", "plan_kind")),
+    TopicExpectation(
+        "/planning/plan",
+        (
+            "planner_instance_id",
+            "plan_id",
+            "revision",
+            "world_revision",
+            "generated_at",
+            "solver_status",
+            "tasks",
+        ),
+    ),
     TopicExpectation("/planning/execution_feedback", ("ts", "feedback_state", "reason")),
 ]
 
@@ -114,7 +125,7 @@ class PlanningTopicVerifier(Node):
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Verify that the house planning precheck publishes the four /planning/* topics."
+        description="Verify the v2 house planning topic contract."
     )
     parser.add_argument("--timeout-sec", type=float, default=20.0)
     return parser.parse_args()

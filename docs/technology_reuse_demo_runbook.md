@@ -221,3 +221,9 @@ print(finite.to_str("hoa"))
 6. 最后接真实感知。
 
 任何一步失败时，先回到对应官方 demo。官方 demo 同样失败，修环境/TF/topic；官方 demo 通过而本项目失败，再检查本项目 adapter。不要用修改 MILP 规避 TF、地图或 Nav2 生命周期问题。
+
+## 8. m-explore-ros2 的使用结论
+
+`m-explore-ros2` 不进入正式执行栈。它只可作为建图准备阶段的可选 frontier exploration 对照：探索完成后保存地图，正式 MILP/Nav2 实验重新使用 saved map + AMCL。不要把源码复制到本仓库，也不要让在线探索与任务规划同时运行。
+
+详细理由、house 区域修正和单车可视化命令见 [House World、建图复用与 v2 可视化验收](world_mapping_and_visual_acceptance.md)。

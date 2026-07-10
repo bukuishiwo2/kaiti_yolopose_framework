@@ -164,6 +164,7 @@ class RevisionPlanningCoordinator:
         self,
         *,
         resource_states: dict[str, ResourceState],
+        current_time: float = 0.0,
         before_publish: Callable[[], None] | None = None,
     ) -> dict[str, Any]:
         if self.solve_in_progress:
@@ -172,7 +173,12 @@ class RevisionPlanningCoordinator:
         self.solve_in_progress = True
         solved_revision = self.world.world_revision
         problem = self.world.planning_problem()
-        result = solve_milp(problem, resource_states=resource_states, plan_kind="world_revision")
+        result = solve_milp(
+            problem,
+            current_time=current_time,
+            resource_states=resource_states,
+            plan_kind="world_revision",
+        )
         if before_publish is not None:
             before_publish()
         stale = self.world.world_revision != solved_revision

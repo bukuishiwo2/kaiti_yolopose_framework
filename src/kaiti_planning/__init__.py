@@ -28,6 +28,15 @@ from .world_state import (
     WorldUpdate,
 )
 from .dynamic_repair import RevisionPlanningCoordinator, affected_tasks, repair_after_disturbance
+from .execution_protocol import (
+    ExecutionStepSpec,
+    PlanAcceptance,
+    PlanIdentity,
+    RevisionGate,
+    can_apply_deferred_revision,
+    expand_assignments,
+)
+from .spatial_state import clear_robot_footprint, compose_static_dynamic_grid
 
 __all__ = [
     "DynamicEvent",
@@ -59,4 +68,12 @@ __all__ = [
     "RevisionPlanningCoordinator",
     "affected_tasks",
     "repair_after_disturbance",
+    "ExecutionStepSpec",
+    "PlanAcceptance",
+    "PlanIdentity",
+    "RevisionGate",
+    "can_apply_deferred_revision",
+    "expand_assignments",
+    "compose_static_dynamic_grid",
+    "clear_robot_footprint",
 ]

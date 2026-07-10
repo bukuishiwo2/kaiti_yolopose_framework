@@ -33,6 +33,7 @@ class RegionSpec:
     blocked_wait_sec: float = 60.0
     occupied_value_threshold: int = 50
     unknown_as_occupied: bool = True
+    width_quantile: float = 0.10
     metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -105,6 +106,66 @@ def build_grid_from_replay_frame(cfg: SpatialReplayConfig, frame: SpatialReplayF
                 if x_min <= cx <= x_max and y_min <= cy <= y_max:
                     grid[row * cfg.width + col] = value
     return grid
+
+
+def compose_static_dynamic_grid(
+    *,
+    static_grid: list[int],
+    costmap_grid: list[int],
+    costmap_baseline: list[int],
+    occupied_value_threshold: int = 50,
+) -> list[int]:
+    """Keep static obstacles and add only costmap occupancy above its frozen baseline."""
+    if not (len(static_grid) == len(costmap_grid) == len(costmap_baseline)):
+        raise ValueError("static map, costmap, and baseline must have the same cell count")
+    threshold = int(occupied_value_threshold)
+    fused: list[int] = []
+    for static_value, current_value, baseline_value in zip(
+        static_grid, costmap_grid, costmap_baseline
+    ):
+        if static_value < 0:
+            fused.append(-1)
+        elif static_value >= threshold:
+            fused.append(100)
+        elif current_value >= threshold and baseline_value < threshold:
+            fused.append(100)
+        else:
+            fused.append(0)
+    return fused
+
+
+def clear_robot_footprint(
+    *,
+    fused_grid: list[int],
+    static_grid: list[int],
+    width: int,
+    height: int,
+    resolution: float,
+    origin_x: float,
+    origin_y: float,
+    robot_x: float,
+    robot_y: float,
+    radius: float,
+    occupied_value_threshold: int = 50,
+) -> list[int]:
+    """Remove the controlled robot's dynamic footprint without clearing static walls."""
+    if len(fused_grid) != len(static_grid) or len(fused_grid) != width * height:
+        raise ValueError("grid dimensions do not match footprint-clearing geometry")
+    output = list(fused_grid)
+    radius_sq = float(radius) ** 2
+    threshold = int(occupied_value_threshold)
+    for row in range(height):
+        cell_y = origin_y + (row + 0.5) * resolution
+        if abs(cell_y - robot_y) > radius:
+            continue
+        for col in range(width):
+            cell_x = origin_x + (col + 0.5) * resolution
+            if (cell_x - robot_x) ** 2 + (cell_y - robot_y) ** 2 > radius_sq:
+                continue
+            index = row * width + col
+            if 0 <= static_grid[index] < threshold:
+                output[index] = 0
+    return output
 
 
 class SpatialStateEstimator:
@@ -308,13 +369,15 @@ class SpatialStateEstimator:
                 longest_run = max(longest_run, current_run)
             free_widths.append(longest_run * resolution)
 
-        positive_widths = sorted(width for width in free_widths if width > 0.0)
-        if not positive_widths:
+        valid_widths = sorted(free_widths)
+        if not valid_widths or valid_widths[-1] <= 0.0:
             return 0.0
 
-        # Use the median non-zero free run so edge-wall rows don't collapse the
-        # entire corridor estimate to zero in a known environment.
-        return positive_widths[len(positive_widths) // 2]
+        # A low quantile preserves the actual bottleneck while tolerating a
+        # small number of edge rows that touch static walls.
+        quantile = min(1.0, max(0.0, float(spec.width_quantile)))
+        index = min(len(valid_widths) - 1, int(quantile * (len(valid_widths) - 1)))
+        return valid_widths[index]
 
     def _path_cost_for_region(self, resource_id: str) -> float:
         if resource_id == "corridor_H":

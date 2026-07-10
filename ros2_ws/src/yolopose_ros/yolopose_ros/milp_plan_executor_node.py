@@ -62,6 +62,7 @@ class TaskStep:
     task_type: str
     location_id: str
     step_name: str
+    attempt: int = 1
 
 
 @dataclass(frozen=True)
@@ -97,7 +98,7 @@ class MilpPlanExecutorNode(Node):
         self.declare_parameter("tf_wait_timeout_sec", 0.2)
         self.declare_parameter("publish_period_sec", 1.0)
         self.declare_parameter("task_hold_sec", 1.0)
-        self.declare_parameter("plan_stale_sec", 10.0)
+        self.declare_parameter("plan_stale_sec", 600.0)
         self.declare_parameter("max_nav_retries_per_step", 0)
 
         self._project_root = Path(str(self.get_parameter("project_root").value)).resolve()
@@ -106,10 +107,18 @@ class MilpPlanExecutorNode(Node):
             sys.path.insert(0, str(src_root))
 
         from kaiti_planning.models import load_problem_from_yaml
+        from kaiti_planning.execution_protocol import (
+            RevisionGate,
+            can_apply_deferred_revision,
+            expand_assignments,
+        )
 
         cfg_path = self._project_root / str(self.get_parameter("planner_config_path").value)
         self._problem = load_problem_from_yaml(cfg_path)
         self._task_map = self._problem.task_by_id()
+        self._expand_execution_assignments = expand_assignments
+        self._can_apply_deferred_revision = can_apply_deferred_revision
+        self._revision_gate = RevisionGate()
 
         waypoint_path = self._project_root / str(self.get_parameter("waypoint_config_path").value)
         self._waypoints = self._load_waypoints(waypoint_path)
@@ -133,7 +142,13 @@ class MilpPlanExecutorNode(Node):
         self._max_nav_retries_per_step = max(0, int(self.get_parameter("max_nav_retries_per_step").value))
 
         self._status_pub = self.create_publisher(String, self._planner_status_topic, 10)
-        self.create_subscription(String, self._plan_topic, self._on_plan, 10)
+        plan_qos = QoSProfile(
+            history=HistoryPolicy.KEEP_LAST,
+            depth=1,
+            reliability=ReliabilityPolicy.RELIABLE,
+            durability=DurabilityPolicy.TRANSIENT_LOCAL,
+        )
+        self.create_subscription(String, self._plan_topic, self._on_plan, plan_qos)
         map_qos = QoSProfile(
             history=HistoryPolicy.KEEP_LAST,
             depth=1,
@@ -151,14 +166,16 @@ class MilpPlanExecutorNode(Node):
         self._latest_plan_monotonic: float | None = None
         self._active_plan_signature: tuple[tuple[str, float, float], ...] | None = None
         self._pending_plan_assignments: list[dict[str, Any]] | None = None
+        self._pending_plan_identity = None
+        self._active_plan_identity = None
         self._execution_queue: list[TaskStep] = []
         self._pending_goal = False
         self._active_goal_handle = None
         self._active_step: TaskStep | None = None
         self._hold_until_monotonic: float | None = None
         self._completed_task_ids: set[str] = set()
-        self._completed_step_keys: set[tuple[str, str]] = set()
-        self._nav_retry_counts: dict[tuple[str, str], int] = {}
+        self._completed_step_keys: set[tuple[str, str, int]] = set()
+        self._nav_retry_counts: dict[tuple[str, str, int], int] = {}
         self._dispatched_goal_history: list[dict[str, Any]] = []
         self._terminal_failure_reason: str | None = None
         self._latest_map_bounds: MapBounds | None = None
@@ -247,6 +264,7 @@ class MilpPlanExecutorNode(Node):
                 "task_type": self._active_step.task_type,
                 "location_id": self._active_step.location_id,
                 "step_name": self._active_step.step_name,
+                "attempt": self._active_step.attempt,
             }
             if self._active_step is not None
             else None,
@@ -262,12 +280,12 @@ class MilpPlanExecutorNode(Node):
                 for step in self._execution_queue[:10]
             ],
             "completed_step_keys": [
-                {"task_id": task_id, "step_name": step_name}
-                for task_id, step_name in sorted(self._completed_step_keys)
+                {"task_id": task_id, "step_name": step_name, "attempt": attempt}
+                for task_id, step_name, attempt in sorted(self._completed_step_keys)
             ],
             "nav_retry_counts": {
-                f"{task_id}:{step_name}": count
-                for (task_id, step_name), count in sorted(self._nav_retry_counts.items())
+                f"{task_id}:{step_name}:{attempt}": count
+                for (task_id, step_name, attempt), count in sorted(self._nav_retry_counts.items())
             },
             "dispatched_goal_history": self._dispatched_goal_history[-20:],
             "terminal_failure_reason": self._terminal_failure_reason,
@@ -284,6 +302,14 @@ class MilpPlanExecutorNode(Node):
             if self._latest_map_bounds is not None
             else None,
             "source_plan_meta": self._plan_meta(self._latest_plan_payload),
+            "active_plan_identity": {
+                "planner_instance_id": self._active_plan_identity.planner_instance_id,
+                "plan_id": self._active_plan_identity.plan_id,
+                "revision": self._active_plan_identity.revision,
+                "world_revision": self._active_plan_identity.world_revision,
+            }
+            if self._active_plan_identity is not None
+            else None,
         }
 
     @staticmethod
@@ -298,6 +324,10 @@ class MilpPlanExecutorNode(Node):
             "plan_kind": payload.get("plan_kind"),
             "assignment_count": len(assignments) if isinstance(assignments, list) else 0,
             "note_count": len(payload.get("notes", [])) if isinstance(payload.get("notes"), list) else 0,
+            "planner_instance_id": payload.get("planner_instance_id"),
+            "plan_id": payload.get("plan_id"),
+            "revision": payload.get("revision"),
+            "world_revision": payload.get("world_revision"),
         }
 
     def _on_parameters_changed(self, parameters) -> SetParametersResult:
@@ -388,6 +418,11 @@ class MilpPlanExecutorNode(Node):
         if payload is None:
             return
 
+        acceptance = self._revision_gate.evaluate(payload)
+        if not acceptance.accepted:
+            self.get_logger().info("Ignoring plan: %s" % acceptance.reason)
+            return
+
         assignments = payload.get("tasks")
         if not isinstance(assignments, list):
             assignments = payload.get("assignments")
@@ -398,7 +433,6 @@ class MilpPlanExecutorNode(Node):
             item for item in assignments
             if isinstance(item, dict)
             and str(item.get("robot", "")).strip() == self._controlled_robot_id
-            and str(item.get("task", "")).strip() in self._task_map
         ]
         filtered.sort(
             key=lambda item: (
@@ -411,24 +445,19 @@ class MilpPlanExecutorNode(Node):
         self._latest_plan_monotonic = time.monotonic()
         signature = self._assignment_signature(filtered)
 
-        if signature == self._active_plan_signature:
-            return
-
-        if self._active_plan_signature is not None and not self._allow_plan_refresh_during_execution:
-            self.get_logger().info(
-                "Ignoring updated MILP plan because execution plan refresh is disabled for this demo run."
-            )
-            return
-
-        if self._pending_goal or self._active_goal_handle is not None:
+        if self._pending_goal or self._active_goal_handle is not None or self._execution_queue:
             self._pending_plan_assignments = filtered
+            self._pending_plan_identity = acceptance.identity
             self.get_logger().info(
-                "Received updated MILP plan during active navigation; queueing refresh for %d assignments"
-                % len(filtered)
+                "Received revision %d during execution; deferring it until the current queue completes (%d assignments)"
+                % (
+                    acceptance.identity.revision,
+                    len(filtered),
+                )
             )
             return
 
-        self._apply_plan(filtered, signature)
+        self._apply_plan(filtered, signature, acceptance.identity)
 
     def _on_map(self, msg: OccupancyGrid) -> None:
         resolution = float(msg.info.resolution)
@@ -451,10 +480,13 @@ class MilpPlanExecutorNode(Node):
         self,
         assignments: list[dict[str, Any]],
         signature: tuple[tuple[str, float, float], ...],
+        identity,
     ) -> None:
         self._execution_queue = self._expand_assignments(assignments)
         self._active_plan_signature = signature
+        self._active_plan_identity = identity
         self._pending_plan_assignments = None
+        self._pending_plan_identity = None
         self._hold_until_monotonic = None
         if not self._completed_task_ids:
             self._completed_step_keys.clear()
@@ -475,34 +507,26 @@ class MilpPlanExecutorNode(Node):
         )
 
     def _expand_assignments(self, assignments: list[dict[str, Any]]) -> list[TaskStep]:
-        steps: list[TaskStep] = []
-        for item in assignments:
-            task_id = str(item.get("task", "")).strip()
-            task = self._task_map.get(task_id)
-            if task is None:
-                continue
-            if task.pickup_location:
-                pickup_step = TaskStep(
-                    task_id=task_id,
-                    task_type=task.type,
-                    location_id=str(task.pickup_location),
-                    step_name="pickup_location",
-                )
-                if self._step_key(pickup_step) not in self._completed_step_keys:
-                    steps.append(pickup_step)
-            task_step = TaskStep(
-                task_id=task_id,
-                task_type=task.type,
-                location_id=str(task.location),
-                step_name="task_location",
+        specs = self._expand_execution_assignments(
+            assignments,
+            robot_id=self._controlled_robot_id,
+            task_registry=self._task_map,
+            completed_step_keys=self._completed_step_keys,
+        )
+        return [
+            TaskStep(
+                task_id=spec.task_id,
+                task_type=spec.task_type,
+                location_id=spec.location_id,
+                step_name=spec.step_name,
+                attempt=spec.attempt,
             )
-            if self._step_key(task_step) not in self._completed_step_keys:
-                steps.append(task_step)
-        return steps
+            for spec in specs
+        ]
 
     @staticmethod
-    def _step_key(step: TaskStep) -> tuple[str, str]:
-        return (step.task_id, step.step_name)
+    def _step_key(step: TaskStep) -> tuple[str, str, int]:
+        return (step.task_id, step.step_name, step.attempt)
 
     def _build_nav_goal(self, waypoint: Waypoint) -> NavigateToPose.Goal:
         pose = PoseStamped()
@@ -615,6 +639,13 @@ class MilpPlanExecutorNode(Node):
                 "y": waypoint.y,
                 "frame_id": waypoint.frame_id,
                 "dispatch_index": len(self._dispatched_goal_history) + 1,
+                "attempt": next_step.attempt,
+                "nav_retry_index": self._nav_retry_counts.get(self._step_key(next_step), 0),
+                "plan_revision": (
+                    self._active_plan_identity.revision
+                    if self._active_plan_identity is not None
+                    else None
+                ),
             }
         )
         send_future = self._action_client.send_goal_async(
@@ -734,12 +765,19 @@ class MilpPlanExecutorNode(Node):
             self._dispatch_next_step()
 
     def _maybe_apply_pending_plan(self) -> None:
-        if self._pending_plan_assignments is None:
-            return
-        if self._pending_goal or self._active_goal_handle is not None:
+        if not self._can_apply_deferred_revision(
+            has_pending_plan=self._pending_plan_assignments is not None,
+            queue_length=len(self._execution_queue),
+            goal_pending=self._pending_goal,
+            goal_active=self._active_goal_handle is not None,
+        ):
             return
         signature = self._assignment_signature(self._pending_plan_assignments)
-        self._apply_plan(self._pending_plan_assignments, signature)
+        self._apply_plan(
+            self._pending_plan_assignments,
+            signature,
+            self._pending_plan_identity,
+        )
 
     def _on_timer(self) -> None:
         if not self._execution_enabled:
@@ -760,7 +798,10 @@ class MilpPlanExecutorNode(Node):
             self._publish_status(planner_state="idle", reason="waiting_for_plan")
             return
 
-        if (time.monotonic() - self._latest_plan_monotonic) > self._plan_stale_sec:
+        if (
+            not self._execution_queue
+            and (time.monotonic() - self._latest_plan_monotonic) > self._plan_stale_sec
+        ):
             self._publish_status(planner_state="holding", reason="plan_stale")
             return
 

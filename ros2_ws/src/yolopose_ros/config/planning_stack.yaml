@@ -1,7 +1,7 @@
 semantic_state_node:
   ros__parameters:
     use_sim_time: true
-    planner_config_path: configs/planner_minimal_experiment.yaml
+    planner_config_path: configs/planner_graduation_v2.yaml
     perception_event_topic: /perception/events
     semantic_state_topic: /planning/semantic_state
     publish_period_sec: 1.0
@@ -10,28 +10,41 @@ semantic_state_node:
 spatial_state_node:
   ros__parameters:
     use_sim_time: true
-    planner_config_path: configs/planner_minimal_experiment.yaml
+    planner_config_path: configs/planner_graduation_v2.yaml
     region_config_path: configs/planner_regions_house.yaml
     spatial_state_topic: /planning/spatial_state
+    map_topic: /map
+    robot_pose_topic: /amcl_pose
     publish_period_sec: 1.0
-    costmap_topic: /map
+    costmap_topic: /global_costmap/costmap
     costmap_timeout_sec: 5.0
     use_costmap_topic: true
+    costmap_baseline_samples: 5
+    self_footprint_clear_radius: 0.60
 
 milp_planner_node:
   ros__parameters:
     use_sim_time: true
-    planner_config_path: configs/planner_minimal_experiment.yaml
+    planner_config_path: configs/planner_graduation_v2.yaml
     semantic_state_topic: /planning/semantic_state
     spatial_state_topic: /planning/spatial_state
+    execution_feedback_topic: /planning/execution_feedback
     plan_topic: /planning/plan
-    publish_period_sec: 2.0
+    health_topic: /planning/planner_health
+    solve_debounce_sec: 0.25
+    health_period_sec: 2.0
+    plan_valid_sec: 600.0
+    plan_id: house-v2
+    # Empty in the formal stack: a Nav2 arrival is not a verification result.
+    # The visual-only launch may override this with "fall" to demonstrate the
+    # verify -> pickup -> deliver episode without a physical verify performer.
+    verification_result_on_success: ""
     backend: pulp
 
 milp_plan_executor_node:
   ros__parameters:
     use_sim_time: true
-    planner_config_path: configs/planner_minimal_experiment.yaml
+    planner_config_path: configs/planner_graduation_v2.yaml
     waypoint_config_path: configs/planner_waypoints.yaml
     plan_topic: /planning/plan
     planner_status_topic: /planning/executor_status
@@ -47,7 +60,7 @@ milp_plan_executor_node:
     tf_wait_timeout_sec: 0.2
     publish_period_sec: 1.0
     task_hold_sec: 1.0
-    plan_stale_sec: 10.0
+    plan_stale_sec: 600.0
     max_nav_retries_per_step: 0
 
 execution_feedback_bridge_node:

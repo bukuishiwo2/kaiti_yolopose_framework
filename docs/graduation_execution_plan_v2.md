@@ -74,6 +74,23 @@
 
 ## 7. 验收命令基线
 
+### Week 7 当前实现状态（运行门禁尚未签字）
+
+- [x] ROS planner 改为 world revision 变化触发，health timer 不再周期重求解；
+- [x] plan 增加 planner instance、plan ID、plan/world revision 与有效期；
+- [x] executor 拒绝重复/过期 revision，并把执行中到达的新 revision 延迟到完整队列边界；
+- [x] 动态 `verify/pickup/deliver:{event_id}` 可直接展开，不依赖静态任务表；
+- [x] 完成 step key 防止同一任务步骤被 revision 重复派发；
+- [x] 单车 v2 可视化配置、trace recorder 和重复目标机器检查；
+- [x] house 门洞、事件区、跌倒标记和 waypoint 的配置对齐；
+- [x] 现场发现并记录旧 saved map 的 C/D 覆盖不足；增加 Nav2 waypoint path audit；
+- [ ] Gazebo + RViz 现场运行并保存 trace/截图；
+- [ ] 重新覆盖 C/D 建图，冻结新 map hash，并通过 A→B/C/D/S path audit；
+- [ ] Nav2 path-cost adapter；
+- [ ] `kaiti_interfaces` 正式消息替换 `String + JSON`。
+
+在最后三项完成前，W7 总门禁仍标记为未完成。
+
 ```bash
 .venv/bin/python scripts/check_graduation_plan_sync.py
 .venv/bin/python -m pytest -q

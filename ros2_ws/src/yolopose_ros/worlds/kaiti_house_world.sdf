@@ -167,19 +167,24 @@
       <static>true</static>
       <link name="region_markers_link">
         <visual name="marker_corridor_H">
-          <pose>1.7 2.0 0.01 0 0 0</pose>
-          <geometry><box><size>1.4 2.0 0.02</size></box></geometry>
+          <pose>2.45 2.10 0.01 0 0 0</pose>
+          <geometry><box><size>0.6 0.9 0.02</size></box></geometry>
           <material><ambient>0.95 0.8 0.2 0.35</ambient><diffuse>0.95 0.8 0.2 0.35</diffuse></material>
         </visual>
         <visual name="marker_event_zone_B">
-          <pose>3.5 3.5 0.01 0 0 0</pose>
-          <geometry><box><size>1.0 1.0 0.02</size></box></geometry>
+          <pose>3.4 2.85 0.01 0 0 0</pose>
+          <geometry><box><size>0.7 1.2 0.02</size></box></geometry>
           <material><ambient>0.85 0.2 0.2 0.35</ambient><diffuse>0.85 0.2 0.2 0.35</diffuse></material>
         </visual>
         <visual name="marker_supply_S">
           <pose>1.0 4.5 0.01 0 0 0</pose>
-          <geometry><box><size>1.0 1.0 0.02</size></box></geometry>
+          <geometry><box><size>0.7 0.8 0.02</size></box></geometry>
           <material><ambient>0.2 0.7 0.9 0.35</ambient><diffuse>0.2 0.7 0.9 0.35</diffuse></material>
+        </visual>
+        <visual name="fall_test_marker_B">
+          <pose>3.45 3.15 0.12 0 1.5708 0</pose>
+          <geometry><cylinder><radius>0.12</radius><length>0.8</length></cylinder></geometry>
+          <material><ambient>0.85 0.12 0.12 0.9</ambient><diffuse>0.85 0.12 0.12 0.9</diffuse></material>
         </visual>
       </link>
     </model>
