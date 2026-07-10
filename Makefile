@@ -1,7 +1,9 @@
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
+CONDA ?= $(HOME)/anaconda3/condabin/conda
+SPOT_PYTHON ?= $(HOME)/anaconda3/envs/kaiti-ltlf-spot/bin/python
 
-.PHONY: help setup install-editable dev-setup test planning-smoke docs-setup docs-build docs-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
+.PHONY: help setup install-editable dev-setup test planning-smoke docs-setup docs-build docs-check ltlf-env ltlf-build ltlf-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
 
 help:
 	@echo "Targets:"
@@ -13,6 +15,9 @@ help:
 	@echo "  docs-setup       Install research-plan DOCX generation dependencies"
 	@echo "  docs-build       Generate the research-plan DOCX and manifest"
 	@echo "  docs-check       Verify Markdown / DOCX / manifest synchronization"
+	@echo "  ltlf-env         Create or update the isolated Spot environment"
+	@echo "  ltlf-build       Generate finite transition tables with Spot"
+	@echo "  ltlf-check       Verify LTLf source hash and table integrity without Spot"
 	@echo "  infer            Run pose inference with the default config"
 	@echo "  build-seq        Build the sequence dataset from UR Fall labels"
 	@echo "  train-seq        Train the LSTM fall classifier"
@@ -49,6 +54,15 @@ docs-build:
 
 docs-check:
 	$(PYTHON) scripts/check_graduation_plan_sync.py
+
+ltlf-env:
+	$(CONDA) env update --file environment-ltlf-spot.yml --prune
+
+ltlf-build:
+	$(SPOT_PYTHON) scripts/generate_ltlf_transition_tables.py
+
+ltlf-check:
+	$(PYTHON) scripts/check_ltlf_transition_tables.py
 
 infer:
 	$(PYTHON) scripts/run_pose_infer.py --config configs/infer_pose_stream.yaml

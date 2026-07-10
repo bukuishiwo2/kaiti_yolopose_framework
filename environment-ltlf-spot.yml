@@ -1,0 +1,6 @@
+name: kaiti-ltlf-spot
+channels:
+  - conda-forge
+dependencies:
+  - python=3.10
+  - spot=2.15.1

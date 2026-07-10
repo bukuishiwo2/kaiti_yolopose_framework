@@ -15,6 +15,7 @@ from .models import (
     TaskAssignment,
     load_problem_from_yaml,
 )
+from .ltlf_monitor import LtlfTraceMonitor, TraceVerdict, TransitionTable, load_transition_tables
 
 __all__ = [
     "DynamicEvent",
@@ -30,4 +31,8 @@ __all__ = [
     "Task",
     "TaskAssignment",
     "load_problem_from_yaml",
+    "LtlfTraceMonitor",
+    "TraceVerdict",
+    "TransitionTable",
+    "load_transition_tables",
 ]

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "specifications": [
+    {
+      "id": "confirmed_event_eventually_verified",
+      "scope": "event",
+      "formula": "fall_confirmed -> F verify_done"
+    },
+    {
+      "id": "required_response_eventually_delivered",
+      "scope": "event",
+      "formula": "response_required -> F deliver_done"
+    },
+    {
+      "id": "low_battery_eventually_charged",
+      "scope": "robot",
+      "formula": "low_battery -> F charge_done"
+    },
+    {
+      "id": "interrupted_patrol_eventually_resolved",
+      "scope": "robot",
+      "formula": "patrol_interrupted -> F (patrol_resumed | patrol_cancelled)"
+    }
+  ]
+}

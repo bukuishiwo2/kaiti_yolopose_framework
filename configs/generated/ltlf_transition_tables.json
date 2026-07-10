@@ -1,0 +1,185 @@
+{
+  "schema_version": 1,
+  "source_path": "configs/ltlf_specifications.json",
+  "source_sha256": "4db071ef12c253646fc354c03fc1bb52b75c3942e92ef16fb8287d14202431a7",
+  "generator": {
+    "name": "Spot",
+    "version": "2.15.1",
+    "pipeline": "from_ltlf -> deterministic complete buchi/sbacc -> to_finite"
+  },
+  "specifications": [
+    {
+      "id": "confirmed_event_eventually_verified",
+      "scope": "event",
+      "formula": "fall_confirmed -> F verify_done",
+      "spot_rewrite": "alive & (alive U G!alive) & (!fall_confirmed | F(alive & verify_done))",
+      "atomic_propositions": [
+        "fall_confirmed",
+        "verify_done"
+      ],
+      "mask_semantics": "bit i is 1 iff atomic_propositions[i] is true",
+      "initial_state": 1,
+      "state_count": 3,
+      "accepting_states": [
+        0
+      ],
+      "permanently_accepting_states": [
+        0
+      ],
+      "rejecting_states": [],
+      "transitions": {
+        "0": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "1": [
+          0,
+          2,
+          0,
+          0
+        ],
+        "2": [
+          2,
+          2,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "required_response_eventually_delivered",
+      "scope": "event",
+      "formula": "response_required -> F deliver_done",
+      "spot_rewrite": "alive & (alive U G!alive) & (!response_required | F(alive & deliver_done))",
+      "atomic_propositions": [
+        "deliver_done",
+        "response_required"
+      ],
+      "mask_semantics": "bit i is 1 iff atomic_propositions[i] is true",
+      "initial_state": 1,
+      "state_count": 3,
+      "accepting_states": [
+        0
+      ],
+      "permanently_accepting_states": [
+        0
+      ],
+      "rejecting_states": [],
+      "transitions": {
+        "0": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "1": [
+          0,
+          0,
+          2,
+          0
+        ],
+        "2": [
+          2,
+          0,
+          2,
+          0
+        ]
+      }
+    },
+    {
+      "id": "low_battery_eventually_charged",
+      "scope": "robot",
+      "formula": "low_battery -> F charge_done",
+      "spot_rewrite": "alive & (alive U G!alive) & (!low_battery | F(alive & charge_done))",
+      "atomic_propositions": [
+        "charge_done",
+        "low_battery"
+      ],
+      "mask_semantics": "bit i is 1 iff atomic_propositions[i] is true",
+      "initial_state": 1,
+      "state_count": 3,
+      "accepting_states": [
+        0
+      ],
+      "permanently_accepting_states": [
+        0
+      ],
+      "rejecting_states": [],
+      "transitions": {
+        "0": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "1": [
+          0,
+          0,
+          2,
+          0
+        ],
+        "2": [
+          2,
+          0,
+          2,
+          0
+        ]
+      }
+    },
+    {
+      "id": "interrupted_patrol_eventually_resolved",
+      "scope": "robot",
+      "formula": "patrol_interrupted -> F (patrol_resumed | patrol_cancelled)",
+      "spot_rewrite": "alive & (alive U G!alive) & (!patrol_interrupted | F(alive & (patrol_cancelled | patrol_resumed)))",
+      "atomic_propositions": [
+        "patrol_cancelled",
+        "patrol_interrupted",
+        "patrol_resumed"
+      ],
+      "mask_semantics": "bit i is 1 iff atomic_propositions[i] is true",
+      "initial_state": 2,
+      "state_count": 3,
+      "accepting_states": [
+        0
+      ],
+      "permanently_accepting_states": [
+        0
+      ],
+      "rejecting_states": [],
+      "transitions": {
+        "0": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "1": [
+          1,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "2": [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    }
+  ]
+}
