@@ -1,12 +1,17 @@
 PYTHON ?= .venv/bin/python
 PIP ?= .venv/bin/pip
 
-.PHONY: help setup install-editable infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
+.PHONY: help setup install-editable dev-setup test docs-setup docs-build docs-check infer build-seq train-seq train-seq-tcn eval-rule eval-seq eval-seq-tcn tune-seq tune-seq-tcn clean clean-local
 
 help:
 	@echo "Targets:"
 	@echo "  setup            Install runtime requirements into .venv"
 	@echo "  install-editable Install the src package in editable mode"
+	@echo "  dev-setup        Install documentation and test dependencies"
+	@echo "  test             Run the Python test suite"
+	@echo "  docs-setup       Install research-plan DOCX generation dependencies"
+	@echo "  docs-build       Generate the research-plan DOCX and manifest"
+	@echo "  docs-check       Verify Markdown / DOCX / manifest synchronization"
 	@echo "  infer            Run pose inference with the default config"
 	@echo "  build-seq        Build the sequence dataset from UR Fall labels"
 	@echo "  train-seq        Train the LSTM fall classifier"
@@ -25,6 +30,21 @@ setup:
 
 install-editable:
 	$(PIP) install -e . --no-deps
+
+dev-setup:
+	$(PIP) install -r requirements-dev.txt
+
+test:
+	PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 $(PYTHON) -m pytest -q
+
+docs-setup:
+	$(PIP) install -r requirements-docs.txt
+
+docs-build:
+	$(PYTHON) scripts/build_graduation_plan_docx.py
+
+docs-check:
+	$(PYTHON) scripts/check_graduation_plan_sync.py
 
 infer:
 	$(PYTHON) scripts/run_pose_infer.py --config configs/infer_pose_stream.yaml

@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "title": "动态家居环境下语义事件与资源状态驱动的多机器人协同任务规划与局部修复研究",
+  "research_plan_version": "2.0",
+  "generator_version": "2.0.0",
+  "generated_at": "2026-07-10T08:57:52.928371+00:00",
+  "source_path": "docs/graduation_research_plan_v2.md",
+  "source_sha256": "d7c155914c44caf4fad8bb4bb00c7decdb4400b653556999a68bf0b8954e5387",
+  "source_block_count": 236,
+  "git_commit": "4087256e3a83433cc4e814f150a7d0a5576d0e38",
+  "git_dirty": true,
+  "output_path": "docs/generated/毕业设计研究内容与实施方案_叶豪成_修订版v2.0.docx",
+  "output_sha256": "8aa4c451af2d765d3620dc0a183b1ed52952749845493c07fcff93a02dec3d47"
+}
