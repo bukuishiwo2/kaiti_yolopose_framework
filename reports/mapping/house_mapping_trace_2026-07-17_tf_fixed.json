@@ -1,0 +1,152 @@
+{
+  "route": "configs/house_mapping_route.yaml",
+  "started_at": 1784286172.5260475,
+  "visits": [
+    {
+      "x": 1.6304438629930167,
+      "y": 0.8000006340398282,
+      "position_error": 0.11955613700866456,
+      "front_clearance": 5.100527763366699,
+      "id": "A_east",
+      "scan": true
+    },
+    {
+      "x": 1.7485474098305964,
+      "y": 1.9808022361894482,
+      "position_error": 0.11920661439549556,
+      "front_clearance": 1.6486573219299316,
+      "id": "corridor_west",
+      "scan": true
+    },
+    {
+      "x": 2.930389890756325,
+      "y": 2.098627567060822,
+      "position_error": 0.11961798278459787,
+      "front_clearance": 0.9541587829589844,
+      "id": "corridor_east",
+      "scan": true
+    },
+    {
+      "x": 3.114880162600021,
+      "y": 1.9829314386535988,
+      "position_error": 0.11884027194581198,
+      "front_clearance": 2.0447239875793457,
+      "id": "B_recovery_south",
+      "scan": false
+    },
+    {
+      "x": 3.8846521793314204,
+      "y": 2.0694471017674245,
+      "position_error": 0.11932560212880103,
+      "front_clearance": 1.452825665473938,
+      "id": "B_lower",
+      "scan": true
+    },
+    {
+      "x": 3.99780982639401,
+      "y": 4.581007955655681,
+      "position_error": 0.11901219886072488,
+      "front_clearance": 1.497833013534546,
+      "id": "B_upper",
+      "scan": true
+    },
+    {
+      "x": 5.380867582856971,
+      "y": 4.698208087258326,
+      "position_error": 0.11914589277694154,
+      "front_clearance": 1.2032347917556763,
+      "id": "east_upper",
+      "scan": true
+    },
+    {
+      "x": 5.498145475697794,
+      "y": 1.1185427513720296,
+      "position_error": 0.11855725689825278,
+      "front_clearance": 1.4031466245651245,
+      "id": "D_charger",
+      "scan": true
+    },
+    {
+      "x": 5.501851834588136,
+      "y": 4.580742223132192,
+      "position_error": 0.11927215364364731,
+      "front_clearance": 3.0038397312164307,
+      "id": "east_upper_return",
+      "scan": false
+    },
+    {
+      "x": 4.119012895344075,
+      "y": 4.698083005428157,
+      "position_error": 0.11902833329240659,
+      "front_clearance": 4.597304344177246,
+      "id": "B_upper_return",
+      "scan": false
+    },
+    {
+      "x": 4.002077454103165,
+      "y": 3.21923949686725,
+      "position_error": 0.11925759275075802,
+      "front_clearance": 0.49736419320106506,
+      "id": "B_east_recovery_return",
+      "scan": false
+    },
+    {
+      "x": 3.999168233987695,
+      "y": 2.218732160793282,
+      "position_error": 0.11873507418341459,
+      "front_clearance": 0.5013155937194824,
+      "id": "B_lower_return",
+      "scan": false
+    },
+    {
+      "x": 3.1688725868250804,
+      "y": 2.100406154376773,
+      "position_error": 0.11887328068100124,
+      "front_clearance": 2.0024306774139404,
+      "id": "corridor_east_return",
+      "scan": false
+    },
+    {
+      "x": 1.8690798490744773,
+      "y": 2.0991734396273265,
+      "position_error": 0.11908271771189123,
+      "front_clearance": 1.99985933303833,
+      "id": "corridor_west_return",
+      "scan": false
+    },
+    {
+      "x": 1.535560763838929,
+      "y": 2.785762381867274,
+      "position_error": 0.11964447885902056,
+      "front_clearance": 1.495750904083252,
+      "id": "left_mid",
+      "scan": true
+    },
+    {
+      "x": 1.497341156790425,
+      "y": 4.580559611637279,
+      "position_error": 0.11946997873713232,
+      "front_clearance": 0.6968374252319336,
+      "id": "S_supply",
+      "scan": true
+    },
+    {
+      "x": 1.505822635386345,
+      "y": 3.018504626391461,
+      "position_error": 0.11864758555917644,
+      "front_clearance": 0.892655074596405,
+      "id": "left_mid_return",
+      "scan": false
+    },
+    {
+      "x": 0.8395278345773195,
+      "y": 0.9124580029216229,
+      "position_error": 0.11920256762122061,
+      "front_clearance": 1.602243185043335,
+      "id": "A_home",
+      "scan": true
+    }
+  ],
+  "status": "completed",
+  "finished_at": 1784286505.1656544
+}

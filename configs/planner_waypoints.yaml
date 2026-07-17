@@ -44,8 +44,8 @@ waypoints:
 
   S:
     frame_id: map
-    x: 1.15
-    y: 4.65
+    x: 1.50
+    y: 4.70
     z: 0.0
     qx: 0.0
     qy: 0.0

@@ -19,11 +19,18 @@ from __future__ import annotations
 from pathlib import Path
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, TimerAction
+from launch.actions import (
+    DeclareLaunchArgument,
+    ExecuteProcess,
+    IncludeLaunchDescription,
+    LogInfo,
+    TimerAction,
+)
 from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import EnvironmentVariable, LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import Node
 
 
 REPO_ROOT = str(Path(__file__).resolve().parents[4])
@@ -57,12 +64,18 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("turtlebot4_y", default_value="0.8"),
             DeclareLaunchArgument("turtlebot4_z", default_value="0.0"),
             DeclareLaunchArgument("turtlebot4_yaw", default_value="0.0"),
+            DeclareLaunchArgument("spawn_dock", default_value="true"),
             DeclareLaunchArgument("rgb_topic", default_value="/oakd/rgb/preview/image_raw"),
             DeclareLaunchArgument("depth_topic", default_value="/oakd/rgb/preview/depth"),
             DeclareLaunchArgument("camera_info_topic", default_value="/oakd/rgb/preview/camera_info"),
             DeclareLaunchArgument("scan_topic", default_value="/scan"),
-            DeclareLaunchArgument("odom_topic", default_value="/odom"),
-            DeclareLaunchArgument("odom_frame_id", default_value="odom"),
+            DeclareLaunchArgument("odom_topic", default_value="/mapping/ground_truth_odom"),
+            DeclareLaunchArgument("ground_truth_odom_topic", default_value="/sim_ground_truth_pose"),
+            DeclareLaunchArgument("use_sim_ground_truth_odom", default_value="true"),
+            # Subscribe to the configured Odometry topic by default.  This lets
+            # simulation mapping use /sim_ground_truth_pose and avoids treating
+            # drifting wheel odometry as an immutable TF trajectory.
+            DeclareLaunchArgument("odom_frame_id", default_value=""),
             DeclareLaunchArgument("base_frame_id", default_value="base_link"),
             DeclareLaunchArgument("use_sim_time", default_value="true"),
             DeclareLaunchArgument("approx_sync", default_value="true"),
@@ -72,13 +85,47 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("rtabmap_args", default_value="--delete_db_on_start"),
             DeclareLaunchArgument("rtabmap_viz", default_value="false"),
             DeclareLaunchArgument("rtabmap_rviz", default_value="false"),
-            DeclareLaunchArgument("rtabmap_start_delay", default_value="12.0"),
+            DeclareLaunchArgument("rtabmap_start_delay", default_value="20.0"),
             DeclareLaunchArgument("visualization_enabled", default_value="true"),
             LogInfo(
                 msg=[
                     "House Phase 4a stack: custom house + TurtleBot4 + yolopose_ros ros_image + ",
                     "RTAB-Map sidecar mapping. Nav2 and PlanSys2 lifecycle remain outside this launch.",
                 ]
+            ),
+            Node(
+                package="yolopose_ros",
+                executable="ground_truth_odom_relay_node",
+                name="ground_truth_odom_relay",
+                output="screen",
+                condition=IfCondition(LaunchConfiguration("use_sim_ground_truth_odom")),
+                parameters=[
+                    {
+                        "input_topic": LaunchConfiguration("ground_truth_odom_topic"),
+                        "output_topic": LaunchConfiguration("odom_topic"),
+                        # Reuse the connected ROS odom frame for sensor TF
+                        # lookup; the pose values themselves come from Gazebo.
+                        "odom_frame_id": "odom",
+                        "base_frame_id": LaunchConfiguration("base_frame_id"),
+                        "publish_tf": True,
+                    }
+                ],
+            ),
+            TimerAction(
+                period=16.0,
+                actions=[
+                    ExecuteProcess(
+                        cmd=[
+                            "ros2",
+                            "param",
+                            "set",
+                            "/diffdrive_controller",
+                            "enable_odom_tf",
+                            "false",
+                        ],
+                        output="screen",
+                    )
+                ],
             ),
             LogInfo(
                 msg=(
@@ -99,6 +146,7 @@ def generate_launch_description() -> LaunchDescription:
                     "turtlebot4_y": LaunchConfiguration("turtlebot4_y"),
                     "turtlebot4_z": LaunchConfiguration("turtlebot4_z"),
                     "turtlebot4_yaw": LaunchConfiguration("turtlebot4_yaw"),
+                    "spawn_dock": LaunchConfiguration("spawn_dock"),
                 }.items(),
             ),
             IncludeLaunchDescription(

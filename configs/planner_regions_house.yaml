@@ -59,10 +59,10 @@ regions:
     kind: region
     resource_id: supply_point_S
     bounds:
-      x_min: 0.65
-      x_max: 1.35
-      y_min: 4.10
-      y_max: 4.90
+      x_min: 1.20
+      x_max: 1.80
+      y_min: 4.30
+      y_max: 5.10
     width_axis: y
     min_passage_width: 0.6
     free_threshold: 0.30

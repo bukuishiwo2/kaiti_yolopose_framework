@@ -91,6 +91,7 @@ def generate_launch_description() -> LaunchDescription:
             Node(
                 package="ros_ign_gazebo",
                 executable="create",
+                condition=IfCondition(LaunchConfiguration("spawn_dock")),
                 arguments=[
                     "-name",
                     robot_name,
@@ -213,6 +214,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("y", default_value="0.8"),
             DeclareLaunchArgument("z", default_value="0.0"),
             DeclareLaunchArgument("yaw", default_value="0.0"),
+            DeclareLaunchArgument("spawn_dock", default_value="true"),
             DeclareLaunchArgument(
                 "param_file",
                 default_value=PathJoinSubstitution(

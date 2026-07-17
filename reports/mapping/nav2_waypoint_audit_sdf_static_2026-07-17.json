@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "results": [
+    {
+      "start": "A",
+      "goal": "B",
+      "path_exists": true,
+      "pose_count": 115,
+      "path_length": 2.9219
+    },
+    {
+      "start": "A",
+      "goal": "C",
+      "path_exists": true,
+      "pose_count": 257,
+      "path_length": 6.4571
+    },
+    {
+      "start": "A",
+      "goal": "D",
+      "path_exists": true,
+      "pose_count": 376,
+      "path_length": 9.4467
+    },
+    {
+      "start": "A",
+      "goal": "S",
+      "path_exists": true,
+      "pose_count": 150,
+      "path_length": 3.7649
+    }
+  ]
+}

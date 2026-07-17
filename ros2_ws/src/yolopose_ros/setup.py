@@ -33,6 +33,7 @@ setup(
             "controller_ready_node = yolopose_ros.controller_ready_node:main",
             "robot_ready_gate_node = yolopose_ros.robot_ready_gate_node:main",
             "cmd_vel_direct_bridge_node = yolopose_ros.cmd_vel_direct_bridge_node:main",
+            "ground_truth_odom_relay_node = yolopose_ros.ground_truth_odom_relay_node:main",
             "semantic_state_node = yolopose_ros.semantic_state_node:main",
             "spatial_state_node = yolopose_ros.spatial_state_node:main",
             "milp_planner_node = yolopose_ros.milp_planner_node:main",

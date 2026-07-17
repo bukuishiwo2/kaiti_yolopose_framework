@@ -69,6 +69,27 @@ def _check_clean_start(context, *_args, **_kwargs):
                 continue
             if "pgrep -fa" in normalized:
                 continue
+            # A parent launch command may itself contain words such as
+            # ``rtabmap`` in the launch filename or arguments.  It is part of
+            # the launch currently being evaluated, not a stale ROS process.
+            # Skip this process and all ancestors while retaining genuine
+            # processes left behind by an earlier run.
+            fields = normalized.split(maxsplit=1)
+            try:
+                matched_pid = int(fields[0])
+            except (IndexError, ValueError):
+                matched_pid = -1
+            ancestor_pids = {os.getpid()}
+            parent_pid = os.getppid()
+            while parent_pid > 1 and parent_pid not in ancestor_pids:
+                ancestor_pids.add(parent_pid)
+                try:
+                    with open(f"/proc/{parent_pid}/stat", encoding="utf-8") as stat_file:
+                        parent_pid = int(stat_file.read().split()[3])
+                except (FileNotFoundError, IndexError, OSError, ValueError):
+                    break
+            if matched_pid in ancestor_pids:
+                continue
             matches.append(normalized)
 
     if matches:
@@ -165,6 +186,7 @@ def generate_launch_description() -> LaunchDescription:
             "y": LaunchConfiguration("turtlebot4_y"),
             "z": LaunchConfiguration("turtlebot4_z"),
             "yaw": LaunchConfiguration("turtlebot4_yaw"),
+            "spawn_dock": LaunchConfiguration("spawn_dock"),
         }.items(),
     )
 
@@ -200,6 +222,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("turtlebot4_y", default_value="0.8"),
             DeclareLaunchArgument("turtlebot4_z", default_value="0.0"),
             DeclareLaunchArgument("turtlebot4_yaw", default_value="0.0"),
+            DeclareLaunchArgument("spawn_dock", default_value="true"),
             OpaqueFunction(function=_check_clean_start),
             LogInfo(
                 msg=[

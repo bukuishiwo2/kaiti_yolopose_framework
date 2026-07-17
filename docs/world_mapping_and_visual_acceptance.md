@@ -6,10 +6,24 @@
 
 但 2026-07-10 的 Nav2 现场 `getPath()`/NavigateToPose 检查表明：现有保存地图能生成 `A→B`、`A→S` 路径，不能生成 `A→C` 路径，D 周围也存在较大 unknown 区域。因此 `maps/kaiti_house.yaml` 只能作为当前单车 B/S 门禁的临时地图，不能直接冻结为三车正式地图。W7 结束前必须在不修改墙体的前提下重新覆盖 C/D 区域、保存新地图，并逐点通过 Nav2 path audit。正式实验再冻结新地图的 hash，并使用 AMCL + saved map 保证重复性。
 
-本轮修正了两个会直接影响实验有效性的问题：
+2026-07-17 实际控制 TurtleBot4 覆盖 A/B/C/D/S 后确认：单纯增加扫图范围仍不能让 RTAB-Map 图直接进入正式 Nav2。第一张图受 dock 打滑和轮式 odom 漂移影响；统一真值 Odometry/TF 后的第二张图仍有激光重影，加入 0.10 m 栅格膨胀后 C/D 不连通。因此两张图均冻结为 `reports/mapping/rejected/` 下的失败证据，不覆盖正式地图。
+
+仿真正式 known-map 改为从 SDF 静态几何自动生成候选图：
+
+```bash
+python3 scripts/build_house_static_map.py \
+  --output-base maps/candidates/2026-07-17/kaiti_house_sdf_static
+```
+
+这不是替代 SLAM：它只用于与 Gazebo SDF 同源的可重复仿真；实物仍使用 RTAB-Map/SLAM 建图。生成图已通过真实 Nav2 `getPath()`：A→B/C/D/S 路径长度分别为 2.9219、6.4571、9.4467、3.7649 m，详见 `reports/mapping/nav2_waypoint_audit_sdf_static_2026-07-17.json`。候选图尚未覆盖 `maps/kaiti_house.*`，需再完成一次 Gazebo 实体 NavigateToPose 门禁后才能提升为正式地图。
+
+本轮修正了会直接影响实验有效性的问题：
 
 - `corridor_H` 现在覆盖内墙在 `x=2.45, y≈2.10` 的真实门洞，不再覆盖无关的大块房间区域；
 - `event_zone_B` 同时覆盖机器人核验停靠点 `B=(3.35, 2.55)` 和跌倒人物标记 `(3.45, 3.15)`。
+- 床和跌倒标记移至 B 西侧，东侧保留可通行救援走廊；
+- 补给架移至 S 西墙，`S` waypoint 改为 `(1.50, 4.70)`，不再落在货架内部；
+- scene 中 C、门廊、事件区和补给区坐标与 waypoint/region 配置统一。
 
 人物、床和货架目前保持为视觉模型，不增加碰撞体。原因是现有静态地图按墙体几何保存；若现在只给 Gazebo 家具增加碰撞而不重新建图，会造成 Gazebo 真值、AMCL 静态地图和 Nav2 costmap 三者不一致。以后若决定把家具作为固定障碍，必须同时重新生成并冻结地图、waypoint、region mask 和基准路径。
 
@@ -40,7 +54,7 @@
 4. 依赖放在独立验证工作区或 pinned `.repos`，记录 commit 和 license；
 5. 不把 exploration 成功率写成核心论文贡献。
 
-当前地图确实需要补齐 C/D，因此推荐先用仓库已有 RTAB-Map/遥控方式重建一次；若人工覆盖仍容易漏区，再在独立工作区使用 `explore_lite` 自动扫图。它在这里是一次性地图制作工具，不是任务规划运行依赖。
+本轮已经用受控覆盖路线完整扫过 C/D，问题不再是 frontier 漏区，而是仿真 TF/传感器重影。因此安装 `explore_lite` 不会修复当前根因，暂不引入。它仍只可作为实物未知环境建图的可选一次性工具，不是任务规划运行依赖。
 
 该项目 README 说明 Humble 及以上需从源码构建，并将多机器人 map merge 的部分依赖描述为非官方/实验分支，因此当前没有必要把它变成核心运行依赖：[robo-friends/m-explore-ros2](https://github.com/robo-friends/m-explore-ros2)。
 
@@ -54,13 +68,13 @@
 
 通用 depot、maze、warehouse world 可作为后续“场景迁移”对照，但不替换 house 主场景，因为通用场景没有 B/S/D 和共享走廊的课题语义。
 
-地图重建后，在 Nav2 已启动的终端执行：
+地图生成后，在 Nav2 已启动的终端执行：
 
 ```bash
 python3 scripts/audit_nav2_waypoints.py --start A --goals B,C,D,S --require-all
 ```
 
-只有全部 `path_exists=true`，并且 B/S/D waypoint 仍位于对应 region 内，地图才允许进入正式实验。
+只有全部 `path_exists=true`，并且 B/S/D waypoint 仍位于对应 region 内，再完成一次实体 NavigateToPose 无碰撞验证，地图才允许进入正式实验。
 
 ## 5. v2 单车可视化验收
 
@@ -139,3 +153,5 @@ B 出现两次是两项不同任务：第一次核验，第二次送达，不是
 - AMCL 初始位姿若与仿真 spawn 不一致，需要在 RViz 校准，之后固定参数；
 - `/plan` 的实际 topic 名可能因 TurtleBot4 namespace 改变，三车阶段 recorder 需参数化；
 - 当前 executor 是 W7 的 Nav2-only 门禁，不是 W8 的 PlanSys2 action performer。
+- SDF 生成图已通过全局路径门禁，但尚未完成 A→B→C→D→S 的实体导航门禁，因此仍标记为 candidate；
+- `reports/mapping/rejected/` 是本地失败诊断产物并已加入 `.gitignore`，不应提交或作为论文成功结果。

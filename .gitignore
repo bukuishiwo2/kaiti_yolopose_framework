@@ -57,11 +57,15 @@ outputs/*
 ros2_ws/build/
 ros2_ws/install/
 ros2_ws/log/
+/log/
 ros2_ws/*.pt
 ros2_ws/*.onnx
 
 # Local benchmark/eval scratch directories if recreated elsewhere
 outputs/pose_events.jsonl
+
+# Local mapping attempts rejected by the navigation gate
+reports/mapping/rejected/
 
 # Downloaded Ultralytics weight at repo root
 /yolo11n-pose.pt

@@ -23,11 +23,23 @@ patterns=(
 )
 
 echo "[cleanup_house_sim] stopping stale house sim processes if present"
-for pattern in "${patterns[@]}"; do
-  if pgrep -fa "$pattern" >/dev/null 2>&1; then
-    echo "[cleanup_house_sim] pkill -f $pattern"
-    pkill -f "$pattern" || true
+declare -A protected_pids=()
+current_pid="$$"
+while [[ "$current_pid" =~ ^[0-9]+$ ]] && (( current_pid > 1 )); do
+  protected_pids["$current_pid"]=1
+  if [[ ! -r "/proc/$current_pid/stat" ]]; then
+    break
   fi
+  current_pid="$(awk '{print $4}' "/proc/$current_pid/stat")"
+done
+
+for pattern in "${patterns[@]}"; do
+  while read -r pid; do
+    [[ -z "$pid" ]] && continue
+    [[ -n "${protected_pids[$pid]:-}" ]] && continue
+    echo "[cleanup_house_sim] kill $pid ($pattern)"
+    kill "$pid" 2>/dev/null || true
+  done < <(pgrep -f "$pattern" || true)
 done
 
 sleep 2

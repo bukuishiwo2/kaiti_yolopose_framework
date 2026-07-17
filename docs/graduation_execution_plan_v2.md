@@ -85,7 +85,8 @@
 - [x] house 门洞、事件区、跌倒标记和 waypoint 的配置对齐；
 - [x] 现场发现并记录旧 saved map 的 C/D 覆盖不足；增加 Nav2 waypoint path audit；
 - [ ] Gazebo + RViz 现场运行并保存 trace/截图；
-- [ ] 重新覆盖 C/D 建图，冻结新 map hash，并通过 A→B/C/D/S path audit；
+- [x] 控制小车完整覆盖 C/D；拒绝有重影的 RTAB-Map 图；SDF 同源候选图已通过 A→B/C/D/S Nav2 path audit；
+- [ ] 候选图完成 A→B→C→D→S 实体 NavigateToPose 后提升正式 map hash；
 - [ ] Nav2 path-cost adapter；
 - [ ] `kaiti_interfaces` 正式消息替换 `String + JSON`。
 

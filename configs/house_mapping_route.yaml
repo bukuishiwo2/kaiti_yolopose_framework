@@ -1,0 +1,28 @@
+meta:
+  description: Collision-aware coverage route used only to create the static house map.
+  coordinate_frame: gazebo_world
+  spawn_xy: [0.8, 0.8]
+
+route:
+  - {id: A_east, x: 1.75, y: 0.80, scan: true}
+  - {id: corridor_west, x: 1.75, y: 2.10, scan: true}
+  - {id: corridor_east, x: 3.05, y: 2.10, scan: true}
+  # Keep the coverage path east of the floor-level event marker.  The simulated
+  # lidar reports the marker near (3.4, 2.85) as a close return.
+  - {id: B_recovery_south, x: 3.20, y: 1.90, scan: false}
+  - {id: B_lower, x: 4.00, y: 2.10, scan: true}
+  - {id: B_upper, x: 4.00, y: 4.70, scan: true}
+  - {id: east_upper, x: 5.50, y: 4.70, scan: true}
+  - {id: D_charger, x: 5.50, y: 1.00, scan: true}
+  - {id: east_upper_return, x: 5.50, y: 4.70, scan: false}
+  - {id: B_upper_return, x: 4.00, y: 4.70, scan: false}
+  # Return through the same east aisle; a diagonal shortcut would intersect
+  # the bed/fallen-person proxy used by the event scenario.
+  - {id: B_east_recovery_return, x: 4.00, y: 3.10, scan: false}
+  - {id: B_lower_return, x: 4.00, y: 2.10, scan: false}
+  - {id: corridor_east_return, x: 3.05, y: 2.10, scan: false}
+  - {id: corridor_west_return, x: 1.75, y: 2.10, scan: false}
+  - {id: left_mid, x: 1.50, y: 2.90, scan: true}
+  - {id: S_supply, x: 1.50, y: 4.70, scan: true}
+  - {id: left_mid_return, x: 1.50, y: 2.90, scan: false}
+  - {id: A_home, x: 0.80, y: 0.80, scan: true}

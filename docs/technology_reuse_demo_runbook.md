@@ -227,3 +227,37 @@ print(finite.to_str("hoa"))
 `m-explore-ros2` 不进入正式执行栈。它只可作为建图准备阶段的可选 frontier exploration 对照：探索完成后保存地图，正式 MILP/Nav2 实验重新使用 saved map + AMCL。不要把源码复制到本仓库，也不要让在线探索与任务规划同时运行。
 
 详细理由、house 区域修正和单车可视化命令见 [House World、建图复用与 v2 可视化验收](world_mapping_and_visual_acceptance.md)。
+
+## 9. House 建图与静态图门禁
+
+仿真小车覆盖路线复用 RTAB-Map、Create3 safety reflex 和 Gazebo ground truth，不实现 frontier planner：
+
+```bash
+ros2 launch yolopose_ros kaiti_house_turtlebot4_rtabmap.launch.py \
+  launch_system_stack:=false
+
+# bringup 稳定后，地图制作阶段移除出生 dock
+ign service -s /world/kaiti_house_world/remove \
+  --reqtype ignition.msgs.Entity \
+  --reptype ignition.msgs.Boolean \
+  --timeout 5000 \
+  --req 'name: "standard_dock" type: MODEL'
+
+python3 scripts/drive_house_mapping_route.py \
+  --obstacle-stop 0.25 \
+  --trace reports/mapping/house_mapping_trace.json
+```
+
+`0.25 m` 只用于已审计的仿真地图制作门洞，正式 Nav2 使用 footprint、inflation layer 和 Create3 safety，不复用该参数。
+
+Gazebo 正式 known-map 使用 SDF 同源生成器，然后必须通过 Nav2：
+
+```bash
+python3 scripts/build_house_static_map.py \
+  --output-base maps/candidates/kaiti_house_sdf_static
+
+python3 scripts/audit_nav2_waypoints.py \
+  --start A --goals B,C,D,S --require-all
+```
+
+RTAB-Map 图用于 SLAM 方法展示和实物地图制作；SDF 图只用于确定性的 Gazebo 已知环境实验，两者不得混写为同一实验结果。

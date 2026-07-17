@@ -39,28 +39,28 @@ kaiti_house_scene:
         y_max: 1.7
       - id: C
         kind: service_room
-        x_min: 0.2
-        x_max: 2.2
-        y_min: 1.7
-        y_max: 3.3
+        x_min: 4.65
+        x_max: 6.8
+        y_min: 4.05
+        y_max: 5.8
       - id: corridor_H
         kind: corridor
-        x_min: 1.0
-        x_max: 2.4
-        y_min: 1.0
-        y_max: 3.0
+        x_min: 2.15
+        x_max: 2.75
+        y_min: 1.65
+        y_max: 2.55
       - id: B
         kind: event_room
-        x_min: 2.8
-        x_max: 4.2
-        y_min: 2.8
-        y_max: 4.2
+        x_min: 2.55
+        x_max: 4.45
+        y_min: 1.65
+        y_max: 5.8
       - id: event_zone_B
         kind: event_zone
-        x_min: 3.0
-        x_max: 4.0
-        y_min: 3.0
-        y_max: 4.0
+        x_min: 3.05
+        x_max: 3.75
+        y_min: 2.25
+        y_max: 3.45
       - id: D
         kind: charger_room
         x_min: 4.8
@@ -81,10 +81,10 @@ kaiti_house_scene:
         y_max: 5.2
       - id: supply_point_S
         kind: supply_point
-        x_min: 0.5
-        x_max: 1.5
-        y_min: 4.0
-        y_max: 5.0
+        x_min: 1.20
+        x_max: 1.80
+        y_min: 4.30
+        y_max: 5.10
 
     event_actor:
       actor_id: resident_1
