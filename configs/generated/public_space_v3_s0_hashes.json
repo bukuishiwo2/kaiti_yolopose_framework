@@ -1,0 +1,177 @@
+{
+  "schema_version": "3.0.1-s0",
+  "research_plan_version": "3.0.1",
+  "generated_at": "2026-07-29",
+  "hash_algorithm": "sha256",
+  "parameter_canonicalization": "UTF-8 JSON; ensure_ascii=false; sort_keys=true; separators=(',', ':')",
+  "parameter_groups": {
+    "zone": {
+      "keys": [
+        "robot_radius_m",
+        "xy_goal_tolerance_m",
+        "keepout_apply_timeout_sec",
+        "keepout_update_p95_target_sec",
+        "event_detection_distance_min_m",
+        "event_detection_distance_max_m",
+        "event_confirm_clearance_margin_m",
+        "r0_m",
+        "k_sigma",
+        "r_safe_min_m",
+        "r_safe_max_m",
+        "zone_polygon_vertices",
+        "zone_position_update_m",
+        "zone_radius_update_m",
+        "zone_update_debounce_sec",
+        "zone_clear_hold_sec"
+      ],
+      "sha256": "28999201aeaed6eb83ba48da49659ec17bbb86ab11ccd3e0b94b316357e5cdc6"
+    },
+    "service_point": {
+      "keys": [
+        "xy_goal_tolerance_m",
+        "event_confirm_clearance_margin_m",
+        "r_safe_min_m",
+        "r_safe_max_m",
+        "service_standoff_m",
+        "candidate_angle_step_deg",
+        "service_candidates_per_ring",
+        "min_static_clearance_m",
+        "min_service_pair_distance_m",
+        "verifier_view_angle_max_deg",
+        "max_path_candidates_per_role",
+        "path_query_timeout_sec",
+        "service_generation_timeout_sec",
+        "service_radius_retry_step_m",
+        "service_radius_retry_count",
+        "service_point_shift_trigger_m"
+      ],
+      "sha256": "0ed32b49a5e602684c1c2d9c8e4d544780c61a1dcadd94de4b8531639f684fd9"
+    },
+    "edge": {
+      "keys": [
+        "corridor_capacity",
+        "min_single_passage_width_m",
+        "path_probe_hz",
+        "block_confirm_sec",
+        "block_cost_ratio",
+        "release_confirm_sec",
+        "release_cost_ratio",
+        "edge_state_cooldown_sec",
+        "path_cache_ttl_sec",
+        "path_start_shift_m",
+        "path_goal_shift_m",
+        "nav_failure_retry_count",
+        "nav_failure_window_sec"
+      ],
+      "sha256": "1a049765f6abdc5b655e28848b5565f637145bc8a76d18e1c309293841df7e48"
+    },
+    "repair": {
+      "keys": [
+        "local_repair_time_limit_sec",
+        "full_replan_time_limit_sec",
+        "mip_gap",
+        "planning_horizon_sec",
+        "replan_debounce_sec",
+        "min_replan_interval_sec",
+        "affected_ratio_full_replan",
+        "affected_ratio_min_remaining_tasks",
+        "max_local_failures_in_window",
+        "local_failure_window_sec",
+        "plan_change_start_shift_sec"
+      ],
+      "sha256": "6e81fe32e35da1c0bc6ba827bb2cdbaaa2eaad00a2e84b723adacf2e65a9bac9"
+    }
+  },
+  "artifacts": [
+    {
+      "path": "configs/public_space_v3.yaml",
+      "sha256": "5d2f0df81d912851d43b7cd7cd2a1f2dd9ab419c65a99e8932e7c67d55bff511"
+    },
+    {
+      "path": "configs/public_space_regions_v3.yaml",
+      "sha256": "98b40f1289b831937be42dbded57f2f655efc286da3319b3303addc26c53f250"
+    },
+    {
+      "path": "data/eval/public_space_v3_s0_test_vectors.yaml",
+      "sha256": "5637da1d15c5aab52107b9f10e6a381ecf0a50520808b6b7eafa16bc617fd4a8"
+    },
+    {
+      "path": "data/eval/public_space_v3_benchmark_manifest.template.yaml",
+      "sha256": "072b0fc92ecdaa0ef9c879f77c2e0feecb3bf1cfee70e4ad8757a5e06f6ebee9"
+    },
+    {
+      "path": "src/kaiti_planning/public_space_v3_protocol.py",
+      "sha256": "4eb088964545191e8b15f494fe4cfafb07c1e33169be70b89e87379e9257e628"
+    },
+    {
+      "path": "src/kaiti_planning/public_space_v3_safety.py",
+      "sha256": "df5124417080a437bef491e83d619c11425840e947b41ef815da1941164a6864"
+    },
+    {
+      "path": "tests/test_public_space_v3_s0.py",
+      "sha256": "8230d015f0e8346e8eaeaacdc86ebfbdb54e909f276bad17106dd3fd6e120550"
+    },
+    {
+      "path": "docs/public_space_v3_s0_protocol.md",
+      "sha256": "dfbd67580cf5dc89cddb82ceb45a8d86a77278375dcacc48505d18d7e751bb12"
+    },
+    {
+      "path": "docs/research_plan_v3_0_1.md",
+      "sha256": "da3f8942170cc77baab32e991b53d5e9d6b4c3dd90c86916be77a9c1ad15f130"
+    }
+  ],
+  "protected_v2_house_baseline": [
+    {
+      "path": "configs/planner_graduation_v2.yaml",
+      "sha256": "ed4e9630f7a678db9738cd8a278c4645ee3839828c8a8731ec8cc80764601f17"
+    },
+    {
+      "path": "configs/planner_graduation_v2_single_robot_demo.yaml",
+      "sha256": "8b28e4b37b322b84fa825cd26d33b1d56fe0c65cb68cfddff5c12c2bf061c90e"
+    },
+    {
+      "path": "configs/house_mapping_route.yaml",
+      "sha256": "be52ee8b1efab3e0464b612785eeaaf1b192eeed71a5ec8e086ad8d622b62e11"
+    },
+    {
+      "path": "configs/planner_regions_house.yaml",
+      "sha256": "93bfc1174817eeb8efda7e84a0a7cfad4510674f5aa1a3da35d885c69c9cb6e3"
+    },
+    {
+      "path": "docs/graduation_research_plan_v2.md",
+      "sha256": "d7c155914c44caf4fad8bb4bb00c7decdb4400b653556999a68bf0b8954e5387"
+    },
+    {
+      "path": "docs/graduation_execution_plan_v2.md",
+      "sha256": "0c7c556a2290bdc85b4670e313d2fdf2c6f0f7f3fd09033f536c8ba5664324ec"
+    },
+    {
+      "path": "docs/generated/graduation_research_plan_v2.manifest.json",
+      "sha256": "cf3efd4a0abb2c7e10881c79c460c5b27f50ffd3ac19660772c4830e51eb23f5"
+    },
+    {
+      "path": "maps/kaiti_house.pgm",
+      "sha256": "4f06769d8022ee333f0fb7cbe5d43982b0bc5b4c7c731d85c637d70fefa036da"
+    },
+    {
+      "path": "maps/kaiti_house.yaml",
+      "sha256": "e2f1883b34bad372fdee60afba61d712c7da910fb617c666cfcafc831d5753e4"
+    },
+    {
+      "path": "ros2_ws/src/yolopose_ros/worlds/kaiti_house_world.sdf",
+      "sha256": "aa09b87e6837eb954d5c3890b79f28287f21ccfb1e7f0e66b9bcbde76465930c"
+    },
+    {
+      "path": "ros2_ws/src/yolopose_ros/config/kaiti_house_event_script.yaml",
+      "sha256": "5a64dff0ea15d477008255878d9dae34e50aff7f37fd6bd3da8d77a2bb69c054"
+    },
+    {
+      "path": "ros2_ws/src/yolopose_ros/config/kaiti_house_localization.yaml",
+      "sha256": "cb50e7ba498c781c0dcadc605c677902fe5311afc53d453bb8585cb584cf64cb"
+    },
+    {
+      "path": "ros2_ws/src/yolopose_ros/config/kaiti_house_scene.yaml",
+      "sha256": "870b924f8d78dcb722138760b7ba786d828c1cdb5622263dd8c3d285d51af484"
+    }
+  ]
+}

@@ -1,0 +1,358 @@
+schema_version: "3.0.1-s0"
+source_document: "docs/research_plan_v3_0_1.md"
+config_path: "configs/public_space_v3.yaml"
+scope: "S0_TABLE_DRIVEN_CONTRACT_TESTS"
+
+state_action_cases:
+  - case_id: "SA_P01_NORMAL_NO_EPISODE"
+    polarity: "positive"
+    input: {semantic_state: "normal", active_episode: false}
+    expected:
+      {episode_action: "NONE", r1_action: "PATROL", r2_action: "STANDBY",
+       zone_action: "NONE", planner_action: "NO_REPLAN"}
+
+  - case_id: "SA_P02_UNCERTAIN_VALID_POSE"
+    polarity: "positive"
+    input: {semantic_state: "event_uncertain", pose_valid: true}
+    expected:
+      {episode_action: "UPSERT_CANDIDATE", r1_action: "REOBSERVE",
+       r2_action: "NO_DISPATCH", zone_action: "DEBUG_ONLY",
+       planner_action: "R1_LOCAL_OPTIONAL"}
+
+  - case_id: "SA_P03_UNCERTAIN_INVALID_POSE"
+    polarity: "positive"
+    input: {semantic_state: "event_uncertain", pose_valid: false}
+    expected:
+      {episode_action: "UPSERT_CANDIDATE", r1_action: "LOCAL_REOBSERVE_OR_HOLD",
+       r2_action: "HOLD", zone_action: "NONE", planner_action: "NO_REPLAN"}
+
+  - case_id: "SA_P04_CONFIRMED_VALID_CLEARANCE"
+    polarity: "positive"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: true,
+       confirmation_clearance_passed: true}
+    expected:
+      {episode_action: "CONFIRM", r1_action: "VERIFY_AND_MONITOR",
+       r2_action: "PICKUP_AND_DELIVER",
+       zone_action: "CREATE_HARD_ZONE_AND_SERVICE_PAIR",
+       planner_action: "PLAN", planning_trigger: "NEW_CONFIRMED_EVENT"}
+
+  - case_id: "SA_P05_CONFIRMED_INVALID_KEEP_OLD_ZONE"
+    polarity: "positive"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: false,
+       old_zone_available: true}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_POSITION_PENDING",
+       r1_action: "REOBSERVE_NO_LEAVE", r2_action: "HOLD_NO_DELIVER",
+       zone_action: "KEEP_OLD_ZONE", planner_action: "REOBSERVE_ONLY",
+       provisional: false}
+
+  - case_id: "SA_P06_CONFIRMED_INVALID_PROVISIONAL_2D"
+    polarity: "positive"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: false,
+       old_zone_available: false, fallback_center: "ground_projection"}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_POSITION_PENDING",
+       r1_action: "REOBSERVE_NO_LEAVE", r2_action: "HOLD_NO_DELIVER",
+       zone_action: "CREATE_PROVISIONAL_MAX_RADIUS",
+       planner_action: "REOBSERVE_ONLY", provisional: true}
+
+  - case_id: "SA_P07_CONFIRMED_INVALID_PROVISIONAL_REGION"
+    polarity: "positive"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: false,
+       old_zone_available: false, fallback_center: "region_centroid"}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_POSITION_PENDING",
+       r1_action: "REOBSERVE_NO_LEAVE", r2_action: "HOLD_NO_DELIVER",
+       zone_action: "CREATE_PROVISIONAL_MAX_RADIUS",
+       planner_action: "REOBSERVE_ONLY", provisional: true}
+
+  - case_id: "SA_P08_DEGRADED_NO_CONFIRMED"
+    polarity: "positive"
+    input: {semantic_state: "perception_degraded", active_episode: false}
+    expected:
+      {episode_action: "KEEP_CANDIDATE_TO_TTL",
+       r1_action: "REOBSERVE_OR_HOLD", r2_action: "NO_DISPATCH",
+       zone_action: "NONE", planner_action: "ON_FIRST_STATE_CHANGE"}
+
+  - case_id: "SA_P09_DEGRADED_ACTIVE_CONFIRMED"
+    polarity: "positive"
+    input: {semantic_state: "perception_degraded", active_episode: true}
+    expected:
+      {episode_action: "KEEP_ACTIVE",
+       r1_action: "KEEP_MONITOR_AND_REOBSERVE",
+       r2_action: "CONTINUE_ONLY_IF_SERVICE_VALID",
+       zone_action: "INFLATE_ON_STALE",
+       planner_action: "REPLAN_ON_ZONE_OR_SERVICE_THRESHOLD"}
+
+  - case_id: "SA_P10_VERIFY_NO_FALL"
+    polarity: "positive"
+    input: {lifecycle_event: "verify_no_fall"}
+    expected:
+      {episode_action: "CLOSE", r1_action: "RESUME_PATROL",
+       r2_action: "CANCEL_UNSTARTED", zone_action: "CLEAR_AFTER_HOLD",
+       planning_trigger: "EVENT_CLOSED"}
+
+  - case_id: "SA_P11_DELIVER_COMPLETED"
+    polarity: "positive"
+    input: {lifecycle_event: "deliver_completed"}
+    expected:
+      {episode_action: "SUPPLY_COMPLETED", r1_action: "MONITOR_MAY_END",
+       r2_action: "EXIT_DELIVERY_POINT", zone_action: "KEEP"}
+
+  - case_id: "SA_P12_SCENE_CLEAR"
+    polarity: "positive"
+    input: {lifecycle_event: "scene_clear"}
+    expected:
+      {episode_action: "CLOSE", r1_action: "RESUME_PATROL",
+       r2_action: "RESUME_STANDBY", zone_action: "CLEAR_AFTER_HOLD"}
+
+  - case_id: "SA_N01_CONFIRMATION_CLEARANCE_FAILED"
+    polarity: "negative"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: true,
+       confirmation_clearance_passed: false}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_MARK_INVALID_SCENARIO",
+       r1_action: "CANCEL_AND_STOP", r2_action: "CANCEL_AND_STOP",
+       zone_action: "DO_NOT_CREATE_FORMAL_ZONE",
+       planner_action: "HOLD_SAFE",
+       reason_code: "scenario_precondition_failed"}
+
+  - case_id: "SA_N02_CONFIRMED_INVALID_NO_FALLBACK_CENTER"
+    polarity: "negative"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: false,
+       old_zone_available: false, fallback_center: null}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_POSITION_PENDING",
+       r1_action: "REOBSERVE_NO_LEAVE", r2_action: "HOLD_NO_DELIVER",
+       zone_action: "NO_GEOMETRIC_ZONE",
+       planner_action: "HOLD_SAFE_REOBSERVE", provisional: false}
+
+  - case_id: "SA_N03_ZONE_ACK_TIMEOUT"
+    polarity: "negative"
+    input: {zone_ack_timeout: true}
+    expected:
+      {planner_action: "HOLD_SAFE", publish_plan: false,
+       reason_code: "zone_ack_timeout"}
+
+  - case_id: "SA_N04_HOLD_SAFE_CANCEL_NOT_ACKED"
+    polarity: "negative"
+    input:
+      {hold_safe: true, cancel_acknowledged: false, active_nav_goal: true,
+       linear_speed_mps: 0.0, angular_speed_rps: 0.0,
+       dispatch_locked: true}
+    expected:
+      {planner_action: "HOLD_SAFE", stop_state: "FAILED",
+       dispatch_new_goal: false, reason_code: "hold_stop_failed"}
+
+  - case_id: "SA_N05_HOLD_SAFE_ACTIVE_GOAL_REMAINS"
+    polarity: "negative"
+    input:
+      {hold_safe: true, cancel_acknowledged: true, active_nav_goal: true,
+       linear_speed_mps: 0.0, angular_speed_rps: 0.0,
+       dispatch_locked: true}
+    expected:
+      {planner_action: "HOLD_SAFE", stop_state: "FAILED",
+       dispatch_new_goal: false, reason_code: "hold_stop_failed"}
+
+  - case_id: "SA_N06_HOLD_SAFE_LINEAR_SPEED_HIGH"
+    polarity: "negative"
+    input:
+      {hold_safe: true, cancel_acknowledged: true, active_nav_goal: false,
+       linear_speed_mps: 0.021, angular_speed_rps: 0.0,
+       dispatch_locked: true}
+    expected:
+      {planner_action: "HOLD_SAFE", stop_state: "FAILED",
+       dispatch_new_goal: false, reason_code: "hold_stop_failed"}
+
+  - case_id: "SA_N07_HOLD_SAFE_ANGULAR_SPEED_HIGH"
+    polarity: "negative"
+    input:
+      {hold_safe: true, cancel_acknowledged: true, active_nav_goal: false,
+       linear_speed_mps: 0.0, angular_speed_rps: 0.051,
+       dispatch_locked: true}
+    expected:
+      {planner_action: "HOLD_SAFE", stop_state: "FAILED",
+       dispatch_new_goal: false, reason_code: "hold_stop_failed"}
+
+  - case_id: "SA_N08_HOLD_SAFE_DISPATCH_UNLOCKED"
+    polarity: "negative"
+    input:
+      {hold_safe: true, cancel_acknowledged: true, active_nav_goal: false,
+       linear_speed_mps: 0.0, angular_speed_rps: 0.0,
+       dispatch_locked: false}
+    expected:
+      {planner_action: "HOLD_SAFE", stop_state: "FAILED",
+       dispatch_new_goal: false, reason_code: "hold_stop_failed"}
+
+  - case_id: "SA_N09_STALE_SOLVER_RESULT"
+    polarity: "negative"
+    input: {solver_world_revision: 7, current_world_revision: 8}
+    expected:
+      {planner_action: "DISCARD_STALE", publish_plan: false,
+       reason_code: "stale_solver_result"}
+
+  - case_id: "SA_N10_FULL_REPLAN_FAILED"
+    polarity: "negative"
+    input: {full_replan_failed: true}
+    expected:
+      {planner_action: "HOLD_SAFE", r1_action: "KEEP_SAFE_MONITOR",
+       r2_action: "CANCEL_AND_STOP", dispatch_new_goal: false,
+       reason_code: "full_replan_infeasible"}
+
+  - case_id: "SA_N11_UNKNOWN_SEMANTIC_STATE"
+    polarity: "negative"
+    input: {semantic_state: "fallish", pose_valid: true}
+    expected:
+      {planner_action: "REJECT_INPUT",
+       reason_code: "invalid_state_action_vector"}
+
+  - case_id: "SA_N12_PROVISIONAL_ZONE_NEVER_RELEASES_DELIVER"
+    polarity: "negative"
+    input:
+      {semantic_state: "event_confirmed", pose_valid: false,
+       old_zone_available: false, fallback_center: "ground_projection",
+       request_deliver_dispatch: true}
+    expected:
+      {episode_action: "KEEP_CONFIRMED_POSITION_PENDING",
+       r1_action: "REOBSERVE_NO_LEAVE", r2_action: "HOLD_NO_DELIVER",
+       zone_action: "CREATE_PROVISIONAL_MAX_RADIUS",
+       planner_action: "REOBSERVE_ONLY", provisional: true}
+
+planning_trigger_cases:
+  - {trigger_type: "NEW_CONFIRMED_EVENT", changed_entity_ids: ["event:E1"]}
+  - {trigger_type: "EVENT_POSE_CHANGED", changed_entity_ids: ["event:E1"]}
+  - {trigger_type: "EVENT_CLOSED", changed_entity_ids: ["event:E1"]}
+  - {trigger_type: "ZONE_CHANGED", changed_entity_ids: ["zone:E1"]}
+  - {trigger_type: "SERVICE_POINT_CHANGED", changed_entity_ids: ["service:E1"]}
+  - {trigger_type: "EDGE_TEMPORARY", changed_entity_ids: ["edge:C1"]}
+  - {trigger_type: "EDGE_BLOCKED", changed_entity_ids: ["edge:C1"]}
+  - {trigger_type: "EDGE_RELEASED", changed_entity_ids: ["edge:C1"]}
+  - {trigger_type: "ROBOT_LOW_BATTERY", changed_entity_ids: ["robot:R2"]}
+  - {trigger_type: "ROBOT_UNAVAILABLE", changed_entity_ids: ["robot:R2"]}
+  - {trigger_type: "NAVIGATION_FAILED", changed_entity_ids: ["robot:R2"]}
+  - {trigger_type: "ACTION_FAILED", changed_entity_ids: ["task:deliver:E1"]}
+  - {trigger_type: "EXECUTION_COMPLETED", changed_entity_ids: ["task:deliver:E1"]}
+
+repair_gate_cases:
+  - case_id: "RG_LOCAL_SMALL_TASK_SET"
+    expected_kind: "LOCAL_REPAIR"
+    expected_rule_id: null
+    context: {remaining_tasks: 3, affected_tasks: 2}
+
+  - case_id: "RG_SMALL_ALL_ROBOTS_AFFECTED"
+    expected_kind: "FULL_REPLAN"
+    expected_rule_id: "SCOPE_OR_GLOBAL_STRUCTURE"
+    context:
+      {remaining_tasks: 3, affected_tasks: 2,
+       all_active_robots_affected: true}
+
+  - case_id: "RG_SMALL_GLOBAL_SAFETY_STRUCTURE_CHANGED"
+    expected_kind: "FULL_REPLAN"
+    expected_rule_id: "SCOPE_OR_GLOBAL_STRUCTURE"
+    context:
+      {remaining_tasks: 3, affected_tasks: 1,
+       global_resource_or_safety_structure_changed: true}
+
+  - case_id: "RG_SCALE_RATIO_ABOVE_THRESHOLD"
+    expected_kind: "FULL_REPLAN"
+    expected_rule_id: "SCOPE_OR_GLOBAL_STRUCTURE"
+    context: {remaining_tasks: 5, affected_tasks: 4}
+
+  - case_id: "RG_SCALE_RATIO_EQUAL_THRESHOLD"
+    expected_kind: "LOCAL_REPAIR"
+    expected_rule_id: null
+    context: {remaining_tasks: 5, affected_tasks: 3}
+
+fallback_rule_cases:
+  - rule_id: "LOCAL_SOLVER_FAILURE"
+    positive_context: {local_solver_status: "INFEASIBLE"}
+    negative_context: {local_solver_status: "FEASIBLE"}
+  - rule_id: "LOCAL_NO_FEASIBLE_INCUMBENT"
+    positive_context: {local_time_limit_reached: true, feasible_incumbent: false}
+    negative_context: {local_time_limit_reached: true, feasible_incumbent: true}
+  - rule_id: "VALIDATOR_HARD_CONSTRAINT_FAILURE"
+    positive_context: {validator_passed: false}
+    negative_context: {validator_passed: true}
+  - rule_id: "FROZEN_SAFETY_CONFLICT"
+    positive_context: {frozen_safety_conflict: true, safely_releasable: false}
+    negative_context: {frozen_safety_conflict: true, safely_releasable: true}
+  - rule_id: "NO_VALID_SERVICE_PAIR"
+    positive_context: {service_pair_valid: false}
+    negative_context: {service_pair_valid: true}
+  - rule_id: "SCOPE_OR_GLOBAL_STRUCTURE"
+    positive_context: {remaining_tasks: 5, affected_tasks: 4}
+    negative_context: {remaining_tasks: 5, affected_tasks: 3}
+  - rule_id: "REPEATED_LOCAL_FAILURE"
+    positive_context: {local_failures_in_window: 2}
+    negative_context: {local_failures_in_window: 1}
+  - rule_id: "ROBOT_CAPABILITY_LOSS"
+    positive_context: {robot_unavailable_breaks_hard_role: true}
+    negative_context: {robot_unavailable_breaks_hard_role: false}
+  - rule_id: "LOCAL_BOUNDARY_UNTRUSTED"
+    positive_context: {multiple_changes_make_local_boundary_untrusted: true}
+    negative_context: {multiple_changes_make_local_boundary_untrusted: false}
+
+revision_rejection_cases:
+  - case_id: "REV_OLD_PERCEPTION"
+    message_type: "SemanticEvent3D"
+    revision_field: "perception_revision"
+    message_revision: 4
+    current_revision: 5
+  - case_id: "REV_OLD_ZONE"
+    message_type: "DynamicZone"
+    revision_field: "zone_revision"
+    message_revision: 8
+    current_revision: 9
+  - case_id: "REV_OLD_SERVICE"
+    message_type: "RoleServicePointArray"
+    revision_field: "service_revision"
+    message_revision: 2
+    current_revision: 3
+  - case_id: "REV_OLD_EDGE"
+    message_type: "SemanticEdgeState"
+    revision_field: "edge_revision"
+    message_revision: 6
+    current_revision: 7
+  - case_id: "REV_OLD_WORLD_TRIGGER"
+    message_type: "PlanningTrigger"
+    revision_field: "world_revision"
+    message_revision: 10
+    current_revision: 11
+  - case_id: "REV_OLD_PLAN"
+    message_type: "TaskPlan"
+    revision_field: "plan_revision"
+    message_revision: 3
+    current_revision: 4
+  - case_id: "REV_OLD_SOLVER_RESULT"
+    message_type: "RepairStatus"
+    revision_field: "solved_world_revision"
+    message_revision: 12
+    current_revision: 13
+
+zone_ack_gate_cases:
+  - case_id: "ACK_BOTH_CURRENT_READY"
+    required_zone_revision: 4
+    acknowledgements: {R1: 4, R2: 4}
+    elapsed_sec: 0.5
+    expected_state: "READY"
+  - case_id: "ACK_ONE_MISSING_BEFORE_TIMEOUT"
+    required_zone_revision: 4
+    acknowledgements: {R1: 4, R2: 3}
+    elapsed_sec: 1.99
+    expected_state: "WAIT_FOR_ACK"
+  - case_id: "ACK_ONE_MISSING_AT_TIMEOUT"
+    required_zone_revision: 4
+    acknowledgements: {R1: 4, R2: 3}
+    elapsed_sec: 2.0
+    expected_state: "HOLD_SAFE"
+  - case_id: "ACK_OLD_REVISIONS_AT_TIMEOUT"
+    required_zone_revision: 4
+    acknowledgements: {R1: 3, R2: 3}
+    elapsed_sec: 2.1
+    expected_state: "HOLD_SAFE"

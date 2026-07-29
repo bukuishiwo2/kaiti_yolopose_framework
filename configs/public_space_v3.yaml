@@ -1,0 +1,368 @@
+schema_version: "3.0.1-s0"
+research_plan_version: "3.0.1"
+scope: "P0_S0_CONTRACT_ONLY"
+source_document: "docs/research_plan_v3_0_1.md"
+source_document_sha256: "da3f8942170cc77baab32e991b53d5e9d6b4c3dd90c86916be77a9c1ad15f130"
+parameter_count: 96
+task_template_count: 4
+planning_trigger_count: 13
+full_replan_fallback_count: 9
+
+# Only leaves below `parameters` count toward the frozen 96-parameter registry.
+parameters:
+  perception_state:
+    pose_mode: "track"
+    pose_input_hz: 10
+    seq_len: 32
+    keypoint_conf_threshold: 0.30
+    theta_low: 0.45
+    theta_high: 0.75
+    quality_min: 0.55
+    visible_keypoint_threshold: 6
+    min_confirm_windows: 2
+    min_clear_windows: 2
+    hold_windows: 3
+    cooldown_windows: 2
+    event_dedup_time_sec: 10.0
+    event_dedup_distance_m: 1.0
+    candidate_ttl_sec: 15.0
+    event_pose_stale_sec: 2.0
+    event_pose_expire_sec: 5.0
+    perception_debounce_sec: 0.30
+
+  rgbd_tf:
+    rgb_depth_sync_slop_sec: 0.05
+    max_source_age_sec: 0.20
+    tf_lookup_timeout_sec: 0.10
+    depth_min_m: 0.30
+    depth_max_m: 8.00
+    depth_window_radius_px: 2
+    depth_window_min_samples: 5
+    depth_mad_scale: 3.0
+    stable_keypoints: [5, 6, 11, 12]
+    min_valid_stable_keypoints: 2
+    position_std_floor_m: 0.05
+    position_std_max_m: 0.50
+    stale_std_growth_mps: 0.05
+    ground_plane_z_m: 0.00
+    localization_publish_hz: 5.0
+
+  nav2_robot_safety:
+    robot_radius_m: 0.175
+    inflation_radius_m: 0.45
+    max_linear_speed_mps: 0.22
+    max_angular_speed_rps: 0.90
+    xy_goal_tolerance_m: 0.25
+    yaw_goal_tolerance_rad: 0.25
+    min_robot_center_distance_m: 0.60
+    collision_distance_m: 0.35
+    min_single_passage_width_m: 0.80
+    corridor_capacity: 1
+    keepout_apply_timeout_sec: 2.0
+    keepout_update_p95_target_sec: 0.50
+    safe_stop_timeout_sec: 0.50
+    hold_cancel_issue_timeout_sec: 0.50
+    hold_cancel_ack_timeout_sec: 0.50
+    hold_linear_speed_threshold_mps: 0.02
+    hold_angular_speed_threshold_rps: 0.05
+    event_detection_distance_min_m: 2.50
+    event_detection_distance_max_m: 3.00
+    event_confirm_clearance_margin_m: 0.10
+
+  dynamic_core_zone:
+    r0_m: 0.60
+    k_sigma: 2.0
+    r_safe_min_m: 0.90
+    r_safe_max_m: 2.00
+    zone_polygon_vertices: 24
+    zone_position_update_m: 0.25
+    zone_radius_update_m: 0.10
+    zone_update_debounce_sec: 0.50
+    zone_clear_hold_sec: 5.0
+    service_standoff_m: 0.50
+
+  service_points:
+    candidate_angle_step_deg: 15
+    service_candidates_per_ring: 24
+    min_static_clearance_m: 0.35
+    min_service_pair_distance_m: 0.75
+    verifier_view_angle_max_deg: 30
+    max_path_candidates_per_role: 6
+    path_query_timeout_sec: 0.30
+    service_generation_timeout_sec: 4.00
+    service_radius_retry_step_m: 0.15
+    service_radius_retry_count: 3
+    service_point_shift_trigger_m: 0.25
+
+  edge_and_path_cache:
+    path_probe_hz: 1.0
+    block_confirm_sec: 5.0
+    block_cost_ratio: 1.80
+    release_confirm_sec: 10.0
+    release_cost_ratio: 1.30
+    edge_state_cooldown_sec: 10.0
+    path_cache_ttl_sec: 5.0
+    path_start_shift_m: 0.50
+    path_goal_shift_m: 0.25
+    nav_failure_retry_count: 2
+    nav_failure_window_sec: 10.0
+
+  task_and_solver:
+    local_repair_time_limit_sec: 2.0
+    full_replan_time_limit_sec: 5.0
+    mip_gap: 0.01
+    planning_horizon_sec: 300.0
+    replan_debounce_sec: 0.50
+    min_replan_interval_sec: 1.00
+    affected_ratio_full_replan: 0.60
+    affected_ratio_min_remaining_tasks: 5
+    max_local_failures_in_window: 2
+    local_failure_window_sec: 10.0
+    plan_change_start_shift_sec: 5.0
+
+task_templates:
+  "reobserve:E":
+    task_type: "reobserve"
+    service_duration_sec: 10.0
+    hold_until: null
+    deadline_kind: "finish_offset"
+    deadline_offset_sec: 60.0
+    required_capabilities: ["camera", "move"]
+    fixed_robot_id: "R1"
+    target_role: "observer"
+
+  "verify_and_monitor:E":
+    task_type: "verify_and_monitor"
+    service_duration_sec: 15.0
+    hold_until: "deliver_or_event_close"
+    deadline_kind: "start_offset"
+    deadline_offset_sec: 60.0
+    required_capabilities: ["camera", "verify"]
+    fixed_robot_id: "R1"
+    target_role: "verifier"
+
+  "pickup:E":
+    task_type: "pickup"
+    service_duration_sec: 8.0
+    hold_until: null
+    deadline_kind: "finish_offset"
+    deadline_offset_sec: 90.0
+    required_capabilities: ["carry", "move"]
+    fixed_robot_id: "R2"
+    target_role: "supply"
+
+  "deliver:E":
+    task_type: "deliver"
+    service_duration_sec: 15.0
+    hold_until: null
+    deadline_kind: "finish_offset"
+    deadline_offset_sec: 120.0
+    required_capabilities: ["carry", "move"]
+    fixed_robot_id: "R2"
+    target_role: "courier"
+
+# These values are frozen by prose/formulae in V3.0.1 but are not rows in the
+# 96-parameter table. Every value carries its source to prevent magic numbers.
+contract_constants:
+  map_frame:
+    value: "map"
+    source: "2.2 and 6 unified rules"
+  active_robot_ids:
+    value: ["R1", "R2"]
+    source: "1.1"
+  event_type:
+    value: "fall"
+    source: "6.2 SemanticEvent3D"
+  objective_weights:
+    value:
+      Cmax_bar: 1.0
+      L_bar: 4.0
+      Nchange_bar: 2.5
+      Rwait_bar: 1.5
+      Erisk_bar: 3.0
+    source: "3.7 normalized objective"
+  service_goal_extra_margin_parameter:
+    value: "event_confirm_clearance_margin_m"
+    source: "3.5 step 2; reuses the frozen 0.10 m clearance margin"
+  valid_plan_change_flags:
+    value:
+      - "ROBOT_REASSIGNED"
+      - "RELATIVE_ORDER_CHANGED"
+      - "SERVICE_POINT_CHANGED"
+      - "START_TIME_SHIFTED"
+    source: "3.7 N_plan_change definition"
+  engineering_seed_count:
+    value: 20
+    source: "8.5 engineering gate"
+  engineering_success_minimum:
+    value: 18
+    source: "8.5 engineering gate"
+  safety_pose_log_hz_min:
+    value: 20
+    source: "7.3 safety record frequency"
+
+roles:
+  R1:
+    role: "patrol_verifier"
+    capabilities: ["camera", "move", "patrol", "verify"]
+    hard_duty: "verify_and_monitor_until_delivery_or_close"
+  R2:
+    role: "courier"
+    capabilities: ["move", "carry"]
+    hard_duty: "pickup_then_deliver"
+  R_single:
+    role: "fair_single_robot_baseline"
+    capabilities: ["camera", "verify", "carry", "move", "patrol"]
+    same_single_robot_motion_energy_nav_config: true
+    remote_camera_substitution: false
+    continuous_monitor_constraint_retained: true
+
+task_dag:
+  release_on: "event_confirmed_and_zone_service_pair_valid"
+  edges:
+    - ["pickup:E", "deliver:E"]
+  interval_constraints:
+    - "start_monitor <= start_pickup"
+    - "end_monitor >= finish_deliver"
+    - "R1 remains at verifier service point during monitor"
+  pickup_and_monitor_release_concurrently: true
+
+planning_triggers:
+  - "NEW_CONFIRMED_EVENT"
+  - "EVENT_POSE_CHANGED"
+  - "EVENT_CLOSED"
+  - "ZONE_CHANGED"
+  - "SERVICE_POINT_CHANGED"
+  - "EDGE_TEMPORARY"
+  - "EDGE_BLOCKED"
+  - "EDGE_RELEASED"
+  - "ROBOT_LOW_BATTERY"
+  - "ROBOT_UNAVAILABLE"
+  - "NAVIGATION_FAILED"
+  - "ACTION_FAILED"
+  - "EXECUTION_COMPLETED"
+
+full_replan_fallback_rules:
+  - id: "LOCAL_SOLVER_FAILURE"
+    expression: "local_solver_status in {INFEASIBLE, ERROR}"
+  - id: "LOCAL_NO_FEASIBLE_INCUMBENT"
+    expression: "local_time_limit_reached and not feasible_incumbent"
+  - id: "VALIDATOR_HARD_CONSTRAINT_FAILURE"
+    expression: "not validator_passed"
+  - id: "FROZEN_SAFETY_CONFLICT"
+    expression: "frozen_safety_conflict and not safely_releasable"
+  - id: "NO_VALID_SERVICE_PAIR"
+    expression: "not service_pair_valid"
+  - id: "SCOPE_OR_GLOBAL_STRUCTURE"
+    expression: "(remaining_tasks >= affected_ratio_min_remaining_tasks and affected_ratio > affected_ratio_full_replan) or all_active_robots_affected or global_resource_or_safety_structure_changed"
+  - id: "REPEATED_LOCAL_FAILURE"
+    expression: "local_failures_in_window >= max_local_failures_in_window within local_failure_window_sec"
+  - id: "ROBOT_CAPABILITY_LOSS"
+    expression: "robot_unavailable_breaks_hard_role"
+  - id: "LOCAL_BOUNDARY_UNTRUSTED"
+    expression: "multiple_edge_or_zone_changes_make_local_boundary_untrusted"
+
+protocol:
+  reject_unknown_fields: true
+  reject_non_finite_numbers: true
+  reject_negative_revisions: true
+  reject_older_than_current_revision: true
+  complete_object_only: true
+
+  enums:
+    semantic_state:
+      - "normal"
+      - "event_uncertain"
+      - "event_confirmed"
+      - "perception_degraded"
+    zone_lifecycle: ["active", "clearing", "cleared"]
+    service_generation_status: ["SUCCESS", "TIMEOUT", "UNREACHABLE", "CLEARANCE_FAILED"]
+    service_role: ["verifier", "courier"]
+    edge_state: ["FREE", "TEMPORARY_OCCUPIED", "BLOCKED"]
+    plan_kind: ["INITIAL", "LOCAL_REPAIR", "FULL_REPLAN_FALLBACK"]
+    solver_status: ["NOT_RUN", "FEASIBLE", "OPTIMAL", "INFEASIBLE", "TIMEOUT", "ERROR"]
+    execution_state: ["ACCEPTED", "EXECUTING", "COMPLETED", "FAILED", "CANCELED", "HOLDING"]
+    execution_failure_class: ["NONE", "NAVIGATION", "ACTION", "SAFETY", "TIMEOUT", "STALE_PLAN"]
+    repair_selected_kind: ["LOCAL_REPAIR", "FULL_REPLAN", "HOLD_SAFE", "DISCARD_STALE"]
+    safety_stop_state: ["CANCELING", "DECELERATING", "STOPPED", "FAILED"]
+    planning_trigger:
+      - "NEW_CONFIRMED_EVENT"
+      - "EVENT_POSE_CHANGED"
+      - "EVENT_CLOSED"
+      - "ZONE_CHANGED"
+      - "SERVICE_POINT_CHANGED"
+      - "EDGE_TEMPORARY"
+      - "EDGE_BLOCKED"
+      - "EDGE_RELEASED"
+      - "ROBOT_LOW_BATTERY"
+      - "ROBOT_UNAVAILABLE"
+      - "NAVIGATION_FAILED"
+      - "ACTION_FAILED"
+      - "EXECUTION_COMPLETED"
+
+  reason_codes:
+    SemanticEvent3D:
+      - "ok"
+      - "depth_invalid"
+      - "tf_unavailable"
+      - "stale_source"
+      - "pose_uncertain"
+      - "scenario_precondition_failed"
+    DynamicZone:
+      - "created"
+      - "moved"
+      - "inflated"
+      - "cleared"
+      - "stale"
+      - "provisional_2d"
+      - "provisional_region"
+    RoleServicePointArray:
+      - "success"
+      - "timeout"
+      - "unreachable"
+      - "clearance_failed"
+      - "service_point_unavailable"
+    SemanticEdgeState:
+      - "free_confirmed"
+      - "temporary_occupied_confirmed"
+      - "blocked_confirmed"
+      - "released_confirmed"
+    ZoneApplyAck:
+      - "applied"
+      - "apply_failed"
+      - "apply_timeout"
+    PlanningTrigger:
+      - "threshold_crossed"
+      - "lifecycle_changed"
+      - "revision_changed"
+    TaskPlan:
+      - "initial_plan"
+      - "local_repair"
+      - "full_replan_fallback"
+    ExecutionFeedback:
+      - "accepted"
+      - "executing"
+      - "completed"
+      - "navigation_failed"
+      - "action_failed"
+      - "safety_stop"
+      - "timeout"
+      - "stale_plan"
+    RepairStatus:
+      - "local_repair_selected"
+      - "full_replan_selected"
+      - "full_replan_infeasible"
+      - "no_service_point"
+      - "no_capable_robot"
+      - "stale_solver_result"
+    HoldSafeCommand:
+      - "full_replan_infeasible"
+      - "no_service_point"
+      - "no_capable_robot"
+      - "scenario_precondition_failed"
+      - "zone_ack_timeout"
+    SafetyStopStatus:
+      - "canceling"
+      - "decelerating"
+      - "stopped"
+      - "hold_stop_failed"

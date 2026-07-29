@@ -1,0 +1,79 @@
+schema_version: "3.0.1-s0"
+research_plan_version: "3.0.1"
+scope: "P0_ENGINEERING_GATE_TEMPLATE"
+status: "TEMPLATE_NOT_EXECUTED"
+source_document: "docs/research_plan_v3_0_1.md"
+
+artifact_contract:
+  config_path: "configs/public_space_v3.yaml"
+  regions_path: "configs/public_space_regions_v3.yaml"
+  test_vectors_path: "data/eval/public_space_v3_s0_test_vectors.yaml"
+  parameter_hashes_path: "configs/generated/public_space_v3_s0_hashes.json"
+  config_sha256: "${PUBLIC_SPACE_V3_CONFIG_SHA256}"
+  regions_sha256: "${PUBLIC_SPACE_V3_REGIONS_SHA256}"
+  zone_parameter_sha256: "${PUBLIC_SPACE_V3_ZONE_PARAMETER_SHA256}"
+  service_point_parameter_sha256: "${PUBLIC_SPACE_V3_SERVICE_POINT_PARAMETER_SHA256}"
+  edge_parameter_sha256: "${PUBLIC_SPACE_V3_EDGE_PARAMETER_SHA256}"
+  repair_parameter_sha256: "${PUBLIC_SPACE_V3_REPAIR_PARAMETER_SHA256}"
+  map_path: "${PUBLIC_SPACE_MAP_PATH}"
+  map_sha256: "${PUBLIC_SPACE_MAP_SHA256}"
+  git_commit: "${GIT_COMMIT_OR_UNCOMMITTED}"
+  git_dirty: "${GIT_DIRTY_TRUE_OR_FALSE}"
+
+engineering_gate:
+  fixed_seed_count: 20
+  success_minimum: 18
+  purpose: "S7 closed-loop, safety, and reproducibility gate only"
+  prohibited_inference: "Do not use this 20-seed gate alone for method superiority/noninferiority"
+
+  seeds:
+    - {seed: 1001, disturbance: "NO_DISTURBANCE"}
+    - {seed: 1002, disturbance: "NO_DISTURBANCE"}
+    - {seed: 1101, disturbance: "TRANSIENT_PEDESTRIAN"}
+    - {seed: 1102, disturbance: "TRANSIENT_PEDESTRIAN"}
+    - {seed: 1103, disturbance: "TRANSIENT_PEDESTRIAN"}
+    - {seed: 1201, disturbance: "PERSISTENT_BLOCKED"}
+    - {seed: 1202, disturbance: "PERSISTENT_BLOCKED"}
+    - {seed: 1203, disturbance: "PERSISTENT_BLOCKED"}
+    - {seed: 1301, disturbance: "ZONE_UPDATE"}
+    - {seed: 1302, disturbance: "ZONE_UPDATE"}
+    - {seed: 1303, disturbance: "ZONE_UPDATE"}
+    - {seed: 1401, disturbance: "SERVICE_POINT_INVALID"}
+    - {seed: 1402, disturbance: "SERVICE_POINT_INVALID"}
+    - {seed: 1501, disturbance: "R2_NAVIGATION_FAILURE"}
+    - {seed: 1502, disturbance: "R2_NAVIGATION_FAILURE"}
+    - {seed: 1503, disturbance: "R2_NAVIGATION_FAILURE"}
+    - {seed: 1601, disturbance: "PERCEPTION_DEGRADED"}
+    - {seed: 1602, disturbance: "PERCEPTION_DEGRADED"}
+    - {seed: 1701, disturbance: "WORLD_REVISION_DURING_SOLVE"}
+    - {seed: 1702, disturbance: "WORLD_REVISION_DURING_SOLVE"}
+
+acceptance_gates:
+  end_to_end_success_minimum: "18/20"
+  collision_count_maximum: 0
+  core_zone_penetration_count_maximum: 0
+  robot_center_distance_below_0_60_m_count_maximum: 0
+  r1_early_departure_count_maximum: 0
+  r2_on_time_delivery_minimum: "18/20"
+  complete_log_config_revision_chain: "20/20"
+  unacked_zone_revision_dispatch_count_maximum: 0
+  stale_solver_result_publish_count_maximum: 0
+  hold_safe_stop_failure_continued_execution_count_maximum: 0
+
+required_run_metadata:
+  - "seed"
+  - "disturbance"
+  - "config_sha256"
+  - "regions_sha256"
+  - "map_sha256"
+  - "git_commit"
+  - "git_dirty"
+  - "world_revision_trace"
+  - "zone_revision_trace"
+  - "plan_revision_trace"
+  - "zone_ack_trace"
+  - "hold_safe_command_trace"
+  - "safety_stop_status_trace"
+  - "exclusion_reason"
+
+run_records: []

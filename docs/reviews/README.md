@@ -20,6 +20,11 @@
 
 ## 当前文档
 
+- [GPT 二次评审意见采纳决策（2026-07-29）](secondary_review_adoption_2026-07-29.md)
+- [医院公共空间动态语义多机器人技术路线评审（2026-07-29）](public_space_technical_route_review_2026-07-29.md)
+- [公共空间动态语义多机器人实现差距审计（2026-07-29）](implementation_gap_audit_2026-07-29.md)
+- [公共空间动态语义多机器人逐篇文献方法矩阵（2026-07-29）](literature_method_matrix_2026-07-29.md)
+- [公共空间新研究场景重构建议（2026-07-23）](public_space_scenario_reframing_2026-07-23.md)
 - [毕业设计研究方案与仓库现状审计（2026-07-10）](graduation_plan_repo_audit_2026-07-10.md)
 - [感知审计](perception_audit_2026-04-10.md)
 - [系统审计](system_audit_2026-04-10.md)

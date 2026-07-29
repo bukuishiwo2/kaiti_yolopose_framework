@@ -1,0 +1,111 @@
+schema_version: "3.0.1-s0"
+research_plan_version: "3.0.1"
+scope: "P0_S0_SEMANTIC_GEOMETRY_CONTRACT_FIXTURE"
+source_document: "docs/research_plan_v3_0_1.md"
+frame_id: "map"
+
+# S0 does not create the S7 hospital world or map. These coordinates are a
+# deterministic contract fixture for schema/topology tests and must not be
+# represented as a validated simulation map.
+geometry_status: "S0_CONTRACT_FIXTURE_NOT_S7_WORLD"
+map_asset: null
+coordinate_source: "S0 synthetic topology fixture; replace only through reviewed S7 map manifest"
+
+regions:
+  - region_id: "outpatient_lobby"
+    region_type: "public_area"
+    polygon_xy:
+      - [0.0, 0.0]
+      - [8.0, 0.0]
+      - [8.0, 6.0]
+      - [0.0, 6.0]
+
+  - region_id: "waiting_area"
+    region_type: "event_area"
+    polygon_xy:
+      - [8.0, 0.0]
+      - [14.0, 0.0]
+      - [14.0, 6.0]
+      - [8.0, 6.0]
+
+  - region_id: "connector_corridor"
+    region_type: "single_capacity_corridor"
+    polygon_xy:
+      - [5.0, 6.0]
+      - [7.0, 6.0]
+      - [7.0, 14.0]
+      - [5.0, 14.0]
+
+  - region_id: "nurse_station"
+    region_type: "staff_area"
+    polygon_xy:
+      - [0.0, 14.0]
+      - [8.0, 14.0]
+      - [8.0, 20.0]
+      - [0.0, 20.0]
+
+semantic_edges:
+  - edge_id: "lobby_to_waiting"
+    from_region: "outpatient_lobby"
+    to_region: "waiting_area"
+    bidirectional: true
+    capacity_parameter: "corridor_capacity"
+    minimum_width_parameter: "min_single_passage_width_m"
+    dynamic_state_source: "SemanticEdgeState"
+
+  - edge_id: "lobby_to_connector"
+    from_region: "outpatient_lobby"
+    to_region: "connector_corridor"
+    bidirectional: true
+    capacity_parameter: "corridor_capacity"
+    minimum_width_parameter: "min_single_passage_width_m"
+    dynamic_state_source: "SemanticEdgeState"
+
+  - edge_id: "connector_to_nurse_station"
+    from_region: "connector_corridor"
+    to_region: "nurse_station"
+    bidirectional: true
+    capacity_parameter: "corridor_capacity"
+    minimum_width_parameter: "min_single_passage_width_m"
+    dynamic_state_source: "SemanticEdgeState"
+
+fixed_points:
+  supply_point:
+    point_id: "supply_main"
+    region_id: "nurse_station"
+    pose_map: [3.0, 17.0, 0.0]
+    purpose: "pickup"
+
+  waiting_points:
+    - point_id: "wait_lobby"
+      region_id: "outpatient_lobby"
+      pose_map: [2.0, 2.0, 0.0]
+      purpose: "hold_safe_candidate"
+    - point_id: "wait_nurse_station"
+      region_id: "nurse_station"
+      pose_map: [6.0, 17.0, 3.141592653589793]
+      purpose: "hold_safe_candidate"
+
+  robot_starts:
+    R1:
+      region_id: "outpatient_lobby"
+      pose_map: [1.0, 3.0, 0.0]
+    R2:
+      region_id: "nurse_station"
+      pose_map: [4.0, 17.0, 0.0]
+
+  patrol_fixture:
+    - point_id: "patrol_lobby"
+      region_id: "outpatient_lobby"
+      pose_map: [4.0, 3.0, 0.0]
+    - point_id: "patrol_waiting"
+      region_id: "waiting_area"
+      pose_map: [11.0, 3.0, 3.141592653589793]
+
+validation_contract:
+  polygons_must_be_simple: true
+  minimum_polygon_vertices: 3
+  referenced_regions_must_exist: true
+  fixed_points_must_be_inside_declared_region: true
+  edge_capacity_resolves_from: "configs/public_space_v3.yaml"
+  no_runtime_nav2_or_world_asset_created_in_s0: true

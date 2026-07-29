@@ -1,13 +1,19 @@
 # kaiti-yolopose-framework
 
-面向动态家居场景移动机器人任务系统的研究型工程仓库。当前已经形成两条稳定主线：
+面向动态语义事件驱动移动机器人任务系统的研究型工程仓库。当前已经形成两条稳定主线：
 
 - 感知主线：基于人体关键点的跌倒检测、时序模型、语义事件稳定化
 - 系统主线：ROS2 骨架、感知到任务层桥接、后续 `RTAB-Map / Nav2 / PlanSys2 / LTL` 接口预留
 
+当前研究版本分层：
+
+- v2 house 场景继续作为回归与历史实验基线；
+- v3 已冻结医院公共空间双机器人 P0；S0 配置与测试协议已完成，等待用户检查 diff，
+  未启动 S1。
+
 当前仓库的准确定位是：
 
-`面向动态家居场景移动机器人任务系统的感知子系统与系统层骨架研究框架`
+`面向不确定视觉事件、动态语义空间与多机器人协同响应的研究框架`
 
 ## 1. 当前默认与阶段结论
 
@@ -29,7 +35,9 @@
 - `ROS2` 已经打通最小闭环：`/perception/events -> /system/supervisor/status -> /task_planner/request -> /task_planner/status`
 - topic 仍使用 `std_msgs/msg/String + JSON`，但接口语义已经收敛为稳定 schema v1
 - 当前默认学习型正式结果：`Precision=0.8657`、`Recall=0.7401`、`F1=0.7979`
-- 当前重点是冻结感知默认主线，并继续收口系统正式接口与外部验证策略
+- 医院公共空间 P0 已在 [硕士学位论文研究计划 V3.0.1](docs/research_plan_v3_0_1.md)中冻结参数、接口、
+  安全边界和验收门槛；[S0配置与测试协议](docs/public_space_v3_s0_protocol.md)已通过本地
+  门禁，等待用户确认后才能进入 S1
 
 关键 benchmark 摘要：
 
@@ -85,14 +93,16 @@ kaiti_yolopose_framework/
 建议阅读顺序：
 
 1. [项目约定](docs/project_conventions.md)
-2. [开题目标对齐](docs/kaiti_alignment.md)
-3. [系统架构说明](docs/system_architecture.md)
-4. [ROS2 最小骨架说明](docs/system_bringup_skeleton.md)
-5. [系统接口契约](docs/system_interface_contract.md)
-6. [数据集定位与外部验证策略](docs/dataset_positioning.md)
-7. [ROS2 工作区说明](ros2_ws/README.md)
-8. [阶段审计与汇总](docs/reviews/README.md)
-9. [开发工作日志](docs/worklogs/README.md)
+2. [医院公共空间硕士学位论文研究计划 V3.0.1](docs/research_plan_v3_0_1.md)
+3. [医院公共空间 V3.0.1 S0配置与测试协议](docs/public_space_v3_s0_protocol.md)
+4. [开题目标对齐](docs/kaiti_alignment.md)
+5. [系统架构说明](docs/system_architecture.md)
+6. [ROS2 最小骨架说明](docs/system_bringup_skeleton.md)
+7. [系统接口契约](docs/system_interface_contract.md)
+8. [数据集定位与外部验证策略](docs/dataset_positioning.md)
+9. [ROS2 工作区说明](ros2_ws/README.md)
+10. [阶段审计与汇总](docs/reviews/README.md)
+11. [开发工作日志](docs/worklogs/README.md)
 
 文档信息架构说明见：
 
