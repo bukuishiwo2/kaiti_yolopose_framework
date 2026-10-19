@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CycloneDDS xmlns="https://cdds.io/config">
+  <Domain>
+    <General>
+      <AllowMulticast>false</AllowMulticast>
+      <Interfaces>
+        <NetworkInterface name="wlp4s0" />
+      </Interfaces>
+    </General>
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <MaxAutoParticipantIndex>120</MaxAutoParticipantIndex>
+      <!-- The DUCT Wi-Fi/AP path does not reliably forward multicast discovery. -->
+      <Peers>
+        <Peer address="127.0.0.1" />
+        <Peer address="192.168.31.191" />
+      </Peers>
+    </Discovery>
+  </Domain>
+</CycloneDDS>

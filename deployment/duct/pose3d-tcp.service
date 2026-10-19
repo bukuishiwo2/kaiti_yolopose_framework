@@ -1,0 +1,9 @@
+[Unit]
+Description=Stamped RGB and perception JSON TCP exchange
+After=network-online.target
+[Service]
+ExecStart=/bin/bash /home/duct/start_pose3d_research_on_duct.sh tcp
+Restart=on-failure
+RestartSec=3
+[Install]
+WantedBy=default.target

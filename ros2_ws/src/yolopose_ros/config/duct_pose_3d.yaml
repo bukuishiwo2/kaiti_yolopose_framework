@@ -1,0 +1,36 @@
+pose_3d_fusion_node:
+  ros__parameters:
+    pose_event_topic: /perception/events
+    depth_topic: /inference/depth/image_raw
+    depth_compressed_topic: /camera/depth/image_raw/compressedDepth
+    use_compressed_depth: true
+    camera_info_topic: /camera/color/camera_info
+    pose_3d_topic: /perception/pose_observation_3d
+    semantic_event_topic: /perception/semantic_event_3d
+    base_frame: base_link
+    base_footprint_frame: base_footprint
+    map_frame: map
+    odom_frame: odom
+    odom_topic: /rtabmap/odom
+    odom_sync_slop_sec: 0.30
+    observer_robot_id: R1
+    sync_slop_sec: 0.05
+    pending_timeout_sec: 2.0
+    depth_cache_sec: 4.0
+    # Single-threaded callbacks must not block TF/depth delivery while waiting.
+    # Pending events are retried when new messages arrive or on the timer.
+    tf_timeout_sec: 0.0
+    keypoint_confidence: 0.30
+    depth_min_m: 0.30
+    depth_max_m: 8.00
+    depth_window_radius_px: 2
+    depth_window_min_samples: 5
+    depth_mad_scale: 3.0
+    stable_keypoints: [5, 6, 11, 12]
+    min_valid_stable_keypoints: 2
+    event_pose_expire_sec: 5.0
+    publish_semantic_uncertain: true
+    allow_urdf_camera_fallback: true
+    camera_translation_base_m: [0.19147247182847, -0.000068746226105, 0.0955]
+    camera_optical_rpy_base_rad: [-1.5707963267949, 0.0, -1.5707963267949]
+    base_translation_footprint_m: [0.0, 0.0, 0.04]

@@ -21,6 +21,7 @@ def generate_launch_description() -> LaunchDescription:
                 default_value=EnvironmentVariable("KAITI_PROJECT_ROOT", default_value=REPO_ROOT),
             ),
             DeclareLaunchArgument("bridge_config", default_value=bridge_config),
+            DeclareLaunchArgument("infer_config", default_value="configs/infer_pose_stream.yaml"),
             DeclareLaunchArgument("input_mode", default_value="mock"),
             DeclareLaunchArgument("video_file_path", default_value=""),
             DeclareLaunchArgument("camera_device", default_value=""),
@@ -38,6 +39,7 @@ def generate_launch_description() -> LaunchDescription:
                     LaunchConfiguration("bridge_config"),
                     {
                         "project_root": LaunchConfiguration("project_root"),
+                        "infer_config": LaunchConfiguration("infer_config"),
                         "input_mode": LaunchConfiguration("input_mode"),
                         "video_file_path": LaunchConfiguration("video_file_path"),
                         "camera_device": LaunchConfiguration("camera_device"),

@@ -36,6 +36,8 @@
 24. [系统接口契约](system_interface_contract.md)
 25. [数据集定位与外部验证策略](dataset_positioning.md)
 26. [ROS2 工作区说明](../ros2_ws/README.md)
+27. [DUCT 独立研究串流与三维显示](system_duct_research_stream.md)
+28. [DUCT 可回退运动实验与左脚接近](system_duct_motion_experiment.md)
 
 研究补充文档：
 

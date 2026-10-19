@@ -1,0 +1,28 @@
+/pose3d_image2rtsp:
+  ros__parameters:
+    port: "8555"
+    local_only: false
+    config_topic: "/robot/control/pose3d_rtsp_config"
+    diag_log_interval_sec: 5.0
+    default_pipeline_template: |
+      ( appsrc name=imagesrc is-live=true do-timestamp=false format=time block=false max-bytes=0 max-buffers=4 !
+        queue max-size-buffers=4 leaky=downstream !
+        videoconvert ! videoscale !
+        video/x-raw,format=I420,width={WIDTH},height={HEIGHT} !
+        x264enc name=venc tune=zerolatency speed-preset=veryfast bitrate={BITRATE} key-int-max=10 intra-refresh=true bframes=0 threads=2 !
+        video/x-h264,profile=baseline !
+        h264parse config-interval=1 !
+        rtph264pay name=pay0 pt=96 config-interval=1 mtu=1400 aggregate-mode=zero-latency )
+    streams: ["pose3d"]
+    streams.pose3d.channel_id: 1
+    streams.pose3d.source_type: "topic"
+    streams.pose3d.topic: "/perception/pose_3d_debug_image/compressed"
+    streams.pose3d.mountpoint: "/pose3d"
+    streams.pose3d.compressed: true
+    streams.pose3d.is_save: false
+    streams.pose3d.record_mode: "mp4"
+    streams.pose3d.qos_depth: 1
+    streams.pose3d.width: 1280
+    streams.pose3d.height: 720
+    streams.pose3d.framerate: 5
+    streams.pose3d.bitrate: 1800

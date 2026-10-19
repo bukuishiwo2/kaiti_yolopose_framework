@@ -1,0 +1,11 @@
+[Unit]
+Description=Local RGB-D keypoint backprojection and TF fusion
+After=network-online.target
+
+[Service]
+ExecStart=/bin/bash /home/duct/start_pose3d_fusion_on_duct.sh
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

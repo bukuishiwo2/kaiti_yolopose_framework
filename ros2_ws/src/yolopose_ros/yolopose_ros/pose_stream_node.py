@@ -13,7 +13,8 @@ import cv2
 import numpy as np
 import rclpy
 from rclpy.node import Node
-from sensor_msgs.msg import Image
+from rclpy.qos import QoSProfile, ReliabilityPolicy
+from sensor_msgs.msg import CompressedImage, Image
 from std_msgs.msg import String
 
 from yolopose_ros.system_semantics import enrich_observation
@@ -72,7 +73,13 @@ class PoseStreamNode(Node):
         self._reobserve_visible_keypoint_threshold = int(
             self.get_parameter("reobserve_visible_keypoint_threshold").value
         )
-        if self._input_mode not in {"mock", "video_file", "camera", "ros_image"}:
+        if self._input_mode not in {
+            "mock",
+            "video_file",
+            "camera",
+            "ros_image",
+            "ros_compressed_image",
+        }:
             self.get_logger().warning(
                 "Unsupported input_mode=%s, fallback to mock" % self._input_mode
             )
@@ -80,9 +87,14 @@ class PoseStreamNode(Node):
 
         self.publisher = self.create_publisher(String, self._event_topic, 10)
         self._visualization_publisher = None
+        self._visualization_compressed_publisher = None
         if self._visualization_enabled:
             self._visualization_publisher = self.create_publisher(
                 Image, self._visualization_topic, 10
+            )
+            self._visualization_compressed_publisher = self.create_publisher(
+                CompressedImage, self._visualization_topic + '/compressed',
+                QoSProfile(depth=1, reliability=ReliabilityPolicy.BEST_EFFORT),
             )
             self.create_subscription(
                 String,
@@ -116,7 +128,7 @@ class PoseStreamNode(Node):
             return
 
         self._status_timer = self.create_timer(self._heartbeat_interval_sec, self._on_status_timer)
-        if self._input_mode == "ros_image":
+        if self._input_mode in {"ros_image", "ros_compressed_image"}:
             self._start_ros_image_mode()
             return
         self._start_runner_thread()
@@ -297,7 +309,18 @@ class PoseStreamNode(Node):
 
         self._pipeline_state = "starting"
         self._status_reason = "waiting_for_ros_image"
-        self.create_subscription(Image, self._ros_image_topic, self._on_ros_image, 1)
+        # Real-time inference consumes the newest image; reliable delivery can
+        # hold the camera writer behind retransmission of obsolete frames.
+        image_qos = QoSProfile(depth=1, reliability=ReliabilityPolicy.BEST_EFFORT)
+        if self._input_mode == "ros_compressed_image":
+            self.create_subscription(
+                CompressedImage,
+                self._ros_image_topic,
+                self._on_ros_compressed_image,
+                image_qos,
+            )
+        else:
+            self.create_subscription(Image, self._ros_image_topic, self._on_ros_image, image_qos)
         self.get_logger().info("Pose stream subscribed to ros_image_topic=%s" % self._ros_image_topic)
 
     def _start_runner_thread(self) -> None:
@@ -345,25 +368,86 @@ class PoseStreamNode(Node):
     def _on_ros_image(self, msg: Image) -> None:
         if self._runner is None:
             return
-
         try:
             frame = self._decode_ros_image(msg)
+        except Exception as exc:  # pylint: disable=broad-except
+            self._handle_ros_inference_error(exc)
+            return
+        self._infer_ros_frame(frame, msg.header)
+
+    def _on_ros_compressed_image(self, msg: CompressedImage) -> None:
+        if self._runner is None:
+            return
+        try:
+            encoded = np.frombuffer(msg.data, dtype=np.uint8)
+            frame = cv2.imdecode(encoded, cv2.IMREAD_COLOR)
+            if frame is None:
+                raise ValueError("compressed_image_decode_failed")
+        except Exception as exc:  # pylint: disable=broad-except
+            self._handle_ros_inference_error(exc)
+            return
+        self._infer_ros_frame(frame, msg.header)
+
+    def _handle_ros_inference_error(self, exc: Exception) -> None:
+        self._pipeline_state = "error"
+        self._status_reason = f"ros_image_infer_failed:{exc}"
+        self.get_logger().error("ROS image inference failed: %s" % exc)
+        self._publish_terminal_heartbeat()
+
+    def _infer_ros_frame(self, frame: np.ndarray, header: Any) -> None:
+        if self._runner is None:
+            return
+        source_stamp_sec = int(header.stamp.sec)
+        source_stamp_nanosec = int(header.stamp.nanosec)
+        source_frame_id = str(header.frame_id)
+        source_reason_code = (
+            "SOURCE_METADATA_VALID"
+            if source_frame_id
+            else "SOURCE_FRAME_ID_EMPTY"
+        )
+        processing_started_ros_stamp_ns = int(
+            self.get_clock().now().nanoseconds
+        )
+        try:
             event = self._runner.infer_frame(
                 frame,
                 source=f"ros://{self._ros_image_topic}",
+                source_stamp_sec=source_stamp_sec,
+                source_stamp_nanosec=source_stamp_nanosec,
+                source_frame_id=source_frame_id,
+                message_source="ros_image",
+                source_reason_code=source_reason_code,
             )
         except Exception as exc:  # pylint: disable=broad-except
-            self._pipeline_state = "error"
-            self._status_reason = f"ros_image_infer_failed:{exc}"
-            self.get_logger().error("ROS image inference failed: %s" % exc)
-            self._publish_terminal_heartbeat()
+            self._handle_ros_inference_error(exc)
             return
 
+        event_ros_stamp_ns = int(self.get_clock().now().nanoseconds)
+        source_ros_stamp_ns = int(
+            event.get(
+                "source_ros_stamp_ns",
+                source_stamp_sec * 1_000_000_000 + source_stamp_nanosec,
+            )
+        )
+        event["processing_started_ros_stamp_ns"] = (
+            processing_started_ros_stamp_ns
+        )
+        event["event_ros_stamp_ns"] = event_ros_stamp_ns
+        event["simulation_elapsed_sec"] = (
+            event_ros_stamp_ns - source_ros_stamp_ns
+        ) / 1_000_000_000
+        event["clock_reason_code"] = (
+            "CLOCK_DOMAINS_VALID"
+            if event["simulation_elapsed_sec"] >= 0.0
+            else "ROS_TIME_ORDER_INVALID"
+        )
         self._last_ros_image_monotonic = time.monotonic()
         self._pipeline_state = "running"
         self._status_reason = "ros_image_active"
         event["ros_image_topic"] = self._ros_image_topic
-        event["ros_header_frame_id"] = msg.header.frame_id
+        # Compatibility alias retained while the canonical ``frame_id`` and
+        # ``source_stamp`` fields carry the unmodified Image header.
+        event["ros_header_frame_id"] = source_frame_id
         self._publish_runner_event(event)
 
     def _publish_visualization_frame(self, result: Any, record: dict[str, Any]) -> None:
@@ -467,8 +551,15 @@ class PoseStreamNode(Node):
             )
 
         msg = Image()
-        msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = "perception_debug_frame"
+        source_stamp = record.get("source_stamp")
+        if isinstance(source_stamp, dict):
+            msg.header.stamp.sec = int(source_stamp.get("sec", 0))
+            msg.header.stamp.nanosec = int(source_stamp.get("nanosec", 0))
+        else:
+            msg.header.stamp = self.get_clock().now().to_msg()
+        msg.header.frame_id = str(
+            record.get("source_frame_id") or "perception_debug_frame"
+        )
         msg.height = int(frame.shape[0])
         msg.width = int(frame.shape[1])
         msg.encoding = "bgr8"
@@ -476,9 +567,16 @@ class PoseStreamNode(Node):
         msg.step = int(frame.shape[1] * frame.shape[2])
         msg.data = frame.tobytes()
         self._visualization_publisher.publish(msg)
+        if self._visualization_compressed_publisher is not None:
+            ok, jpeg = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            if ok:
+                compressed = CompressedImage()
+                compressed.header = msg.header
+                compressed.format, compressed.data = 'jpeg', jpeg.tobytes()
+                self._visualization_compressed_publisher.publish(compressed)
 
     def _on_status_timer(self) -> None:
-        if self._input_mode != "ros_image":
+        if self._input_mode not in {"ros_image", "ros_compressed_image"}:
             self._publish_terminal_heartbeat()
             return
 

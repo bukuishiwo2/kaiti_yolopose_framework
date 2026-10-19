@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+import time
 from typing import Any, Callable, Iterator
 
 import torch
@@ -11,6 +12,7 @@ from ultralytics import YOLO
 from yolopose.pipeline.fall_detector import FallDetector, FallDetectorConfig
 from yolopose.pipeline.stabilizer import BooleanStabilizer, StabilizerConfig
 from yolopose.temporal.sequence_fall_detector import SequenceFallDetector, SequenceFallDetectorConfig
+from yolopose.temporal.features import extract_pose_observations_2d
 
 
 class PoseRunner:
@@ -104,7 +106,17 @@ class PoseRunner:
             return self.model.track(**common_args)
         return self.model.predict(**common_args)
 
-    def _build_record(self, result: Any, source_override: str | None = None) -> dict[str, Any]:
+    def _build_record(
+        self,
+        result: Any,
+        source_override: str | None = None,
+        *,
+        source_stamp_sec: int | None = None,
+        source_stamp_nanosec: int | None = None,
+        source_frame_id: str | None = None,
+        message_source: str | None = None,
+        source_reason_code: str | None = None,
+    ) -> dict[str, Any]:
         self._frame_counter += 1
         person_count = int(len(result.boxes)) if result.boxes is not None else 0
         raw_present = person_count >= self.min_persons
@@ -112,20 +124,80 @@ class PoseRunner:
         fall_info = self.fall_detector.infer(result)
         seq_fall_info = self.sequence_fall_detector.infer(result)
 
+        has_source_stamp = (
+            source_stamp_sec is not None
+            and source_stamp_nanosec is not None
+        )
+        has_source_header = has_source_stamp and source_frame_id is not None
+        source_metadata_valid = has_source_header and bool(str(source_frame_id))
+        source_ros_stamp_ns = None
+        if has_source_stamp:
+            source_ros_stamp_ns = int(source_stamp_sec) * 1_000_000_000 + int(
+                source_stamp_nanosec
+            )
+
         record = {
             "ts": datetime.now(timezone.utc).isoformat(),
-            "frame_id": self._frame_counter,
+            # ``frame_sequence_id`` is the local processing sequence.  For
+            # ROS Image input, ``frame_id`` remains the original header frame.
+            "frame_sequence_id": self._frame_counter,
+            "frame_id": (
+                str(source_frame_id) if has_source_header else self._frame_counter
+            ),
             "source": str(source_override or getattr(result, "path", self.cfg["source"])),
+            "message_source": str(message_source or "runner_source"),
+            "source_stamp": (
+                {
+                    "sec": int(source_stamp_sec),
+                    "nanosec": int(source_stamp_nanosec),
+                }
+                if has_source_stamp
+                else None
+            ),
+            "source_ros_stamp_ns": source_ros_stamp_ns,
+            "source_stamp_valid": has_source_stamp,
+            "source_metadata_valid": source_metadata_valid,
+            "source_frame_id": str(source_frame_id) if has_source_header else None,
+            "source_reason_code": str(
+                source_reason_code
+                or (
+                    "SOURCE_METADATA_VALID"
+                    if source_metadata_valid
+                    else "SOURCE_METADATA_UNAVAILABLE"
+                )
+            ),
             "person_count": person_count,
             "raw_person_present": raw_present,
             "stable_person_present": stable_present,
             "state_changed": changed,
+            "pose_observations_2d": extract_pose_observations_2d(
+                result,
+                keypoint_conf_threshold=float(
+                    self.sequence_fall_detector.cfg.keypoint_conf_threshold
+                ),
+            ),
         }
         record.update(fall_info)
         record.update(seq_fall_info)
         return record
 
-    def infer_frame(self, frame: Any, source: str = "ros_image") -> dict[str, Any]:
+    def infer_frame(
+        self,
+        frame: Any,
+        source: str = "ros_image",
+        *,
+        source_stamp_sec: int | None = None,
+        source_stamp_nanosec: int | None = None,
+        source_frame_id: str | None = None,
+        message_source: str = "ros_image",
+        source_reason_code: str | None = None,
+    ) -> dict[str, Any]:
+        processing_started_wall_time_ns = time.time_ns()
+        processing_started_at = datetime.fromtimestamp(
+            processing_started_wall_time_ns / 1_000_000_000,
+            tz=timezone.utc,
+        ).isoformat()
+        processing_started_monotonic_ns = time.perf_counter_ns()
         common_args = dict(
             source=frame,
             stream=False,
@@ -150,7 +222,36 @@ class PoseRunner:
 
         if not results:
             raise RuntimeError("no_results_from_model")
-        record = self._build_record(results[0], source_override=source)
+        record = self._build_record(
+            results[0],
+            source_override=source,
+            source_stamp_sec=source_stamp_sec,
+            source_stamp_nanosec=source_stamp_nanosec,
+            source_frame_id=source_frame_id,
+            message_source=message_source,
+            source_reason_code=source_reason_code,
+        )
+        processing_finished_wall_time_ns = time.time_ns()
+        monotonic_elapsed_sec = (
+            time.perf_counter_ns() - processing_started_monotonic_ns
+        ) / 1_000_000_000
+        record.update(
+            {
+                "processing_started_at": processing_started_at,
+                "processing_started_wall_time_ns": (
+                    processing_started_wall_time_ns
+                ),
+                "processing_finished_at": datetime.fromtimestamp(
+                    processing_finished_wall_time_ns / 1_000_000_000,
+                    tz=timezone.utc,
+                ).isoformat(),
+                "processing_finished_wall_time_ns": (
+                    processing_finished_wall_time_ns
+                ),
+                "wall_time_ns": processing_finished_wall_time_ns,
+                "monotonic_elapsed_sec": monotonic_elapsed_sec,
+            }
+        )
         if self.visualization_callback is not None:
             self.visualization_callback(results[0], record)
         return record

@@ -1,0 +1,12 @@
+[Unit]
+Description=DUCT 3D pose annotated RTSP stream
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/duct/start_pose3d_rtsp_on_duct.sh /home/duct/duct_pose3d_rtsp.yaml
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=default.target

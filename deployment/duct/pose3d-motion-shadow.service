@@ -1,0 +1,9 @@
+[Unit]
+Description=Read-only shadow jog gate (no motor command publisher)
+
+[Service]
+Type=simple
+ExecStart=/bin/bash /home/duct/start_pose3d_research_on_duct.sh motion-shadow
+Restart=on-failure
+RestartSec=3
+# Intentionally not enabled at boot. Never drives hardware.

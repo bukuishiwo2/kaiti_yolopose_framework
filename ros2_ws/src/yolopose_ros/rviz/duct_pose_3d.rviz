@@ -1,0 +1,62 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+Visualization Manager:
+  Class: ""
+  Global Options:
+    Background Color: 30; 30; 30
+    Fixed Frame: map
+    Frame Rate: 15
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Name: Grid
+      Enabled: true
+      Cell Size: 1
+      Plane: XY
+    - Class: rviz_default_plugins/Map
+      Name: RTAB-Map occupancy
+      Enabled: true
+      Topic:
+        Value: /grid_prob_map
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+    - Class: rviz_default_plugins/PointCloud2
+      Name: RTAB-Map cloud
+      Enabled: false
+      Topic:
+        Value: /cloud_map
+        Reliability Policy: Best Effort
+        Durability Policy: Volatile
+      Size (Pixels): 2
+      Style: Points
+    - Class: rviz_default_plugins/MarkerArray
+      Name: Human 3D pose
+      Enabled: true
+      Topic:
+        Value: /perception/pose_3d_markers
+        Reliability Policy: Reliable
+        Durability Policy: Transient Local
+    - Class: rviz_default_plugins/Image
+      Name: Metric pose image
+      Enabled: true
+      Image Topic:
+        Value: /perception/pose_3d_debug_image
+        Reliability Policy: Reliable
+        Durability Policy: Volatile
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+  Views:
+    Current:
+      Class: rviz_default_plugins/Orbit
+      Distance: 8
+      Focal Point:
+        X: 0
+        Y: 0
+        Z: 0.8
+      Pitch: 0.55
+      Yaw: 0.8
+Window Geometry:
+  Width: 1400
+  Height: 900

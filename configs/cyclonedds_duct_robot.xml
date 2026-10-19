@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CycloneDDS xmlns="https://cdds.io/config">
+  <Domain>
+    <General>
+      <AllowMulticast>false</AllowMulticast>
+      <Interfaces>
+        <NetworkInterface name="wlp4s0" priority="10" />
+        <!-- Vendor nodes advertise these local interfaces. Keep local DDS
+             communication reachable while workstation traffic uses Wi-Fi. -->
+        <NetworkInterface name="eno1" priority="0" />
+        <NetworkInterface name="enp3s0" priority="0" />
+      </Interfaces>
+    </General>
+    <Discovery>
+      <ParticipantIndex>auto</ParticipantIndex>
+      <MaxAutoParticipantIndex>120</MaxAutoParticipantIndex>
+      <!-- Workstation on the current laboratory Wi-Fi. -->
+      <Peers>
+        <Peer address="127.0.0.1" />
+        <Peer address="192.168.31.221" />
+      </Peers>
+    </Discovery>
+    <Internal>
+      <SocketReceiveBufferSize min="4MB" max="8MB" />
+      <SocketSendBufferSize min="4MB" max="8MB" />
+    </Internal>
+  </Domain>
+</CycloneDDS>

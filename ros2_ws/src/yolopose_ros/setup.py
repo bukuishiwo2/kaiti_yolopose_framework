@@ -14,6 +14,7 @@ setup(
         ("share/" + package_name + "/launch", glob("launch/*.launch.py")),
         ("share/" + package_name + "/config", glob("config/*.yaml")),
         ("share/" + package_name + "/gui", glob("gui/*.config")),
+        ("share/" + package_name + "/rviz", glob("rviz/*.rviz")),
         ("share/" + package_name + "/worlds", glob("worlds/*.sdf")),
     ],
     install_requires=["setuptools"],
@@ -27,6 +28,8 @@ setup(
         "console_scripts": [
             "camera_stream_node = yolopose_ros.camera_stream_node:main",
             "pose_stream_node = yolopose_ros.pose_stream_node:main",
+            "pose_3d_fusion_node = yolopose_ros.pose_3d_fusion_node:main",
+            "pose_3d_visualization_node = yolopose_ros.pose_3d_visualization_node:main",
             "system_supervisor_node = yolopose_ros.system_supervisor_node:main",
             "task_planner_bridge_node = yolopose_ros.task_planner_bridge_node:main",
             "planner_nav2_dispatcher_node = yolopose_ros.planner_nav2_dispatcher_node:main",

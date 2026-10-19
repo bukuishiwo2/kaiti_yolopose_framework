@@ -6,6 +6,25 @@ import numpy as np
 
 POSE_KPT_COUNT = 17
 POSE_FEATURE_DIM = POSE_KPT_COUNT * 3 + 3  # x, y, conf for each keypoint + aspect_ratio + log_area + present
+COCO_KEYPOINT_NAMES = (
+    "nose",
+    "left_eye",
+    "right_eye",
+    "left_ear",
+    "right_ear",
+    "left_shoulder",
+    "right_shoulder",
+    "left_elbow",
+    "right_elbow",
+    "left_wrist",
+    "right_wrist",
+    "left_hip",
+    "right_hip",
+    "left_knee",
+    "right_knee",
+    "left_ankle",
+    "right_ankle",
+)
 
 
 def _clip_conf(value: Any) -> float:
@@ -106,6 +125,68 @@ def extract_person_candidates(result: Any, keypoint_conf_threshold: float = 0.3)
         )
     candidates.sort(key=lambda item: item['area'], reverse=True)
     return candidates
+
+
+def extract_pose_observations_2d(
+    result: Any,
+    keypoint_conf_threshold: float = 0.3,
+) -> list[dict[str, Any]]:
+    """Serialize YOLO pose detections without losing original pixel geometry."""
+
+    boxes = getattr(result, "boxes", None)
+    keypoints = getattr(result, "keypoints", None)
+    if boxes is None or keypoints is None or keypoints.xy is None or keypoints.conf is None:
+        return []
+
+    boxes_xyxy = boxes.xyxy
+    boxes_conf = getattr(boxes, "conf", None)
+    boxes_id = getattr(boxes, "id", None)
+    kp_xy = keypoints.xy
+    kp_conf = keypoints.conf
+    orig_shape = getattr(result, "orig_shape", None)
+    image_height = int(orig_shape[0]) if orig_shape is not None else 0
+    image_width = int(orig_shape[1]) if orig_shape is not None else 0
+
+    observations: list[dict[str, Any]] = []
+    count = min(len(boxes_xyxy), len(kp_xy), len(kp_conf))
+    for detection_index in range(count):
+        track_id = None
+        if boxes_id is not None and detection_index < len(boxes_id):
+            track_id = _to_track_id(boxes_id[detection_index])
+        bbox_confidence = 0.0
+        if boxes_conf is not None and detection_index < len(boxes_conf):
+            bbox_confidence = _clip_conf(boxes_conf[detection_index])
+
+        joints: list[dict[str, Any]] = []
+        visible_count = 0
+        for joint_index, joint_name in enumerate(COCO_KEYPOINT_NAMES):
+            confidence = _clip_conf(kp_conf[detection_index][joint_index])
+            visible = confidence >= float(keypoint_conf_threshold)
+            visible_count += int(visible)
+            joints.append(
+                {
+                    "index": joint_index,
+                    "name": joint_name,
+                    "u": float(kp_xy[detection_index][joint_index][0]),
+                    "v": float(kp_xy[detection_index][joint_index][1]),
+                    "confidence": confidence,
+                    "visible": visible,
+                }
+            )
+
+        observations.append(
+            {
+                "detection_index": detection_index,
+                "track_id": track_id,
+                "bbox_xyxy": [float(value) for value in boxes_xyxy[detection_index]],
+                "bbox_confidence": bbox_confidence,
+                "visible_keypoint_count": visible_count,
+                "image_width": image_width,
+                "image_height": image_height,
+                "keypoints": joints,
+            }
+        )
+    return observations
 
 
 def extract_primary_person_feature(result: Any, keypoint_conf_threshold: float = 0.3) -> tuple[np.ndarray, dict[str, Any] | None]:

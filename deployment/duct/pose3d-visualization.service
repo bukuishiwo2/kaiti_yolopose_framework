@@ -1,0 +1,9 @@
+[Unit]
+Description=Local human 3D markers and annotated JPEG
+After=network-online.target
+[Service]
+ExecStart=/bin/bash /home/duct/start_pose3d_research_on_duct.sh visualization
+Restart=on-failure
+RestartSec=3
+[Install]
+WantedBy=default.target

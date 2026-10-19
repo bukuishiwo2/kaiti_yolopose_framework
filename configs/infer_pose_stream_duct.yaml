@@ -1,0 +1,45 @@
+model: yolo11n-pose.pt
+mode: track
+source: 0
+imgsz: 640
+conf: 0.25
+iou: 0.7
+device: 0
+half: true
+classes: [0]
+vid_stride: 1
+stream_buffer: false
+show: false
+save_visualization: false
+output_dir: outputs/vis
+save_jsonl: null
+tracker: bytetrack.yaml
+
+stabilizer:
+  min_true_frames: 3
+  min_false_frames: 5
+  min_persons: 1
+
+fall_detector:
+  enabled: true
+  keypoint_conf_threshold: 0.3
+  bbox_aspect_ratio_threshold: 1.2
+  torso_vertical_ratio_threshold: 0.22
+  hip_to_ankle_vertical_ratio_threshold: 0.38
+  min_signals_to_fall: 2
+  min_true_frames: 5
+  min_false_frames: 8
+  use_track_stabilization: true
+  track_ttl_frames: 45
+
+sequence_fall_detector:
+  enabled: true
+  model_path: models/fall_sequence_lstm_urfall_finetune_from_fallvision_sampled.pt
+  device: 0
+  seq_len: 32
+  score_threshold: 0.6
+  keypoint_conf_threshold: 0.3
+  min_true_frames: 3
+  min_false_frames: 5
+  use_track_sequences: true
+  track_ttl_frames: 45

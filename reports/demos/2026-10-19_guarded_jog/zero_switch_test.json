@@ -1,0 +1,22 @@
+{
+  "nonzero_commands": 0,
+  "requested_limit_m": 0.05,
+  "speed_mps": 0.02,
+  "operator_abort": "any raw SBUS channel deviation >20",
+  "executed": false,
+  "reason": "zero_only_ready",
+  "final_vx_mps": 0.0,
+  "last_state": {
+    "xy": [
+      0.0,
+      0.0
+    ],
+    "yaw": 0.0,
+    "vx": 0.0,
+    "safe_scan": false,
+    "remote": true,
+    "original_zero": true,
+    "abort": null,
+    "clearance": 2.8386596749379605
+  }
+}

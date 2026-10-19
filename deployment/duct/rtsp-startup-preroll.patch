@@ -1,0 +1,54 @@
+--- a/src/video.cpp
++++ b/src/video.cpp
+@@ -270,6 +270,51 @@
+                          nullptr);
+         }
+ 
++        // Opt-in preroll prevents a missing/inactive camera from blocking
++        // RTSP DESCRIBE when the controller probes both original URLs.
++        if (appsrc_elem && g_strcmp0(g_getenv("DUCT_RTSP_STARTUP_PREROLL"), "1") == 0) {
++            std::lock_guard<std::mutex> lk(config->appsrc_mutex);
++            const unsigned fps = std::max(1u, config->framerate);
++            GstCaps *caps = gst_caps_new_simple("video/x-raw",
++                "format", G_TYPE_STRING, "RGB",
++                "width", G_TYPE_INT, config->width,
++                "height", G_TYPE_INT, config->height,
++                "framerate", GST_TYPE_FRACTION, fps, 1, nullptr);
++            gst_app_src_set_caps(config->appsrc, caps);
++            gst_caps_unref(caps);
++            cv::Mat placeholder(config->height, config->width, CV_8UC3,
++                                cv::Scalar(24, 24, 24));
++            cv::putText(placeholder, "Waiting for camera: " + config->name,
++                        cv::Point(30, 70), cv::FONT_HERSHEY_SIMPLEX,
++                        0.8, cv::Scalar(255, 255, 255), 2);
++            const GstClockTime duration = GST_SECOND / fps;
++            for (unsigned i = 0; i < 8; ++i) {
++                GstBuffer *buf = gst_buffer_new_allocate(nullptr,
++                    placeholder.total() * placeholder.elemSize(), nullptr);
++                gst_buffer_fill(buf, 0, placeholder.data,
++                                placeholder.total() * placeholder.elemSize());
++                GST_BUFFER_PTS(buf) = i * duration;
++                GST_BUFFER_DTS(buf) = i * duration;
++                GST_BUFFER_DURATION(buf) = duration;
++                GST_BUFFER_FLAG_SET(buf, GST_BUFFER_FLAG_LIVE);
++                gst_app_src_push_buffer(config->appsrc, buf);
++            }
++            {
++                std::lock_guard<std::mutex> pts_lk(config->pts_mutex);
++                config->pts_base_set = true;
++                config->pts_base_ros = rclcpp::Time(0, 0, RCL_ROS_TIME);
++                config->pts_base_gst = 0;
++                config->pts_last_gst = 7 * duration;
++                config->pts_last_steady = std::chrono::steady_clock::now();
++            }
++            config->last_width = config->width;
++            config->last_height = config->height;
++            config->last_encoding = "rgb8";
++            config->caps_set.store(true);
++            RCLCPP_INFO(stream_logger(config),
++                        "[%s] sent labeled startup preroll", config->name.c_str());
++        }
++
+         // 关键: 客户端断开 -> media unprepared, 必须清掉 appsrc 防悬空
+         g_signal_handlers_disconnect_by_func(media, (gpointer)media_unprepared, config);
+         g_signal_connect(media, "unprepared", G_CALLBACK(media_unprepared), config);

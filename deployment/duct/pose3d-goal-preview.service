@@ -1,0 +1,9 @@
+[Unit]
+Description=Display-only human approach candidate
+After=network-online.target
+[Service]
+ExecStart=/bin/bash /home/duct/start_pose3d_research_on_duct.sh goal
+Restart=on-failure
+RestartSec=3
+[Install]
+WantedBy=default.target
