@@ -1,0 +1,2885 @@
+<?xml version='1.0' encoding='utf-8'?>
+<sdf version="1.7">
+  <world name="clinic_l1_three">
+    <physics name="10ms" type="ode">
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <scene>
+      <ambient>1 1 1</ambient>
+      <background>0.8 0.8 0.8</background>
+      <grid>false</grid>
+    </scene>
+    <light type="directional" name="sun">
+      <cast_shadows>true</cast_shadows>
+      <pose>0 0 10 0 0 0</pose>
+      <diffuse>1 1 1 1</diffuse>
+      <specular>0.2 0.2 0.2 1</specular>
+      <attenuation>
+        <range>1000</range>
+        <constant>0.09</constant>
+        <linear>0.001</linear>
+        <quadratic>0.001</quadratic>
+      </attenuation>
+      <direction>-0.5 0.1 -0.9</direction>
+    </light>
+    <plugin filename="libignition-gazebo-physics-system.so" name="ignition::gazebo::systems::Physics" />
+    <plugin filename="libignition-gazebo-user-commands-system.so" name="ignition::gazebo::systems::UserCommands" />
+    <plugin filename="libignition-gazebo-scene-broadcaster-system.so" name="ignition::gazebo::systems::SceneBroadcaster" />
+    <plugin filename="libignition-gazebo-sensors-system.so" name="ignition::gazebo::systems::Sensors">
+      <render_engine>ogre2</render_engine>
+    </plugin>
+    <include>
+      <name>OpenRobotics/PotatoChipChair</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>26.733291027268205 -41.450386523595284 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_2</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>29.19668474289453 -41.450386523595284 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_3</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>31.652917195492506 -41.450386523595284 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_4</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>34.11631091111884 -41.493354101765355 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_5</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>27.972135687088986 -40.1255797853929 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_6</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>30.385400561516892 -40.1255797853929 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_7</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>32.877439329256596 -40.11125725933621 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_8</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>29.168039690781146 -38.4857043959848 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_9</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>31.652917195492506 -38.4857043959848 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_10</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>51.881223799084694 -40.62961424560597 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_11</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>54.49729241183036 -40.637502403753736 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_12</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>54.48943117572406 -39.219141571478055 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_13</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>54.47365485942853 -37.800780739202374 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_14</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>51.889085035191 -37.800780739202374 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_15</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>51.889085035191 -39.219141571478055 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_16</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>44.18168147378951 -42.740221529941195 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_17</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>44.99871158801589 -41.37344332910276 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_18</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>44.5887158186224 -44.687896619360835 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_19</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>35.33162570670362 -8.950636513980239 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_20</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>32.74358293911776 -8.950636513980239 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_21</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>32.74358293911776 -7.490519595400184 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_22</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>35.30844582900661 -7.505972847198191 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_23</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>35.347078958501626 -6.099915387869703 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_24</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>32.7512826429753 -6.099915387869703 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_25</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>18.67229337333181 -7.245179031575716 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_26</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>16.88838506211301 -7.235917849313495 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_27</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>16.904699819237738 -9.52095304026769 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_28</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>18.657567016653225 -9.52095304026769 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_29</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>20.142452213376426 -9.513711011114966 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_30</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>20.131844929041208 -7.254440213837936 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_31</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>21.568216607053593 -8.093115649398108 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_32</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>23.00919195415563 -9.55958616976271 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_33</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>6.894680973808706 -29.976589361947646 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_34</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>8.099765393638714 -29.909311180339245 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_35</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>9.46385139033115 -29.93989461943774 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CoffeeTable</name>
+      <uri>model://CoffeeTable</uri>
+      <pose>21.28316603207571 -35.513484096765545 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CoffeeTable_2</name>
+      <uri>model://CoffeeTable</uri>
+      <pose>40.95399792315684 -35.49049267335875 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Toilet</name>
+      <uri>model://Toilet</uri>
+      <pose>8.543332948732749 -35.72137610091923 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Toilet_2</name>
+      <uri>model://Toilet</uri>
+      <pose>11.220191531094969 -37.634429445021375 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Toilet_3</name>
+      <uri>model://Toilet</uri>
+      <pose>40.77701242259917 -8.20252682589132 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_36</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>47.0452713357179 -41.34560593823318 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_37</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>46.303542171454986 -42.75726318218534 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>26.88397369331951 -26.628133533325663 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_2</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>26.892454136379392 -30.11354178685438 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_3</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>35.31267258951582 -24.65983616014771 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_4</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>35.29113495634787 -28.073120264605233 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_5</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>36.303296027075916 -34.964328295065606 0.0 0 0 0.3823</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_6</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>46.09093881004581 -33.67223183723706 0.0 0 0 2.7684</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_7</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>46.597019345409834 -30.06510903426794 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_8</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>46.58625052882586 -23.184696742433005 0.0 0 0 -0.0029</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_9</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>46.53240644590597 -19.81446098226993 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_10</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>45.574116380139266 -16.358101611476496 0.0 0 0 -2.7959</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_11</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>54.18809276566291 -16.056601669166582 0.0 0 0 0.0092</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_12</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>17.883800623052974 -14.5233106418984 0.0 0 0 -0.7084</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_13</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>26.872747202030713 -19.778627745086744 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_14</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>26.839310026537465 -16.334087150494224 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_15</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>15.597392407984323 -28.028079689242748 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_16</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>16.623283719856943 -34.967612784123716 0.0 0 0 0.3826</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_17</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>7.788492750278842 -17.53642552209532 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MetalCabinet</name>
+      <uri>model://MetalCabinet</uri>
+      <pose>7.036775508634289 -18.465020576131703 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MetalCabinet_2</name>
+      <uri>model://MetalCabinet</uri>
+      <pose>7.885789008115079 -18.465020576131703 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>40.647113572554936 -31.19500019230032 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_2</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>41.25329025806703 -31.17688165839778 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_3</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>41.24860582285301 -29.720641513787957 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_4</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>40.62775662474524 -29.71315718626209 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_5</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>20.951459559247738 -29.7292834890966 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_6</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>21.5754047921234 -29.7292834890966 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_7</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>21.557824699050055 -31.196857813161063 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SurgicalTrolleyMed_8</name>
+      <uri>model://SurgicalTrolleyMed</uri>
+      <pose>20.933879466174396 -31.18805430560366 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_18</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>35.31313026422064 -17.750913426406694 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/CGMVanguard_19</name>
+      <uri>model://CGMVanguard</uri>
+      <pose>35.63772931810318 -13.985596707818942 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MetalCabinet_3</name>
+      <uri>model://MetalCabinet</uri>
+      <pose>8.487146648205846 -24.95632860274607 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable</name>
+      <uri>model://NurseTable</uri>
+      <pose>9.008949655782477 -11.460766893581026 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_2</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.969216568593538 -36.71566093611788 0.0 0 0 -2.1716</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_3</name>
+      <uri>model://NurseTable</uri>
+      <pose>22.785792854121013 -38.1124841352256 0.0 0 0 -2.5278</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_4</name>
+      <uri>model://NurseTable</uri>
+      <pose>42.41287642782974 -38.32261066882046 0.0 0 0 -2.8065</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_5</name>
+      <uri>model://NurseTable</uri>
+      <pose>45.57325487481255 -36.488277373947184 0.0 0 0 -2.4507</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_6</name>
+      <uri>model://NurseTable</uri>
+      <pose>54.19215799392336 -14.938960039998475 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_7</name>
+      <uri>model://NurseTable</uri>
+      <pose>44.96476289373489 -17.75605553632554 0.0 0 0 0.3883</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_8</name>
+      <uri>model://NurseTable</uri>
+      <pose>43.50017691627249 -15.209822699126969 0.0 0 0 0.7491</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_9</name>
+      <uri>model://NurseTable</uri>
+      <pose>45.44847121264571 -20.873358716972444 0.0 0 0 0.0053</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_10</name>
+      <uri>model://NurseTable</uri>
+      <pose>45.42833352563367 -24.266101303796027 0.0 0 0 0.0072</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_11</name>
+      <uri>model://NurseTable</uri>
+      <pose>45.48877350871124 -27.712607207415125 0.0 0 0 0.0098</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_12</name>
+      <uri>model://NurseTable</uri>
+      <pose>45.413203338333176 -31.140859966924374 0.0 0 0 0.0034</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MetalCabinet_4</name>
+      <uri>model://MetalCabinet</uri>
+      <pose>7.644782892965662 -24.953097957770876 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_13</name>
+      <uri>model://NurseTable</uri>
+      <pose>6.869993461789938 -20.165659013114897 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_14</name>
+      <uri>model://NurseTable</uri>
+      <pose>6.872066458982353 -23.99090419599248 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_15</name>
+      <uri>model://NurseTable</uri>
+      <pose>17.26572439521558 -33.51072651051886 0.0 0 0 -2.7383</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_16</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.770343448328934 -31.184662128379706 0.0 0 0 0.0036</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_17</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.744821353024907 -27.741763778316244 0.0 0 0 0.004</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_18</name>
+      <uri>model://NurseTable</uri>
+      <pose>16.75862082227608 -30.446028998884685 0.0 0 0 -3.1371</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_19</name>
+      <uri>model://NurseTable</uri>
+      <pose>16.765620553055665 -26.949690396523234 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_20</name>
+      <uri>model://NurseTable</uri>
+      <pose>16.78801969155034 -23.54494057920851 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_21</name>
+      <uri>model://NurseTable</uri>
+      <pose>16.804226760509227 -20.1163916772432 0.0 0 0 3.1309</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_22</name>
+      <uri>model://NurseTable</uri>
+      <pose>17.55074804815201 -17.118864659051592 0.0 0 0 2.7367</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_23</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.736421676089403 -13.476554747894324 0.0 0 0 -0.0073</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_24</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.779766162839913 -17.413095650167318 0.0 0 0 0.0011</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_25</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.825910541902257 -20.877827775854794 0.0 0 0 -0.0008</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_26</name>
+      <uri>model://NurseTable</uri>
+      <pose>25.821468405061367 -24.2898465443637 0.0 0 0 0.0073</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_27</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.48273143340644 -16.664339833083357 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_28</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.470858813122604 -20.10966116687821 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_29</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.427595092496475 -23.56122841429178 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_30</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.43841775316337 -26.98032767970465 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_31</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.470858813122604 -30.399400023076062 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_32</name>
+      <uri>model://NurseTable</uri>
+      <pose>36.92530287296646 -33.50472289527329 0.0 0 0 -2.7739</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_33</name>
+      <uri>model://NurseTable</uri>
+      <pose>38.48336217837779 -36.188069689627355 0.0 0 0 -2.3763</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_34</name>
+      <uri>model://NurseTable</uri>
+      <pose>52.92905657474717 -32.91938386985119 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_35</name>
+      <uri>model://NurseTable</uri>
+      <pose>52.90471904926738 -29.283239106188248 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_36</name>
+      <uri>model://NurseTable</uri>
+      <pose>55.15445944386759 -24.680296911657265 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_37</name>
+      <uri>model://NurseTable</uri>
+      <pose>18.77753163339873 -36.26738202376835 0.0 0 0 -2.37</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_38</name>
+      <uri>model://NurseTable</uri>
+      <pose>19.64964424445215 -39.04807892004157 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_38</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>11.988923502942205 -25.140259990000406 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PotatoChipChair_39</name>
+      <uri>model://PotatoChipChair</uri>
+      <pose>12.020879966155158 -18.682577593169512 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_39</name>
+      <uri>model://NurseTable</uri>
+      <pose>55.14657128571983 -22.179885389023518 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_40</name>
+      <uri>model://NurseTable</uri>
+      <pose>39.41238798507753 -38.948251990308094 0.0 0 0 -3.1045</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_41</name>
+      <uri>model://NurseTable</uri>
+      <pose>10.358066997423185 -18.63942156070922 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_42</name>
+      <uri>model://NurseTable</uri>
+      <pose>10.37039729241184 -24.918314680204627 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_43</name>
+      <uri>model://NurseTable</uri>
+      <pose>9.294404061382263 -25.721426098996215 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/NurseTable_44</name>
+      <uri>model://NurseTable</uri>
+      <pose>10.435117880081545 -15.01296873197186 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MainTable</name>
+      <uri>model://MainTable</uri>
+      <pose>21.32012999500021 -27.377508557363203 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MainTable_2</name>
+      <uri>model://MainTable</uri>
+      <pose>41.03872158763128 -27.4074189454252 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MainTable_3</name>
+      <uri>model://MainTable</uri>
+      <pose>21.289519633860255 -21.72277604707513 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MainTable_4</name>
+      <uri>model://MainTable</uri>
+      <pose>41.05199415407103 -22.28016999346181 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair</name>
+      <uri>model://DeskChair</uri>
+      <pose>19.392188761970708 -38.37179723856778 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_2</name>
+      <uri>model://DeskChair</uri>
+      <pose>21.619503096034787 -37.88580054613288 0.0 0 0 -0.7706</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_3</name>
+      <uri>model://DeskChair</uri>
+      <pose>22.753001807622805 -36.9909388100458 0.0 0 0 -1.489</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_4</name>
+      <uri>model://DeskChair</uri>
+      <pose>24.676985500557695 -36.931279566170566 0.0 0 0 -0.3695</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_5</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.638963886004408 -35.5442290681128 0.0 0 0 -1.0979</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_6</name>
+      <uri>model://DeskChair</uri>
+      <pose>8.457209338102388 -12.107515095573259 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_7</name>
+      <uri>model://DeskChair</uri>
+      <pose>9.777573939463874 -12.138798507749712 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_8</name>
+      <uri>model://DeskChair</uri>
+      <pose>7.7663628321987686 -13.647159724625988 0.0 0 0 3.085</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_9</name>
+      <uri>model://DeskChair</uri>
+      <pose>10.174431752624908 -16.65626322064537 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_10</name>
+      <uri>model://DeskChair</uri>
+      <pose>9.840140763816784 -19.37897003961388 0.0 0 0 1.6366</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_11</name>
+      <uri>model://DeskChair</uri>
+      <pose>7.7000269220414665 -19.76694357909313 0.0 0 0 3.135</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_12</name>
+      <uri>model://DeskChair</uri>
+      <pose>7.7511518787739 -24.220279989231205 0.0 0 0 3.0982</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_13</name>
+      <uri>model://DeskChair</uri>
+      <pose>9.862136071689559 -24.183073727933564 0.0 0 0 -1.5817</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_14</name>
+      <uri>model://DeskChair</uri>
+      <pose>9.04612899503866 -26.41262259143881 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_15</name>
+      <uri>model://DeskChair</uri>
+      <pose>16.567097419330043 -29.722499134648693 0.0 0 0 -1.5664</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_16</name>
+      <uri>model://DeskChair</uri>
+      <pose>16.78406215145573 -32.98765816699361 0.0 0 0 -1.204</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_17</name>
+      <uri>model://DeskChair</uri>
+      <pose>18.158324679820023 -35.89117341640709 0.0 0 0 -1.1703</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_18</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.859266951271128 -31.849878850813457 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_19</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.851540325372124 -28.44292142609902 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_20</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.900000000000023 -24.942517595477117 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_21</name>
+      <uri>model://DeskChair</uri>
+      <pose>16.63941002269145 -26.292011845698266 0.0 0 0 -1.5444</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_22</name>
+      <uri>model://DeskChair</uri>
+      <pose>16.577408561209197 -22.809861159186205 0.0 0 0 -1.6217</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_23</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.907026652821067 -18.080816122456845 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_24</name>
+      <uri>model://DeskChair</uri>
+      <pose>16.742736817814716 -19.462024537517806 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_25</name>
+      <uri>model://DeskChair</uri>
+      <pose>17.72436829352719 -16.434533287181274 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_26</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.87692781046885 -14.223318333910248 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_27</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.313041806084414 -19.441375331718028 0.0 0 0 -1.6777</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_28</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.12706434367912 -22.8408484289066 0.0 0 0 -1.3396</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_29</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.3957193954079 -26.364324449059673 0.0 0 0 -1.5526</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_30</name>
+      <uri>model://DeskChair</uri>
+      <pose>44.072970270374256 -15.638906195915554 0.0 0 0 2.263</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_31</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.34390600361529 -18.408080458443923 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_32</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.6332371831853 -21.538925425945173 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_33</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.560897657782434 -25.010738048536616 0.0 0 0 1.6647</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_34</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.59188492750283 -28.368885812084173 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_35</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.6332371831853 -31.892388754278706 0.0 0 0 1.6796</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_36</name>
+      <uri>model://DeskChair</uri>
+      <pose>37.8422945271336 -35.83951001884546 0.0 0 0 -0.7454</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_37</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.54037152417218 -32.95664397523175 0.0 0 0 -1.1263</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_38</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.48870812661055 -29.722499134648693 0.0 0 0 -1.7595</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_39</name>
+      <uri>model://DeskChair</uri>
+      <pose>39.040917657013225 -38.05072497211649 0.0 0 0 -1.4389</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_40</name>
+      <uri>model://DeskChair</uri>
+      <pose>41.386446675127914 -37.668405061343826 0.0 0 0 -1.1243</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_41</name>
+      <uri>model://DeskChair</uri>
+      <pose>42.83304872889508 -37.317099342333016 0.0 0 0 -1.3139</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_42</name>
+      <uri>model://DeskChair</uri>
+      <pose>44.517291642629175 -36.3664820583824 0.0 0 0 -0.786</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_43</name>
+      <uri>model://DeskChair</uri>
+      <pose>45.416245529018155 -35.38485058266993 0.0 0 0 -0.9053</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_44</name>
+      <uri>model://DeskChair</uri>
+      <pose>53.06363986000543 -32.26894734817894 0.0 0 0 -1.6575</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_45</name>
+      <uri>model://DeskChair</uri>
+      <pose>52.856986269758906 -28.629518095457893 0.0 0 0 -1.4394</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_46</name>
+      <uri>model://DeskChair</uri>
+      <pose>54.57913541786859 -14.209534248682756 0.0 0 0 -1.715</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_47</name>
+      <uri>model://DeskChair</uri>
+      <pose>25.802676820122326 -21.585123649090438 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_48</name>
+      <uri>model://DeskChair</uri>
+      <pose>52.04628283527561 -24.736860120764607 0.0 0 0 -1.7281</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table</name>
+      <uri>model://Table</uri>
+      <pose>52.009076573977964 -25.501984539056213 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_2</name>
+      <uri>model://Table</uri>
+      <pose>7.023368331987237 -13.691527248951976 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_3</name>
+      <uri>model://Table</uri>
+      <pose>54.649132725664444 -19.748609668858908 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>19.48318526210532 -39.605742086842845 0.0 0 0 -3.1182</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_2</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>22.566189761932254 -38.93406407445871 0.0 0 0 -2.6428</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_3</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>23.432433367947407 -38.318895427098994 0.0 0 0 -2.3511</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_4</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>26.094834814045637 -37.486896657820886 0.0 0 0 -2.1035</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_5</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>26.727152801815336 -36.599438483135295 0.0 0 0 -1.8657</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_6</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>39.44014460982274 -39.483704472904925 0.0 0 0 -3.0604</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_7</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>42.04708665051348 -39.02888350448063 0.0 0 0 -2.8514</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_8</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>43.168605053651824 -38.666755124802926 0.0 0 0 -2.5536</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_9</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>45.541486865889816 -37.19848082766051 0.0 0 0 -2.4327</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_10</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>46.48443136802435 -36.41084958270839 0.0 0 0 -2.3371</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_11</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>53.49544248298147 -24.008457367024366 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_12</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>53.49544248298147 -19.837371639552345 0.0 0 0 -0.016</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_13</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>52.55249798084694 -14.678946963578337 0.0 0 0 3.1246</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_14</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>44.86480135379412 -14.257401638398536 0.0 0 0 0.937</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_15</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>46.539890773431836 -17.36355909388102 0.0 0 0 0.4229</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_16</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>47.03910618822357 -21.11309949617324 0.0 0 0 -0.09</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_17</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>47.03910618822357 -24.49658090073461 0.0 0 0 -0.1276</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_18</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>47.11674935579405 -27.946613591784956 0.0 0 0 0.1131</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_19</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>47.09456559363106 -31.37446252067231 0.0 0 0 -0.0522</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_20</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>37.15492096457832 -37.15411330333452 0.0 0 0 -2.4168</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_21</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>35.34670204992119 -33.903734471751115 0.0 0 0 -2.7661</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_22</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>34.89425022114537 -30.217541633014143 0.0 0 0 -3.1148</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_23</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>34.7871004961348 -26.762097611630345 0.0 0 0 -3.12</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_24</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>34.83639475404795 -23.360120764586 0.0 0 0 -3.0188</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_25</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>34.84872504903661 -19.89651936463984 0.0 0 0 -3.0358</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_26</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>34.83639475404795 -16.457578554670988 0.0 0 0 -3.0878</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_27</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.337287027422047 -13.74712126456676 0.0 0 0 0.0294</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_28</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>16.133006422829904 -16.265301334564068 0.0 0 0 2.6429</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_29</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>7.369235798623137 -11.728129687319727 0.0 0 0 -0.0108</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_30</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>10.697257797777018 -11.728129687319727 0.0 0 0 0.0021</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_31</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>7.1234375600938495 -14.885304411368807 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_32</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>8.90753432560287 -16.00504595977079 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_33</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>7.699811545709788 -25.96272835660169 0.0 0 0 0.2197</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_34</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>15.135517864697524 -30.2370601130726 0.0 0 0 -3.1022</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_35</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>15.691996461674567 -33.89568478135459 0.0 0 0 -3.0466</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_36</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.392746432829533 -31.429921926079793 0.0 0 0 -0.0881</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_37</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.403838313911027 -27.957705472866454 0.0 0 0 0.1464</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_38</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.414930194992525 -24.5409484250606 0.0 0 0 -0.0415</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_39</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.426022076074023 -21.14637513941773 0.0 0 0 0.0101</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_40</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>27.414930194992525 -17.663066805122895 0.0 0 0 0.0035</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_41</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>51.27677012422603 -29.05593631014194 0.0 0 0 -3.1011</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_42</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>51.31004576747053 -32.6945579016192 0.0 0 0 -3.0151</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_4</name>
+      <uri>model://Table</uri>
+      <pose>10.044209838083159 -15.912837967770486 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_5</name>
+      <uri>model://Table</uri>
+      <pose>50.815057113188 -17.171928002769143 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_6</name>
+      <uri>model://Table</uri>
+      <pose>50.82857197800089 -22.041209953463348 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_43</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>50.910684204453716 -18.35084419830008 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_44</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>50.910684204453716 -20.88014307142035 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_45</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>17.42068766585902 -37.16361678396988 0.0 0 0 -2.375</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_46</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>15.123510634206388 -26.75962078381603 0.0 0 0 -3.0521</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_47</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>15.156786277450882 -19.903922926041325 0.0 0 0 3.1056</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OfficeChairGrey_48</name>
+      <uri>model://OfficeChairGrey</uri>
+      <pose>15.156786277450882 -23.28740433060269 0.0 0 0 -3.1369</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Table_7</name>
+      <uri>model://Table</uri>
+      <pose>53.44035998615443 -25.162443752163398 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>39.23182185300569 -38.93086035152498 0.86 0 0 -1.5494</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_2</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>41.859440021537665 -38.49703857543944 0.86 0 0 -1.2654</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_3</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>42.968735817853194 -38.11280719972312 0.86 0 0 -1.3255</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_4</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.08198146225149 -36.867178185454435 0.86 0 0 -0.8439</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_5</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>46.092123379870046 -36.03674089458101 0.86 0 0 -0.922</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_6</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>53.01989154263302 -32.901319180031564 0.86 0 0 -1.498</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_7</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.62889504249839 -37.210676512441864 0.86 0 0 -0.5974</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_8</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>26.23332179531559 -36.32935656320914 0.86 0 0 -0.6149</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_9</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>22.280896888581225 -38.45732856428602 0.86 0 0 -0.9838</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_10</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>23.102315295565575 -37.87460097688554 0.86 0 0 -0.9674</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_11</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>19.465524402907597 -39.02602976808588 0.86 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_12</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>9.08500442290682 -25.758982346832838 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_13</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>6.897992384908279 -24.11574170224224 0.86 0 0 -3.0596</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_14</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>6.871285719780015 -19.762474520210777 0.86 0 0 3.1083</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_15</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>9.869162724510605 -18.660824583669875 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_16</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>10.009372716433992 -15.816510903426806 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_17</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>6.924699050036543 -13.726660513057203 0.86 0 0 -3.0738</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_18</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>8.420299219260805 -11.46324372139534 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_19</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>9.642156070920358 -11.469920387677407 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_20</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>17.490523441406115 -17.052932579516188 0.86 0 0 -1.9526</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_21</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>16.64393292565672 -20.08408522749127 0.86 0 0 -1.5544</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_22</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>16.578808507365114 -23.529621937617804 0.86 0 0 -1.5565</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_23</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>16.66759740010001 -26.921906849736573 0.86 0 0 -1.5981</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_24</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.850571131879565 -13.500649975000973 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_25</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.844405984385237 -17.44499826929735 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_26</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.832075689396586 -20.914791738779297 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_27</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.86276681666092 -24.30363062959119 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_28</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.807684319833875 -27.759128495057908 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_29</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>25.84211761086114 -31.20086919733859 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_30</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>17.036294757893945 -33.59886927425872 0.86 0 0 -1.0917</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_31</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>16.593184877504726 -30.402899888465857 0.86 0 0 -1.5318</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_32</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>18.53876004769049 -36.463401407638194 0.86 0 0 -0.8187</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_33</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.33969462712975 -30.39625014422525 0.86 0 0 -1.5637</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_34</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.72002230683439 -33.5557940079228 0.86 0 0 -1.2791</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_35</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>38.265051344179106 -36.39617707011272 0.86 0 0 -0.783</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_36</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.421010730356564 -31.156474750971146 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_37</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.44443290642671 -27.72057613168727 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_38</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.303134494827155 -26.973381793007984 0.86 0 0 -1.5641</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_39</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.26754355601711 -23.553609476558613 0.86 0 0 -1.4799</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_40</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.4619860774586 -24.278350832660305 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_41</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.42830660359221 -20.883266028229702 0.86 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_42</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.30639206184381 -20.090115764778293 0.86 0 0 -1.5616</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_43</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>36.32922195300184 -16.652521056882442 0.86 0 0 -1.5427</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_44</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>43.56648590438834 -15.17563170647284 0.86 0 0 2.255</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_45</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>45.00705742086847 -17.749325025960555 0.86 0 0 1.9445</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_46</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>54.451498019306996 -14.897580862274541 0.86 0 0 -1.5706</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_47</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>51.99060805353645 -25.493450251913412 0.86 0 0 -1.5242</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_48</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>52.74224452905662 -29.265847467405123 0.86 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_49</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>41.173331794931 -27.45496327064346 0.86 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_50</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>41.185473635629435 -22.269643475250973 0.86 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_51</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>21.17286642821432 -21.759632321833795 0.86 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MonitorAndKeyboard_52</name>
+      <uri>model://MonitorAndKeyboard</uri>
+      <pose>21.12429906542058 -27.467105111341894 0.86 0 0 0.0351</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/DeskChair_49</name>
+      <uri>model://DeskChair</uri>
+      <pose>36.319933848698156 -15.891569555017128 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderMalePatient</name>
+      <uri>model://ElderMalePatient</uri>
+      <pose>10.677658551594178 -28.289600399984643 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderMalePatient_2</name>
+      <uri>model://ElderMalePatient</uri>
+      <pose>15.426572054920978 -24.607149725010597 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderMalePatient_3</name>
+      <uri>model://ElderMalePatient</uri>
+      <pose>15.960516903196044 -17.59896542440677 0.0 0 0 -0.3822</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderMalePatient_4</name>
+      <uri>model://ElderMalePatient</uri>
+      <pose>46.78221606861279 -26.676108611207283 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderMalePatient_5</name>
+      <uri>model://ElderMalePatient</uri>
+      <pose>52.158843890619636 -26.699288488904298 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>15.426572054920978 -21.203180646898215 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_2</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>15.49331179570018 -31.481881466097487 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_3</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>26.55959001576865 -33.73784085227494 0.0 0 0 2.7245</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_4</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>27.063409099650038 -23.218160839967716 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_5</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>35.10776893196419 -21.179758470828062 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_6</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>35.139106188223565 -31.476604745971336 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_7</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>54.16927425868241 -18.532298757740104 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/ElderLadyPatient_8</name>
+      <uri>model://ElderLadyPatient</uri>
+      <pose>53.191169570401186 -30.428287373562583 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse</name>
+      <uri>model://Nurse</uri>
+      <pose>8.876923964462913 -28.295630937271667 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_2</name>
+      <uri>model://Nurse</uri>
+      <pose>17.71354563286029 -18.671297257797793 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_3</name>
+      <uri>model://Nurse</uri>
+      <pose>15.536602438367769 -22.294734817891637 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_4</name>
+      <uri>model://Nurse</uri>
+      <pose>17.91406099765395 -25.058874658666994 0.0 0 0 -2.3833</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_5</name>
+      <uri>model://Nurse</uri>
+      <pose>17.64193300257684 -31.962036075535586 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_6</name>
+      <uri>model://Nurse</uri>
+      <pose>24.83151801853777 -33.20804199838471 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_7</name>
+      <uri>model://Nurse</uri>
+      <pose>25.232548748125094 -23.239994615591726 0.0 0 0 -0.3436</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_8</name>
+      <uri>model://Nurse</uri>
+      <pose>36.7903157570863 -22.108568901196126 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_9</name>
+      <uri>model://Nurse</uri>
+      <pose>36.83328333525637 -32.19116957040117 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_10</name>
+      <uri>model://Nurse</uri>
+      <pose>44.89651551863393 -24.987262028383547 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_11</name>
+      <uri>model://Nurse</uri>
+      <pose>52.66077843159883 -18.71641859928466 0.0 0 0 0.2102</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_12</name>
+      <uri>model://Nurse</uri>
+      <pose>53.58415060959199 -14.237129341179196 0.0 0 0 2.6285</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_13</name>
+      <uri>model://Nurse</uri>
+      <pose>39.68155455559405 -38.32147994307915 0.0 0 0 -0.3588</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_14</name>
+      <uri>model://Nurse</uri>
+      <pose>42.03254874812511 -37.17925849005811 0.0 0 0 -1.3217</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_15</name>
+      <uri>model://Nurse</uri>
+      <pose>18.421379946925136 -44.28312372601058 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_16</name>
+      <uri>model://Nurse</uri>
+      <pose>23.357617014730224 -37.000576900888454 0.0 0 0 -0.7854</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_17</name>
+      <uri>model://Nurse</uri>
+      <pose>24.786935117880102 -36.26127072035694 0.0 0 0 -0.7854</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_18</name>
+      <uri>model://Nurse</uri>
+      <pose>20.43732933348719 -21.90635744779049 0.0 0 0 0.2119</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_19</name>
+      <uri>model://Nurse</uri>
+      <pose>40.053671012653396 -29.92786046690514 0.0 0 0 0.17</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitor</name>
+      <uri>model://FemaleVisitor</uri>
+      <pose>16.895627091265737 -44.223329871928044 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitor_2</name>
+      <uri>model://FemaleVisitor</uri>
+      <pose>19.87056651667245 -40.8477635475559 0.0 0 0 2.2598</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitor_3</name>
+      <uri>model://FemaleVisitor</uri>
+      <pose>29.70801507634324 -37.167574324064496 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitor_4</name>
+      <uri>model://FemaleVisitor</uri>
+      <pose>34.95983231414179 -40.49271566478216 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitor_5</name>
+      <uri>model://FemaleVisitor</uri>
+      <pose>41.98713126418219 -43.28943117572405 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>51.376489365793674 -37.4796277066267 0.0 0 0 -3.0094</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_2</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>42.038848505826735 -39.141848390446555 0.0 0 0 -2.8854</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_3</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>43.67005499788474 -42.42959501557636 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_4</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>30.91907618937736 -39.856574747125144 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_5</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>23.499926925887486 -38.38372370293454 0.0 0 0 -2.3047</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_6</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>9.714657128571986 -29.41381100726898 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_7</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>8.393377177800861 -30.410895734779455 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/FemaleVisitorSit_8</name>
+      <uri>model://FemaleVisitorSit</uri>
+      <pose>12.238786969731944 -24.60119995384795 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>17.630921887619724 -44.62441444559828 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone_2</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>26.21743779085422 -40.60864197530867 0.0 0 0 2.2996</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone_3</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>43.90150378831587 -43.59486173608711 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone_4</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>15.509034267912787 -6.8269451174954865 0.0 0 0 0.7956</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone_5</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>21.364820583823718 -10.65305180569979 0.0 0 0 -2.3562</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorOnPhone_6</name>
+      <uri>model://MaleVisitorOnPhone</uri>
+      <pose>32.50141917618556 -9.900149994230999 0.0 0 0 -0.9067</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>16.579804622899136 -7.220276143225267 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_2</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>21.270647282796833 -8.608376600899973 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_3</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>35.84492134917891 -9.212561055344034 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_4</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>51.87653936387066 -38.91010345755936 0.0 0 0 3.0639</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_5</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>44.71363409099654 -42.46300526902815 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_6</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>31.12427598938505 -38.192684896734775 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_7</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>29.183654474827918 -38.19922695280954 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_8</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>28.521183800623074 -39.84308680435371 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_9</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>8.362793738702365 -29.401588400446165 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MaleVisitorSit_10</name>
+      <uri>model://MaleVisitorSit</uri>
+      <pose>7.188319680012313 -29.462755278643158 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>9.671851082650676 -30.44759047728936 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_2</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>12.246971270335766 -25.137056267066672 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_3</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>31.660078458520854 -41.217995461713045 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_4</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>29.86319372331836 -39.87848928887354 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_5</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>32.3657590092689 -39.891573401023074 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_6</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>32.18282373754858 -38.29070804969043 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_7</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>47.0538056228607 -41.11803392177227 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_8</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>46.51097650090385 -41.136125533633354 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_9</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>51.893931002653794 -37.56015153263339 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_10</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>32.7440944579055 -9.165393638706211 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_11</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>35.36632821814548 -9.165393638706211 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_12</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>18.411311103419116 -8.999446175147119 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_13</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>16.680304603669104 -7.75158263143726 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_14</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>18.51835314026385 -7.74679050805739 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VisitorKidSit_15</name>
+      <uri>model://VisitorKidSit</uri>
+      <pose>16.665659013114894 -9.513711011114966 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VendingMachine</name>
+      <uri>model://VendingMachine</uri>
+      <pose>22.896523210645764 -7.257832391061888 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VendingMachine_2</name>
+      <uri>model://VendingMachine</uri>
+      <pose>24.505680550748068 -41.31690704203688 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VendingMachine_3</name>
+      <uri>model://VendingMachine</uri>
+      <pose>43.08054305603634 -44.52283758316992 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VendingMachine_4</name>
+      <uri>model://VendingMachine</uri>
+      <pose>13.566366678204696 -40.96694742509907 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/IVStand</name>
+      <uri>model://IVStand</uri>
+      <pose>51.47564324449064 -27.53166416676284 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/IVStand_2</name>
+      <uri>model://IVStand</uri>
+      <pose>47.18612745663632 -25.86618591592633 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/IVStand_3</name>
+      <uri>model://IVStand</uri>
+      <pose>11.152536440906129 -27.45377870081922 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin</name>
+      <uri>model://LitterBin</uri>
+      <pose>23.67632014153304 -41.3765124418292 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_2</name>
+      <uri>model://LitterBin</uri>
+      <pose>36.647036652436476 -41.367897388562014 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_3</name>
+      <uri>model://LitterBin</uri>
+      <pose>42.18627360486139 -44.567582016076344 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_4</name>
+      <uri>model://LitterBin</uri>
+      <pose>55.165605169032006 -35.35561324564443 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_5</name>
+      <uri>model://LitterBin</uri>
+      <pose>31.935140956117102 -10.197261643782939 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_6</name>
+      <uri>model://LitterBin</uri>
+      <pose>22.952844121379968 -8.078739279258498 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_7</name>
+      <uri>model://LitterBin</uri>
+      <pose>12.270716510903437 -34.21376870120383 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_8</name>
+      <uri>model://LitterBin</uri>
+      <pose>20.249844236760143 -35.99409638090845 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OpScrubs</name>
+      <uri>model://OpScrubs</uri>
+      <pose>53.69881158416989 -17.76114380216147 0.0 0 0 -1.1219</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/OpScrubs_2</name>
+      <uri>model://OpScrubs</uri>
+      <pose>54.4627245105958 -17.74294450213455 0.0 0 0 -1.3103</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit</name>
+      <uri>model://PatientFSit</uri>
+      <pose>18.425795161724565 -9.50646898196224 0.0 0 0 -3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_2</name>
+      <uri>model://PatientFSit</uri>
+      <pose>19.903411407253586 -8.970478058536218 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_3</name>
+      <uri>model://PatientFSit</uri>
+      <pose>30.38593900234609 -39.904630591131145 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_4</name>
+      <uri>model://PatientFSit</uri>
+      <pose>29.712914887888953 -38.225368255067146 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_5</name>
+      <uri>model://PatientFSit</uri>
+      <pose>31.65124802892199 -38.27409715010965 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_6</name>
+      <uri>model://PatientFSit</uri>
+      <pose>26.15896311680322 -37.56744740586904 0.0 0 0 2.5917</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_7</name>
+      <uri>model://PatientFSit</uri>
+      <pose>44.17796623206804 -42.53906003615249 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_8</name>
+      <uri>model://PatientFSit</uri>
+      <pose>43.22075304795973 -38.75944771354951 0.0 0 0 1.9601</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_9</name>
+      <uri>model://PatientFSit</uri>
+      <pose>53.94574054844049 -38.98360063074501 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_10</name>
+      <uri>model://PatientFSit</uri>
+      <pose>52.426583592938776 -38.94483289104269 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientFSit_11</name>
+      <uri>model://PatientFSit</uri>
+      <pose>33.29012730279607 -9.178881581477643 0.0 0 0 -1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientWheelChair</name>
+      <uri>model://PatientWheelChair</uri>
+      <pose>24.24628668128151 -38.23912541825318 0.0 0 0 1.9049</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientWheelChair_2</name>
+      <uri>model://PatientWheelChair</uri>
+      <pose>35.65242875274031 -40.27707011268801 0.0 0 0 1.9552</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientWheelChair_3</name>
+      <uri>model://PatientWheelChair</uri>
+      <pose>37.023164493673356 -8.670889581169963 0.0 0 0 -2.2818</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientWheelChair_4</name>
+      <uri>model://PatientWheelChair</uri>
+      <pose>21.319780008461233 -9.919991538786979 0.0 0 0 -0.7854</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Scrubs</name>
+      <uri>model://Scrubs</uri>
+      <pose>52.69475404792128 -18.06555132494906 0.0 0 0 -0.0141</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Scrubs_2</name>
+      <uri>model://Scrubs</uri>
+      <pose>20.446132841044594 -27.06693588708129 0.0 0 0 -0.4618</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Scrubs_3</name>
+      <uri>model://Scrubs</uri>
+      <pose>20.47590861889929 -27.662424522133787 0.0 0 0 0.2369</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Scrubs_4</name>
+      <uri>model://Scrubs</uri>
+      <pose>40.47298180839202 -22.30929964232147 0.0 0 0 0.0</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Pine Tree</name>
+      <uri>model://Pine Tree</uri>
+      <pose>53.27007807392028 -42.91809545786705 0.0 0 0 -3.0821</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MopCart2</name>
+      <uri>model://MopCart2</uri>
+      <pose>39.73055267105114 -6.423976000923047 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MopCart2_2</name>
+      <uri>model://MopCart2</uri>
+      <pose>38.77756624745206 -6.447505865159038 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/MopCart2_3</name>
+      <uri>model://MopCart2</uri>
+      <pose>11.208534287142813 -29.69503865235955 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Playground</name>
+      <uri>model://Playground</uri>
+      <pose>49.360863043729125 -47.98560439983082 0.0 0 0 3.1416</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Oak tree</name>
+      <uri>model://Oak tree</uri>
+      <pose>34.61070728048924 -47.822726048998156 0.0 0 0 -2.9876</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Pine Tree_2</name>
+      <uri>model://Pine Tree</uri>
+      <pose>40.35482096842433 -50.170570362678404 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Ambulance2</name>
+      <uri>model://Ambulance2</uri>
+      <pose>28.845379023883723 -47.54596746278993 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/SUV</name>
+      <uri>model://SUV</uri>
+      <pose>25.621410714972523 -47.34553286412065 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/PatientWheelChair_5</name>
+      <uri>model://PatientWheelChair</uri>
+      <pose>41.75433637167805 -46.68384292911815 0.0 0 0 -0.593</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/Nurse_20</name>
+      <uri>model://Nurse</uri>
+      <pose>42.062432214145645 -47.832175685550595 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/VendingMachine_5</name>
+      <uri>model://VendingMachine</uri>
+      <pose>9.019233875620175 -45.16312449521176 0.0 0 0 -0.7854</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>OpenRobotics/LitterBin_9</name>
+      <uri>model://LitterBin</uri>
+      <pose>9.557890081150735 -44.544321372254956 0.0 0 0 1.5708</pose>
+      <static>True</static>
+      <static>true</static>
+    </include>
+    <include>
+      <name>clinic_L1</name>
+      <uri>model://clinic_L1</uri>
+      <pose>0 0 0.0 0 0 0</pose>
+      <static>true</static>
+    </include>
+    <gui fullscreen="0">
+      <plugin filename="GzScene3D" name="3D View">
+        <ignition-gui>
+          <title>Clinic L1 Nav2</title>
+          <property type="bool" key="showTitleBar">false</property>
+          <property type="string" key="state">docked</property>
+        </ignition-gui>
+        <engine>ogre2</engine>
+        <scene>scene</scene>
+        <camera_pose>14 -38 12 0 0.95 1.57</camera_pose>
+      </plugin>
+      <plugin filename="WorldControl" name="World control">
+        <play_pause>true</play_pause>
+        <step>true</step>
+        <start_paused>false</start_paused>
+      </plugin>
+    </gui>
+    <plugin filename="libignition-gazebo-contact-system.so" name="ignition::gazebo::systems::Contact" />
+  </world>
+</sdf>

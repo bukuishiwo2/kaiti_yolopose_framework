@@ -69,3 +69,22 @@ reports/mapping/rejected/
 
 # Downloaded Ultralytics weight at repo root
 /yolo11n-pose.pt
+
+# Local papers, office drafts, recordings and raw run records (keep on disk)
+/*.pdf
+/*.pptx
+/*.docx
+/.~lock.*
+/rviz_screenshot_*.png
+/reports/presentations/
+/reports/s1/
+/maps/candidates/
+
+# Clinic source snapshot: retain only the required map inputs under verification
+/experiments/clinic/runs/
+/experiments/clinic/verification/*
+!/experiments/clinic/verification/hospital_semantics/
+/experiments/clinic/verification/hospital_semantics/*
+!/experiments/clinic/verification/hospital_semantics/collision_audit.yaml
+!/experiments/clinic/verification/hospital_semantics/collision_audit.pgm
+/experiments/clinic/support/semantic_geometry_deps/

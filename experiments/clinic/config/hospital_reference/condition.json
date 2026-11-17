@@ -1,0 +1,6 @@
+{
+  "localization": "gazebo_reference_pose",
+  "scope": "planning/control simulation with known state",
+  "amcl_tf_broadcast": false,
+  "no_teleportation": true
+}

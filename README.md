@@ -1,5 +1,9 @@
 # kaiti-yolopose-framework
 
+近期协同规划与Clinic实验：见[小影响范围配对与分级模式实测](reports/benchmarks/clinic_sparse_repair_and_modes_2026-11-17.md)及[独立Clinic源码快照](experiments/clinic/README.md)。Fast/Standard功能验收通过，时间压缩目标未达；研究主链和原生Clinic保持不变。
+
+2026-11-09研究方向与完成路线已重新确认，优先阅读[三项研究内容：已有成果、停止项与完成路线](docs/reviews/research_scope_and_completion_plan_2026-11-09.md)。该文汇总最新实测边界与后续投入；下文部分S0/S1状态保留早期口径，不代表最新阶段审计结论。
+
 面向动态语义事件驱动移动机器人任务系统的研究型工程仓库。当前已经形成两条稳定主线：
 
 - 感知主线：基于人体关键点的跌倒检测、时序模型、语义事件稳定化

@@ -1,0 +1,842 @@
+navigation_policy:
+  source: Manual conservative envelopes registered to original clinic.png; no through-room
+    shortcuts
+  closed_regions:
+  - id: WEST_OUTER_CLINICAL
+    kind: clinical_no_through
+    polygon:
+    - - 6.5
+      - -11.2
+    - - 11.9
+      - -11.2
+    - - 11.9
+      - -29.0
+    - - 6.5
+      - -29.0
+  - id: WEST_CURVED_CONSULT
+    kind: clinical_no_through
+    polygon:
+    - - 16.95
+      - -13.1
+    - - 19.9
+      - -15.2
+    - - 19.9
+      - -31.9
+    - - 22.8
+      - -34.7
+    - - 20.5
+      - -37.8
+    - - 17.6
+      - -35.8
+    - - 14.0
+      - -33.5
+    - - 14.0
+      - -17.8
+  - id: WEST_STRAIGHT_CONSULT
+    kind: clinical_no_through
+    polygon:
+    - - 23.55
+      - -13.2
+    - - 27.85
+      - -13.2
+    - - 27.85
+      - -33.7
+    - - 23.55
+      - -33.7
+  - id: EAST_STRAIGHT_CONSULT
+    kind: clinical_no_through
+    polygon:
+    - - 34.1
+      - -13.15
+    - - 38.25
+      - -13.15
+    - - 38.25
+      - -33.0
+    - - 34.1
+      - -33.0
+  - id: EAST_CURVED_CONSULT
+    kind: clinical_no_through
+    polygon:
+    - - 44.5
+      - -13.1
+    - - 48.0
+      - -17.8
+    - - 48.0
+      - -32.6
+    - - 44.2
+      - -35.1
+    - - 41.1
+      - -37.9
+    - - 38.6
+      - -35.4
+    - - 40.3
+      - -32.9
+    - - 42.75
+      - -31.7
+    - - 42.75
+      - -15.2
+  - id: EAST_OUTER_CLINICAL
+    kind: clinical_no_through
+    polygon:
+    - - 50.45
+      - -11.2
+    - - 55.7
+      - -11.2
+    - - 55.7
+      - -33.2
+    - - 50.45
+      - -33.2
+  - id: CLEANING_STORE
+    kind: support_no_through
+    polygon:
+    - - 37.8
+      - -7.25
+    - - 40.7
+      - -7.25
+    - - 40.7
+      - -5.9
+    - - 37.8
+      - -5.9
+  - id: WC_SW
+    kind: support_no_through
+    polygon:
+    - - 6.8
+      - -35.0
+    - - 11.9
+      - -35.0
+    - - 11.9
+      - -32.5
+    - - 6.8
+      - -32.5
+  - id: HR
+    kind: support_no_through
+    polygon:
+    - - 9.4
+      - -36.8
+    - - 10.9
+      - -36.8
+    - - 10.9
+      - -35.0
+    - - 9.4
+      - -35.0
+  - id: WC_NE
+    kind: support_no_through
+    polygon:
+    - - 37.8
+      - -11.4
+    - - 40.7
+      - -11.4
+    - - 40.7
+      - -7.3
+    - - 37.8
+      - -7.3
+  - id: E_TROLLEY
+    kind: support_no_through
+    polygon:
+    - - 45.4
+      - -11.4
+    - - 48.1
+      - -11.4
+    - - 48.1
+      - -9.5
+    - - 45.4
+      - -9.5
+  - id: STAIRS_NE
+    kind: support_no_through
+    polygon:
+    - - 40.9
+      - -9.7
+    - - 48.4
+      - -9.7
+    - - 48.4
+      - -5.8
+    - - 40.9
+      - -5.8
+schema: hospital-semantics/v1
+date: '2026-11-10'
+scope: Clinic L1 outpatient/public-service research design; existing static fixtures
+  retained, no pedestrians added
+points:
+  B1:
+    id: B1
+    kind: standby
+    pose:
+    - 12.7
+    - -37.9
+    - 1.5707963267948966
+    label: 待命B1
+    origin: research service position
+    source_anchor: null
+    rationale: 原充电标注邻近的后勤候选停靠区，新增独立停车位
+    geometry:
+      free: true
+      clearance: 0.8
+      component: 3
+  B2:
+    id: B2
+    kind: standby
+    pose:
+    - 12.7
+    - -38.9
+    - 1.5707963267948966
+    label: 待命B2
+    origin: research service position
+    source_anchor: null
+    rationale: 与充电和物资取货分离，不将待命算作充电
+    geometry:
+      free: true
+      clearance: 0.8
+      component: 3
+  B3:
+    id: B3
+    kind: standby
+    pose:
+    - 12.7
+    - -39.9
+    - 1.5707963267948966
+    label: 待命B3
+    origin: research service position
+    source_anchor: null
+    rationale: 后勤候选停靠区第三独立停车位
+    geometry:
+      free: true
+      clearance: 0.8
+      component: 3
+  C1:
+    id: C1
+    kind: charging_reservation
+    pose:
+    - 12.71576477827777
+    - -36.9
+    - 3.141592653589793
+    label: 充电预留C1
+    origin: research service position near original charger-named anchor
+    source_anchor:
+      id: graph_0:L1:vertex_40
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: deliveryRobot_1_charger
+      xy:
+      - 12.71576477827777
+      - -37.26495134802511
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: deliveryRobot_1_charger
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 参考原生charger命名区，原标签未带is_charger；本研究指定充电预留位，仅验空间/路径，无充电硬件和SOC验收
+    geometry:
+      free: true
+      clearance: 0.45276925690687087
+      component: 3
+  CA:
+    id: CA
+    kind: charging_approach
+    pose:
+    - 13.65
+    - -36.9
+    - 3.141592653589793
+    label: 充电进场CA
+    origin: research service position
+    source_anchor: null
+    rationale: C1直线进场位，充电资源容量1
+    geometry:
+      free: true
+      clearance: 1.0965856099730655
+      component: 3
+  G1:
+    id: G1
+    kind: supply_pickup
+    pose:
+    - 22.7
+    - -27.5
+    - 3.141592653589793
+    label: 人工取货交接G1
+    origin: research service position
+    source_anchor: null
+    rationale: 参考原始平面图左BOH ADMIN AREA，工作人员备货后在柜台外侧临时交接；研究新增业务接口，不宣称原有医疗物资库。原STORE为cleaning_supplies，保持原用途，不从清洁库取护理用品
+    geometry:
+      free: true
+      clearance: 0.7000000000000001
+      component: 3
+  DL:
+    id: DL
+    kind: nurse_handoff
+    pose:
+    - 21.523795238644688
+    - -19.625899003884484
+    - 0.0
+    label: 左护理站交付DL
+    origin: original semantic anchor
+    source_anchor:
+      id: graph_0:L1:vertex_47
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_left_nurse_center
+      xy:
+      - 21.523795238644688
+      - -19.625899003884484
+      properties:
+        is_holding_point: true
+        is_parking_spot: true
+        name: L1_left_nurse_center
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 原护士中心锚点作为任务交接候选；巡检与配送共用同一站点容量1
+    geometry:
+      free: true
+      clearance: 0.8500000000000001
+      component: 3
+  DR:
+    id: DR
+    kind: nurse_handoff
+    pose:
+    - 40.9051613399485
+    - -20.215195569401196
+    - 0.0
+    label: 右护理站交付DR
+    origin: original semantic anchor
+    source_anchor:
+      id: graph_0:L1:vertex_48
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_right_nurse_center
+      xy:
+      - 40.9051613399485
+      - -20.215195569401196
+      properties:
+        is_holding_point: true
+        is_parking_spot: true
+        name: L1_right_nurse_center
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 原护士中心锚点作为任务交接候选；巡检与配送共用同一站点容量1
+    geometry:
+      free: true
+      clearance: 0.8500000000000001
+      component: 3
+  PW1:
+    id: PW1
+    kind: patrol_waiting
+    pose:
+    - 8.007099726933587
+    - -31.734248682743
+    - 1.5707963267948966
+    label: 候诊1观察PW1
+    origin: original semantic anchor
+    source_anchor:
+      id: graph_0:L1:vertex_46
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_sub_waiting_area_1
+      xy:
+      - 8.007099726933587
+      - -31.734248682743
+      properties:
+        is_charger: true
+        is_holding_point: true
+        is_parking_spot: true
+        name: L1_sub_waiting_area_1
+        spawn_robot_name: deliveryRobot_1
+        spawn_robot_type: DeliveryRobot
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 原图虽带charger属性，本设计按候诊语义使用，不安排充电
+    geometry:
+      free: true
+      clearance: 0.8015609770940699
+      component: 3
+  PW2:
+    id: PW2
+    kind: patrol_waiting
+    pose:
+    - 17.0
+    - -11.1
+    - 1.5707963267948966
+    label: 候诊2观察PW2
+    origin: research service position
+    source_anchor:
+      id: graph_0:L1:vertex_9
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_sub_waiting_area_2
+      xy:
+      - 15.243098342371459
+      - -10.286131302642216
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_sub_waiting_area_2
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 参考L1_sub_waiting_area_2，沿候诊区外缘新增观察位，避开事件人体区域
+    geometry:
+      free: true
+      clearance: 0.8
+      component: 3
+  PW3:
+    id: PW3
+    kind: patrol_waiting
+    pose:
+    - 36.86968193531021
+    - -10.033252567208962
+    - 1.5707963267948966
+    label: 候诊3观察PW3
+    origin: original semantic anchor
+    source_anchor:
+      id: graph_0:L1:vertex_49
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_sub_waiting_area_3
+      xy:
+      - 36.86968193531021
+      - -10.033252567208962
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_sub_waiting_area_3
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: ''
+    geometry:
+      free: true
+      clearance: 0.7905694150420949
+      component: 3
+  PW7:
+    id: PW7
+    kind: patrol_waiting
+    pose:
+    - 50.90363062959121
+    - -34.56924733664093
+    - 1.5707963267948966
+    label: 南侧候诊观察PW7
+    origin: original semantic anchor
+    source_anchor:
+      id: graph_0:L1:vertex_39
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_sub_waiting_area_7
+      xy:
+      - 50.90363062959121
+      - -34.56924733664093
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_sub_waiting_area_7
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 右区南侧公共候诊区，用于形成不穿诊室的巡检环线
+    geometry:
+      free: true
+      clearance: 1.25
+      component: 3
+  TL:
+    id: TL
+    kind: patrol_clinic_entrance
+    pose:
+    - 12.7
+    - -13.6
+    - 3.141592653589793
+    label: 左诊疗入口TL
+    origin: research service position
+    source_anchor:
+      id: graph_0:L1:vertex_7
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_left_treatment_1
+      xy:
+      - 10.099184646744366
+      - -13.60685742856045
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_left_treatment_1
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: L1_left_treatment_1外侧公共过渡空间；巡检不进入诊疗间
+    geometry:
+      free: true
+      clearance: 1.0
+      component: 3
+  TR:
+    id: TR
+    kind: patrol_clinic_entrance
+    pose:
+    - 49.3
+    - -19.8
+    - 0.0
+    label: 右诊疗入口TR
+    origin: research service position
+    source_anchor:
+      id: graph_0:L1:vertex_20
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_right_treatment
+      xy:
+      - 51.548790431137306
+      - -19.788831198800064
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_right_treatment
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 右诊疗区入口外侧，不进入治疗区
+    geometry:
+      free: true
+      clearance: 1.118033988749895
+      component: 3
+  PR:
+    id: PR
+    kind: patrol_clinic_entrance
+    pose:
+    - 49.3
+    - -13.45
+    - 0.0
+    label: 右操作区入口PR
+    origin: research service position
+    source_anchor:
+      id: graph_0:L1:vertex_52
+      source: /home/yhc/rmf_clinic_ws/install/rmf_demos_maps/share/rmf_demos_maps/maps/clinic/nav_graphs/0.yaml
+      name: L1_right_procedure
+      xy:
+      - 52.31165339794628
+      - -13.450278835429419
+      properties:
+        is_holding_point: true
+        is_parking_spot: false
+        name: L1_right_procedure
+      point_pixel: 254
+      coordinate_status: generated RMF metric graph; not yet validated against L1
+        navigation/footprint/door geometry
+    rationale: 右操作/诊疗区外侧公共路线
+    geometry:
+      free: true
+      clearance: 1.5508062419270825
+      component: 3
+  V1:
+    id: V1
+    kind: verify
+    pose:
+    - 14.5
+    - -13.7
+    - 1.2698760924344712
+    label: 核验V1
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 1.8601075237738276
+      component: 3
+  M1:
+    id: M1
+    kind: monitor
+    pose:
+    - 18.3
+    - -12.0
+    - 2.7492525093742777
+    label: 监护M1
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 1.05
+      component: 3
+  H1:
+    id: H1
+    kind: event_handoff
+    pose:
+    - 19.0
+    - -12.4
+    - 2.7233683240105644
+    label: 事件交付H1
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 0.65
+      component: 3
+  V2:
+    id: V2
+    kind: verify
+    pose:
+    - 13.5
+    - -32.4
+    - 2.8966139904629293
+    label: 核验V2
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 0.8500000000000001
+      component: 3
+  M2:
+    id: M2
+    kind: monitor
+    pose:
+    - 13.3
+    - -31.3
+    - -2.9889433251945285
+    label: 监护M2
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 0.9617692030835672
+      component: 3
+  H2:
+    id: H2
+    kind: event_handoff
+    pose:
+    - 13.5
+    - -33.9
+    - 2.475623416210684
+    label: 事件交付H2
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 1.0307764064044151
+      component: 3
+  V3:
+    id: V3
+    kind: verify
+    pose:
+    - 13.3
+    - -12.0
+    - -1.6092389168160852
+    label: 核验V3
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 1.0124228365658294
+      component: 3
+  M3:
+    id: M3
+    kind: monitor
+    pose:
+    - 13.0
+    - -17.3
+    - 1.4968572891369565
+    label: 监护M3
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 0.890224690738243
+      component: 3
+  H3:
+    id: H3
+    kind: event_handoff
+    pose:
+    - 13.7
+    - -17.8
+    - 1.7257930687188376
+    label: 事件交付H3
+    origin: research service position
+    source_anchor: null
+    rationale: 与人体、安全区、其他服务位分开；观察朝向对准事件
+    geometry:
+      free: true
+      clearance: 0.9013878188659974
+      component: 3
+events:
+- id: E1
+  zone: 候诊区2
+  center:
+  - 15.4
+  - -10.8
+  body_yaw: 0.0
+  body_length: 1.6
+  body_width: 0.55
+  body_safety_margin: 0.35
+  services:
+    verify: V1
+    monitor: M1
+    event_handoff: H1
+- id: E2
+  zone: 候诊区1出口侧
+  center:
+  - 10.7
+  - -31.7
+  body_yaw: 0.0
+  body_length: 1.6
+  body_width: 0.55
+  body_safety_margin: 0.35
+  services:
+    verify: V2
+    monitor: M2
+    event_handoff: H2
+- id: E3
+  zone: 左诊疗入口外侧公共区
+  center:
+  - 13.2
+  - -14.6
+  body_yaw: 1.5707963267948966
+  body_length: 1.6
+  body_width: 0.55
+  body_safety_margin: 0.35
+  services:
+    verify: V3
+    monitor: M3
+    event_handoff: H3
+routes:
+- id: PATROL_WEST
+  kind: patrol
+  nominal_robot: r1
+  points:
+  - DL
+  - PW2
+  - TL
+  - PW1
+  - DL
+  dwell_seconds: 5
+  period_seconds: 600
+  max_revisit_seconds: 900
+  semantics: 左护理站—候诊2—左诊疗入口外侧—候诊1—左护理站
+  length_m: 75.51594750253554
+  nominal_travel_seconds: 343.254306829707
+- id: PATROL_EAST
+  kind: patrol
+  nominal_robot: r3
+  points:
+  - DR
+  - PW3
+  - PR
+  - TR
+  - PW7
+  - DR
+  dwell_seconds: 5
+  period_seconds: 600
+  max_revisit_seconds: 900
+  semantics: 右护理站—候诊3—右操作区入口—右诊疗入口—南侧候诊区—右护理站
+  length_m: 84.14856515481259
+  nominal_travel_seconds: 382.4934779764209
+- id: DELIVERY_WEST
+  kind: pickup_delivery
+  nominal_robot: r2
+  points:
+  - G1
+  - DL
+  - G1
+  pickup_seconds: 15
+  handoff_seconds: 10
+  semantics: 一个标准物资包取货—左护理站人工交接—返回取货位
+  length_m: 16.726408303287336
+  nominal_travel_seconds: 76.02912865130607
+- id: DELIVERY_EAST
+  kind: pickup_delivery
+  nominal_robot: r2
+  points:
+  - G1
+  - DR
+  - G1
+  pickup_seconds: 15
+  handoff_seconds: 10
+  semantics: 一个标准物资包取货—右护理站人工交接—返回取货位
+  length_m: 81.52329509074224
+  nominal_travel_seconds: 370.56043223064654
+courier_cycle:
+- DELIVERY_WEST
+- DELIVERY_EAST
+courier_cycle_period_seconds: 1200
+resources:
+- id: charge_C1
+  capacity: 1
+  points:
+  - CA
+  - C1
+  status: space reservation only; charging/SOC not implemented
+- id: supply_G1
+  capacity: 1
+  points:
+  - G1
+- id: nurse_left
+  capacity: 1
+  points:
+  - DL
+- id: nurse_right
+  capacity: 1
+  points:
+  - DR
+nominal_assignments_are_not_hard_capabilities: true
+source_floorplan:
+  file: /home/yhc/rmf_clinic_ws/src/rmf_demos/rmf_demos_maps/maps/clinic/clinic.png
+  store_reference_bbox:
+  - 37.8
+  - -7.25
+  - 40.7
+  - -5.9
+  store_actual_door_name: L1_cleaning_supplies
+  supply_interface_reference_bbox:
+  - 20.5
+  - -28.8
+  - 22.5
+  - -24.0
+  supply_interface_basis: Manual reading of BOH ADMIN AREA in original clinic.png;
+    outside staff counter, temporary handoff, not an existing medical store
+  charging_and_parking: Research reservation strip along original demo charging-area
+    wall; not an existing dedicated hospital equipment room
+  non_repurposed_regions:
+  - HR
+  - WC
+  - DIS.WC
+  - E-TROLLEY
+  - stairs
+  - STORE / cleaning_supplies
+reserved_aisle:
+  centerline:
+  - - 14.8
+    - -41.0
+  - - 14.8
+    - -37.2
+  width_m: 1.2
+  role: research minimum free bypass corridor beside charging/standby strip; not statutory
+    hospital corridor width
+robot_radius_m: 0.2
+extra_clearance_m: 0.1
+travel_speed_for_estimate: 0.22
+camera:
+  frame: oakd_rgb_camera_frame
+  base_to_camera:
+  - - 1.0
+    - 0.0
+    - 0.0
+    - -0.03705974
+  - - 0.0
+    - 1.0
+    - 0.0
+    - 0.0
+  - - 0.0
+    - 0.0
+    - 1.0
+    - 0.18588622
+  - - 0.0
+    - 0.0
+    - 0.0
+    - 1.0
+  horizontal_fov: 1.25
+  vertical_fov: 0.9919896803728256
+  image:
+  - 320
+  - 240
+  near: 0.3
+  far: 100.0
+  base_height_assumed: 0.0
+  pose_tests:
+    position_error_m: 0.2
+    yaw_error_rad: 0.3
+  target_geometry: 1.6m x 0.55m footprint; 9 planar samples at heights 0.08/0.18/0.28m;
+    not a vision detector test
+acceptance: Static geometry, camera geometry and independent Nav2 path queries; not
+  closed-loop execution or medical design certification

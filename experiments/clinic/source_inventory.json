@@ -1,0 +1,656 @@
+{
+  "schema": "clinic-source-export/v1",
+  "date": "2026-11-17",
+  "source_workspace": "/home/yhc/clinic_planning_ws",
+  "deployment": "Copy/review into the original independent workspace; existing absolute paths preserved",
+  "files": [
+    {
+      "path": "README_CLINIC_ACTIVE_BED.md",
+      "bytes": 9928,
+      "sha256": "cb763fe857000790c9ee9b6e080a80f3d50ac84b9edb78555e1a52d90576109c"
+    },
+    {
+      "path": "README_CLINIC_MODES.md",
+      "bytes": 4152,
+      "sha256": "2cac4334fe7496cddccc06ca79b86d9d2fac1770bd3c42edd560b3ec92ad7d4a"
+    },
+    {
+      "path": "README_CLINIC_RUNTIME.md",
+      "bytes": 7241,
+      "sha256": "6efd8b6bdf804396724c7823a4f4cfa343975756a322342a07e61952b39ede07"
+    },
+    {
+      "path": "clinic_experiment.sh",
+      "bytes": 197,
+      "sha256": "7b957a7f346f1b26d36da6cb914d810ddda280b4b26ea2f9d20d2a5735d96bb3"
+    },
+    {
+      "path": "config/clinic_modes/benchmark.json",
+      "bytes": 630,
+      "sha256": "78eb2a43fef4a1b9fbc989437310ce5f078047307c54e3fc9a36432633e57beb"
+    },
+    {
+      "path": "config/clinic_modes/fast.json",
+      "bytes": 644,
+      "sha256": "f00efdf9ee0bd1e973d9ebe154dc3d080cdd832c03bc35c7f7b0f3f11f830e1f"
+    },
+    {
+      "path": "config/clinic_modes/standard.json",
+      "bytes": 650,
+      "sha256": "854276e2986fd93f340460fd25be3a9b8dc1e6ccb0eb7d15d090c5fd82b7ba83"
+    },
+    {
+      "path": "config/clinic_runtime/nav2.template.yaml",
+      "bytes": 10996,
+      "sha256": "0874a5e783a4fcaf6ac5a08e738892691a75b4297bb496a83be3908446ff6955"
+    },
+    {
+      "path": "config/clinic_runtime/profile.json",
+      "bytes": 464,
+      "sha256": "0efc1837b66cbd6dbbff435af0ee5377562f38ce77f87bbab2133b0c93ff4208"
+    },
+    {
+      "path": "config/fall/provenance.json",
+      "bytes": 379,
+      "sha256": "b898a86bb213e83fe55ce8365e555c95e47f212d7de18e49efd1378d5137297b"
+    },
+    {
+      "path": "config/fall/r1_nav2.yaml",
+      "bytes": 10667,
+      "sha256": "53e8ba548e5e8943118464c31fe09e7a5739b7c83d353adece4812e28bfdabbb"
+    },
+    {
+      "path": "config/fall/r2_nav2.yaml",
+      "bytes": 10667,
+      "sha256": "5e3ee792146ec829f0c182efa774903b6e2d38d439ed580a895e53a077570572"
+    },
+    {
+      "path": "config/fall/r3_nav2.yaml",
+      "bytes": 10668,
+      "sha256": "33ea3d27ded145a3d9fcb8b18ae8cb4ea44130d7666c73df0c731f4485df671a"
+    },
+    {
+      "path": "config/fall/scenario.json",
+      "bytes": 5769,
+      "sha256": "74b876e796dddecb79f9524562d904b45b0a36da02887b8d8b5a376a22c0b027"
+    },
+    {
+      "path": "config/hospital_aligned/r1_nav2.yaml",
+      "bytes": 10886,
+      "sha256": "10bb8c043a426d0ae4a938650f028232566611df627fbd2f081f2da5a3d12937"
+    },
+    {
+      "path": "config/hospital_aligned/r2_nav2.yaml",
+      "bytes": 10872,
+      "sha256": "53c3b9492840e9ad15753bcbe66d85ea38f86f4ae8b8abc34ed708ec2c2c37be"
+    },
+    {
+      "path": "config/hospital_aligned/r3_nav2.yaml",
+      "bytes": 10884,
+      "sha256": "8f62c2fe7451ae24c84873b67bc0ef68a892c70c202e8ffcc491b162a12a90a9"
+    },
+    {
+      "path": "config/hospital_aligned/scenario.json",
+      "bytes": 60503,
+      "sha256": "4ea3f3395e1da67a2ff6f2d73c3dd190d53388f33b24b44badb12977bc7c6e29"
+    },
+    {
+      "path": "config/hospital_aligned/scenario.yaml",
+      "bytes": 226,
+      "sha256": "42c3f762f7ec6cfa648b8e8f9e696d04f8900ba73e2d79269362f09ad4286dee"
+    },
+    {
+      "path": "config/hospital_aligned/semantic_navigation.pgm",
+      "bytes": 1200017,
+      "sha256": "cf451a84b7d7050ab549e840679e30a9961188264665a42d611aad46f256c377"
+    },
+    {
+      "path": "config/hospital_aligned/semantic_navigation.yaml",
+      "bytes": 141,
+      "sha256": "7d581236079910a0f53a73163b4c994e9a6239641d372e89855b59274697584a"
+    },
+    {
+      "path": "config/hospital_bed/bed.sdf",
+      "bytes": 1035,
+      "sha256": "e8fd4be1cd74e8fe1c90138a47ca6d1f90ef1d5c547f5b716d1762a86522a0a6"
+    },
+    {
+      "path": "config/hospital_bed/r1_nav2.yaml",
+      "bytes": 10898,
+      "sha256": "a11a9e4a7e1fbfa50c8ffa10b8d8334e50c2f9a225e28c0aaf55b2ba46f29db3"
+    },
+    {
+      "path": "config/hospital_bed/r2_nav2.yaml",
+      "bytes": 10884,
+      "sha256": "1ecca0cd1740efd16bc1b1e9d9b2b921460331cce481b644a45174787d11fdd8"
+    },
+    {
+      "path": "config/hospital_bed/r3_nav2.yaml",
+      "bytes": 10909,
+      "sha256": "d68064781f4c5f38bbf1ca1685a87b396aa98eec338e63da361f87b89f3fcdfb"
+    },
+    {
+      "path": "config/hospital_bed/scenario.json",
+      "bytes": 26757,
+      "sha256": "e306d7c2bf1b5dd90ba970584c098bfca1b16ecd82d8356dc44a247078284d03"
+    },
+    {
+      "path": "config/hospital_bed/scenario.yaml",
+      "bytes": 19815,
+      "sha256": "0a4390b7ffc5e29eda0f456b826eaa067711036b796f4a9f40c662e16a20470b"
+    },
+    {
+      "path": "config/hospital_dense/r1_nav2.yaml",
+      "bytes": 10886,
+      "sha256": "1e55a11847fc2ba629da61cec14b589cb4af206410c5ef192ce1dc4a1b42636a"
+    },
+    {
+      "path": "config/hospital_dense/r2_nav2.yaml",
+      "bytes": 10872,
+      "sha256": "6d89fec410660675685ff212291ac5b0c1e562b409d346466c9dc8ef23612102"
+    },
+    {
+      "path": "config/hospital_dense/r3_nav2.yaml",
+      "bytes": 10897,
+      "sha256": "e16e0853a4900410d73e136f64bc2902a164c972191daa49ae7b01e92fa97ae7"
+    },
+    {
+      "path": "config/hospital_dense/scenario.json",
+      "bytes": 20479,
+      "sha256": "03786cbdebe05c6417383525aa932016f694f8a8d3bb1e378ad33eb36280f2f8"
+    },
+    {
+      "path": "config/hospital_dense/scenario.yaml",
+      "bytes": 15033,
+      "sha256": "e0ce4e1878bd7c82fc7381f3720a516b6a5ec42b176ff1c94eb572e78ded579c"
+    },
+    {
+      "path": "config/hospital_execution/r1_nav2.yaml",
+      "bytes": 10884,
+      "sha256": "2c521320263b22b9b0d3796b4b5620eefdbfd365485f908517bfafdd778ea6f4"
+    },
+    {
+      "path": "config/hospital_execution/r2_nav2.yaml",
+      "bytes": 10870,
+      "sha256": "b8d3907d5943cfdd9024695dab7d0289ee02e30898ceebf26f64278f8e733e3f"
+    },
+    {
+      "path": "config/hospital_execution/r3_nav2.yaml",
+      "bytes": 10882,
+      "sha256": "a8c845ebdbdd64e7740001dd50afe78764735c915c0e37c04a22a99c40f2b468"
+    },
+    {
+      "path": "config/hospital_execution/scenario.json",
+      "bytes": 34762,
+      "sha256": "691e235c2a11eeecc1f07456ac946f549278c9b1b0681bea1fef09fccbe8dada"
+    },
+    {
+      "path": "config/hospital_execution/scenario.yaml",
+      "bytes": 226,
+      "sha256": "42c3f762f7ec6cfa648b8e8f9e696d04f8900ba73e2d79269362f09ad4286dee"
+    },
+    {
+      "path": "config/hospital_execution/semantic_navigation.pgm",
+      "bytes": 1200017,
+      "sha256": "cf451a84b7d7050ab549e840679e30a9961188264665a42d611aad46f256c377"
+    },
+    {
+      "path": "config/hospital_execution/semantic_navigation.yaml",
+      "bytes": 141,
+      "sha256": "7d581236079910a0f53a73163b4c994e9a6239641d372e89855b59274697584a"
+    },
+    {
+      "path": "config/hospital_reference/condition.json",
+      "bytes": 162,
+      "sha256": "476f4dd57aab5c0e8ef0cb1959c7af6214a589625887c30e6f730d75bde6d7da"
+    },
+    {
+      "path": "config/hospital_reference/r1_nav2.yaml",
+      "bytes": 10887,
+      "sha256": "750244b685368f99ab3c0d16a540cd535097def448fd4acc3b603ea3aac41587"
+    },
+    {
+      "path": "config/hospital_reference/r2_nav2.yaml",
+      "bytes": 10873,
+      "sha256": "6501736a2742a57e0669e359a94d39ea1d819e892c97d0fab820c75f47a8fb91"
+    },
+    {
+      "path": "config/hospital_reference/r3_nav2.yaml",
+      "bytes": 10885,
+      "sha256": "a15041796a1c36fd8e073b4fac7f2f5614f1734f5ca7244dbd1980f1a3eacbf7"
+    },
+    {
+      "path": "config/hospital_semantics/design.yaml",
+      "bytes": 20446,
+      "sha256": "27fbe4ced215b1e8d0d5753044ab0f6964e8aef71e3c8561b4b879bd198e92eb"
+    },
+    {
+      "path": "config/hospital_semantics/path_audit.yaml",
+      "bytes": 911,
+      "sha256": "e525b3e492e914af4b0f53f1503258be2dd276159e6b12e7e5871ef8d5a61bb2"
+    },
+    {
+      "path": "config/nav2.yaml",
+      "bytes": 10305,
+      "sha256": "b9aa39fb50bb8b536a98f5151421dc9471b144f175c2011a8fa0a19985c88df6"
+    },
+    {
+      "path": "config/navbot.sdf",
+      "bytes": 4026,
+      "sha256": "c55a3707d3a268a28a139860d29f967e2f458de8a8e0f856b80cd5d465c0d8e4"
+    },
+    {
+      "path": "config/services.yaml",
+      "bytes": 170,
+      "sha256": "b166a9d805d31316b7542677de5f6912e96f625a76b67e003c20c85dfaf9ce37"
+    },
+    {
+      "path": "config/three_tb4/cyclonedds.xml",
+      "bytes": 394,
+      "sha256": "61e4937f9970a7fc9af9ab10e754116434acfe4a8317754cd3e1aefa35e54d0e"
+    },
+    {
+      "path": "config/three_tb4/r1.urdf",
+      "bytes": 37810,
+      "sha256": "3c0377ef20f21cfa8ffac614c68548036507fbab3eb8072f5d3dc5261fc50b1e"
+    },
+    {
+      "path": "config/three_tb4/r1_control.yaml",
+      "bytes": 1672,
+      "sha256": "39d8a5d5c80dd171055504936bbadac48e4f3c5d2556fbaad70c7f504e5d8770"
+    },
+    {
+      "path": "config/three_tb4/r1_nav2.yaml",
+      "bytes": 10299,
+      "sha256": "7818d92ec310db5c2bd0ef96f08fa15093dba7ac73a39e337993989f21e45e63"
+    },
+    {
+      "path": "config/three_tb4/r2.urdf",
+      "bytes": 37810,
+      "sha256": "c7d9e95938c3f9754b75a0fcc681b0feadda23318927b4a03649b09a389b013d"
+    },
+    {
+      "path": "config/three_tb4/r2_control.yaml",
+      "bytes": 1672,
+      "sha256": "39d8a5d5c80dd171055504936bbadac48e4f3c5d2556fbaad70c7f504e5d8770"
+    },
+    {
+      "path": "config/three_tb4/r2_nav2.yaml",
+      "bytes": 10299,
+      "sha256": "b165484161ab065183544e3af0d268dc9f4ae9b447b0a9efb1795a77d25eedba"
+    },
+    {
+      "path": "config/three_tb4/r3.urdf",
+      "bytes": 37810,
+      "sha256": "2e5311d645c4a9aeccbba9d4405a6470d673c217c936f4d814cdf15ae36be9f6"
+    },
+    {
+      "path": "config/three_tb4/r3_control.yaml",
+      "bytes": 1672,
+      "sha256": "39d8a5d5c80dd171055504936bbadac48e4f3c5d2556fbaad70c7f504e5d8770"
+    },
+    {
+      "path": "config/three_tb4/r3_nav2.yaml",
+      "bytes": 10300,
+      "sha256": "e9825a9ebb5a2f28b16c2b2b57e246420df045bf8887bb7e1941dc0810503c6b"
+    },
+    {
+      "path": "config/three_tb4/scenario.yaml",
+      "bytes": 390,
+      "sha256": "28af25ab916f18da7a21ce28357a197c99981ddc0868212d80b8f2ad066971c6"
+    },
+    {
+      "path": "launch/clinic_experiment.launch.py",
+      "bytes": 4801,
+      "sha256": "e3def0a033cbc38103708ad40433f171b93fd0569bfa98919448ee3f8cccc039"
+    },
+    {
+      "path": "run_bed_clearance_probe.sh",
+      "bytes": 224,
+      "sha256": "e21266ddf80a1edcdb5acc63a76e6f7afd2797064ef35878219e52bed45eb0c4"
+    },
+    {
+      "path": "run_bed_episode.sh",
+      "bytes": 206,
+      "sha256": "9ecfeba5043932f2fce518a7a9bab3d4b2b9583658b54e780b918a375ed683ee"
+    },
+    {
+      "path": "run_bed_probe.sh",
+      "bytes": 223,
+      "sha256": "6deca55edc20029dfa32832418a975d37f6761343ab95d2dec61bf0e03c3eac9"
+    },
+    {
+      "path": "run_bed_recovery.sh",
+      "bytes": 206,
+      "sha256": "9ecfeba5043932f2fce518a7a9bab3d4b2b9583658b54e780b918a375ed683ee"
+    },
+    {
+      "path": "run_bed_sensor_probe.sh",
+      "bytes": 221,
+      "sha256": "c8a992e8d6400a9254595de957a2f0af02f5b42165260239cc04e20b55800701"
+    },
+    {
+      "path": "run_bed_source_probe.sh",
+      "bytes": 221,
+      "sha256": "47aa82cc2a7f941b9da1ae4e2c5c379d19018873f629d51e7097dd6ca21bbcc4"
+    },
+    {
+      "path": "run_bed_static_delta.sh",
+      "bytes": 206,
+      "sha256": "9ecfeba5043932f2fce518a7a9bab3d4b2b9583658b54e780b918a375ed683ee"
+    },
+    {
+      "path": "support/clinic_runtime/__init__.py",
+      "bytes": 82,
+      "sha256": "edf7d0419057519c9d3dfb815ec2f63e9bfc58cd1804242566d0b6df53cc8340"
+    },
+    {
+      "path": "support/clinic_runtime/__main__.py",
+      "bytes": 15408,
+      "sha256": "aa83eb9ea2b7c986315409d7968dac75a6b05de7a4c90dc5b69970c8d5187e47"
+    },
+    {
+      "path": "support/clinic_runtime/audits.py",
+      "bytes": 25865,
+      "sha256": "74eda6955a927f33e8109298dd9c4c428f3c0ea7aa7ffb53b2e39ab77fc8f535"
+    },
+    {
+      "path": "support/clinic_runtime/bootstrap.py",
+      "bytes": 2859,
+      "sha256": "dd23ee2fc5019fb98b7935c1806a992e3d8c771b6000d1a4169a6d96aade594d"
+    },
+    {
+      "path": "support/clinic_runtime/config.py",
+      "bytes": 3050,
+      "sha256": "06e5e49b4fface4ab9827c0308579cb6fc00d4cd8772cf74c87284a888294285"
+    },
+    {
+      "path": "support/clinic_runtime/environment.sh",
+      "bytes": 1079,
+      "sha256": "85e3398c71d01c3201d002bdaa02d93ed8826dfdd2d796a0399ca92cc73f141a"
+    },
+    {
+      "path": "support/clinic_runtime/episode.py",
+      "bytes": 33725,
+      "sha256": "29685f728fb4c08b1576bfa95a565ea60adb6dbb6d33efed08b9853d07e89141"
+    },
+    {
+      "path": "support/clinic_runtime/experiment_modes.py",
+      "bytes": 2109,
+      "sha256": "631f27acb6b7c55fda2efd433a6eeca12e291f7569ceaae132cb742532524572"
+    },
+    {
+      "path": "support/clinic_runtime/preflight.py",
+      "bytes": 16370,
+      "sha256": "a46bfab31f9fdf529bf3d6dd9a61009abd363210bc81b2cb291b16cd5ec109cb"
+    },
+    {
+      "path": "support/clinic_runtime/rendering.py",
+      "bytes": 12172,
+      "sha256": "f996f5b1b8875625090199af26f42e65d13ee97de0a98c3cab603743b1d61b62"
+    },
+    {
+      "path": "tests/test_experiment_modes.py",
+      "bytes": 3374,
+      "sha256": "7203db21ed2712b494f2eaafecad732e59243382f7f9643d86a2f75ef6218ae0"
+    },
+    {
+      "path": "tests/test_runtime_convergence.py",
+      "bytes": 9716,
+      "sha256": "8203a94ec6d829dd2ababead2273917ac55c7d906fde4531a1498aa5b035e966"
+    },
+    {
+      "path": "tools/aligned_contract.py",
+      "bytes": 3876,
+      "sha256": "56922a47a07d4b650d02118fd614cfb575fe3340e1e2b63afaa5f05454774247"
+    },
+    {
+      "path": "tools/aligned_health.py",
+      "bytes": 1412,
+      "sha256": "8a2c7774ba4078370966d5d047692e0426d893ab3677b04ce1074aa17fa11969"
+    },
+    {
+      "path": "tools/aligned_keepout.py",
+      "bytes": 2992,
+      "sha256": "9d819d3c02f21a9cf28d89e3c14f89fd273e2299d9f852a7ecfb73563df26492"
+    },
+    {
+      "path": "tools/aligned_reference_tf.py",
+      "bytes": 2631,
+      "sha256": "cee3e7283ddeb44e14fe1b855bfc159ba2a46d08ec51e0f17653f6992135139a"
+    },
+    {
+      "path": "tools/aligned_resources.py",
+      "bytes": 3605,
+      "sha256": "ca313cde64d513843ed20d3a90a7648303a14d39483a6440682c84227ec577e4"
+    },
+    {
+      "path": "tools/aligned_service_worker.py",
+      "bytes": 871,
+      "sha256": "86fe368fd169ac6079955019841189a3e73e5ac474b530a71bac03136917b49a"
+    },
+    {
+      "path": "tools/aligned_solver.py",
+      "bytes": 5726,
+      "sha256": "bfdb6c12fef90417f61629189963a8ea2a52ec6e1253fdfb40298a61d3740c49"
+    },
+    {
+      "path": "tools/aligned_tasks.py",
+      "bytes": 1597,
+      "sha256": "e2a4fb3e7d19f446d931558e7237365cd8e53fb6d5b3db7495b8e9ba58f583b4"
+    },
+    {
+      "path": "tools/bed_contract.py",
+      "bytes": 3708,
+      "sha256": "94dd8e216df56167c65e86d0fa33bf96e034dd5910108ecfed490d6aa2803bd6"
+    },
+    {
+      "path": "tools/bed_driver.py",
+      "bytes": 3018,
+      "sha256": "736edb09d2fd901ad536551b1d77da63443637ff191539f22e8d3d714950d196"
+    },
+    {
+      "path": "tools/bed_initial_solver.py",
+      "bytes": 1606,
+      "sha256": "f05c0962b3bc0db6fa4067a5d15964225b38bac0d13bcafb48b03ad5a7c676c8"
+    },
+    {
+      "path": "tools/bed_keepout.py",
+      "bytes": 3493,
+      "sha256": "fed30197eb8f7da0d70fe0c856ee9188236b1063a72de1f55a04677a562df2cf"
+    },
+    {
+      "path": "tools/bed_local_evidence.py",
+      "bytes": 1089,
+      "sha256": "86bf60f7d7efff2dbe160830c3ec5af319afb86ab5d5bfa566b7c35847a81986"
+    },
+    {
+      "path": "tools/bed_resources.py",
+      "bytes": 3821,
+      "sha256": "4dd427c4e2980b05ed513296ca2121d20d26c44098560ce0ea955b79d6ab391d"
+    },
+    {
+      "path": "tools/bed_solver.py",
+      "bytes": 5065,
+      "sha256": "3c5a889ec8faf7b99b03b7a8e617697589655fdbf66c23dfe1f1c95080b72d8c"
+    },
+    {
+      "path": "tools/bed_validate.py",
+      "bytes": 552,
+      "sha256": "1683f78cfdcce17230fcc86a978f596f07b54ebc8396279910faf32684559af1"
+    },
+    {
+      "path": "tools/benchmark_sparse_repair.py",
+      "bytes": 10512,
+      "sha256": "cb59f748220ccf7a136cb5c7a2315824f191011193cc6e624c0841610a465628"
+    },
+    {
+      "path": "tools/bootstrap_dense_tb4.py",
+      "bytes": 2456,
+      "sha256": "d614c8ede84e3b1134890457ba8c5d54f4bcb4cf2afed98e36e298cdc0b71f9f"
+    },
+    {
+      "path": "tools/clinic_milp_backend.py",
+      "bytes": 25752,
+      "sha256": "377a61fc0f7f6ad9ab87701902e1bcbff9664e1fafaacd24d5c5726abb4829c8"
+    },
+    {
+      "path": "tools/clinic_plan_check.py",
+      "bytes": 6276,
+      "sha256": "27dfcf8ba1bb6af4ddf9b3f6a52551dddde685caeafc1bda24dd7bd6ad136bd8"
+    },
+    {
+      "path": "tools/clinic_run_status.py",
+      "bytes": 905,
+      "sha256": "ac9d9539ec45e42522550a9a88de6dd80bcccb363f4aa5bd58e1b2318b287482"
+    },
+    {
+      "path": "tools/compare_active_bed_snapshots.py",
+      "bytes": 4203,
+      "sha256": "8eaec0099380ba943f6224dc46e75d4f25149773436b7836b613ff1590995a7c"
+    },
+    {
+      "path": "tools/dense_keepout.py",
+      "bytes": 3495,
+      "sha256": "58978801a758cf010aee56a3530028f4c211ce565c2f935eab875ae1e19edfbf"
+    },
+    {
+      "path": "tools/dense_reference_tf.py",
+      "bytes": 3285,
+      "sha256": "b8bfd6e0c696c781d6b3c241097c15e5519241dcf48e0c112417ad52ca3be43b"
+    },
+    {
+      "path": "tools/dense_resources.py",
+      "bytes": 3823,
+      "sha256": "b1f9f03903e4f4eb7c77cdbd60cc0b3b2daa4be4d07be2738ecda4290934abe0"
+    },
+    {
+      "path": "tools/dense_solver.py",
+      "bytes": 2254,
+      "sha256": "ef5f9b5e18c28ccc92484e8a21e0cb94a30bdbdaa48477f09ff15ede35a69fa2"
+    },
+    {
+      "path": "tools/dense_tasks.py",
+      "bytes": 5710,
+      "sha256": "4a7606652fe76b70b937c60657ed1a149e6d9aa5950ded75b21f07c56f15445f"
+    },
+    {
+      "path": "tools/dense_validate.py",
+      "bytes": 848,
+      "sha256": "699af75049a0e57162232ba5c4f0b052d6ac686cf42bcc0fc25807cbcc564bce"
+    },
+    {
+      "path": "tools/fall_service_worker.py",
+      "bytes": 3080,
+      "sha256": "631f998a01ba297e57e90bb48318a2806aed2a84101565b06d9bee2f58bf373c"
+    },
+    {
+      "path": "tools/hospital_service_worker.py",
+      "bytes": 551,
+      "sha256": "92ff8b836e3b7918221319eed1bca1e2e4bafbf7400dd630f2ae8f7dcf5c3ed6"
+    },
+    {
+      "path": "tools/hospital_tasks.py",
+      "bytes": 3349,
+      "sha256": "ee0dbe577dfffdfaccf3f97c634c1456fd0dc0fbfed4690795cb4735713888ba"
+    },
+    {
+      "path": "tools/prefix_contract.py",
+      "bytes": 8893,
+      "sha256": "ed4c5c57ef19e361abeac8ec1582889178838ed892301f44e93cf1f177342f97"
+    },
+    {
+      "path": "tools/prefix_solver.py",
+      "bytes": 5430,
+      "sha256": "48974b044a5bbd22b9d0b002e3fafc97743f1bf3557123220577f546a7bce952"
+    },
+    {
+      "path": "tools/run_aligned_episode.py",
+      "bytes": 32192,
+      "sha256": "76efc8212ab3857508d197a90b6267092a1eeb46710c11c7edcb9223a7f05154"
+    },
+    {
+      "path": "tools/run_bed_episode.py",
+      "bytes": 494,
+      "sha256": "2bfc415b04d1da98c2f51b6f80f1b4df2cf76877765862483bda29f0029c8ccf"
+    },
+    {
+      "path": "tools/run_bed_episode_recovery.py",
+      "bytes": 494,
+      "sha256": "2bfc415b04d1da98c2f51b6f80f1b4df2cf76877765862483bda29f0029c8ccf"
+    },
+    {
+      "path": "tools/run_bed_episode_static_delta.py",
+      "bytes": 494,
+      "sha256": "2bfc415b04d1da98c2f51b6f80f1b4df2cf76877765862483bda29f0029c8ccf"
+    },
+    {
+      "path": "tools/run_dense_episode.py",
+      "bytes": 23604,
+      "sha256": "48d926dcfe557209096ede9f11a70944a8cae76c44171af56ac63fee18eb3669"
+    },
+    {
+      "path": "tools/service_worker.py",
+      "bytes": 3452,
+      "sha256": "405d3c992861b4c7e902399e0af856b734f1125baed5d6ca4cd047ae258f10c9"
+    },
+    {
+      "path": "tools/shared_resource.py",
+      "bytes": 2862,
+      "sha256": "9d7ff33b8274639397fbccbb601ceb0c8fe61c003c5cf191bad1c003caffc4ea"
+    },
+    {
+      "path": "tools/spawn_dense_tb4.py",
+      "bytes": 1487,
+      "sha256": "1b957d2c73f2aa2989a35aa992b38bfa5073224a4850de4528776c4ed668f7ec"
+    },
+    {
+      "path": "tools/start_three_gui.py",
+      "bytes": 1155,
+      "sha256": "ad394e23db293c9f23b42cd633c27c3d8ecdc1564b7aa5145a46209839bd22f0"
+    },
+    {
+      "path": "tools/tb4_io.py",
+      "bytes": 2230,
+      "sha256": "7ceeb3a5c75974a05598530e860858238f36074e8e4413f67cb23734ce1baf1f"
+    },
+    {
+      "path": "tools/tb4_service_worker.py",
+      "bytes": 1509,
+      "sha256": "e7fa11b4b8f0b1e22ad33bf1b620410076e5b79e7a1c569f65614b20093038e0"
+    },
+    {
+      "path": "tools/verify_experiment_modes.py",
+      "bytes": 3389,
+      "sha256": "cd7bac3924adec6a38735a79a9ad70a66d108edeb6696e6075b8bf74272a839b"
+    },
+    {
+      "path": "tools/verify_three_tb4.py",
+      "bytes": 18205,
+      "sha256": "10119562cddf10956109d40e6d91886a32522cda98681e568b57f56f86d486a2"
+    },
+    {
+      "path": "verification/hospital_semantics/collision_audit.pgm",
+      "bytes": 1200017,
+      "sha256": "f5795ab94f20fe9373b1c6c30cf111495446ba44c7269aef576962d9a522559e"
+    },
+    {
+      "path": "verification/hospital_semantics/collision_audit.yaml",
+      "bytes": 137,
+      "sha256": "bdac195eceba626a504affb55c1ae204761e8c30df10284495aa3ff2a0098412"
+    },
+    {
+      "path": "worlds/clinic_l1_three.sdf",
+      "bytes": 100550,
+      "sha256": "7392ed08169ed980c2c8581eb9ef3fbfed6d5560a4ed022bfeb77f54a8a809d2"
+    }
+  ],
+  "excluded": [
+    "runs/",
+    "verification/ except required navigation-map configuration",
+    "support/semantic_geometry_deps/",
+    "third-party assets/dependencies",
+    "logs/caches/videos",
+    "credentials and private settings"
+  ]
+}

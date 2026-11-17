@@ -1,6 +1,24 @@
 # Docs Index
 
+- [Clinic小影响范围配对与Fast/Standard/Benchmark实测（2026-11-17）](../reports/benchmarks/clinic_sparse_repair_and_modes_2026-11-17.md)
+
+- [Clinic统一入口完整闭环复验与同快照对照（2026-11-17）](../reports/benchmarks/clinic_unified_full_loop_recheck_2026-11-17.md)
+
+- [Clinic基础设施复用、单入口与预检收敛（2026-11-17）](reviews/clinic_runtime_reuse_convergence_2026-11-17.md)
+
+- [Clinic实体床扰动、承诺保持修复与热启动全量对照实测](../reports/benchmarks/clinic_active_bed_repair_2026-11-16.md)
+
+- [Clinic实体床扰动、活动监护/携货承诺与修复契约（2026-11-17验收）](reviews/clinic_active_bed_repair_contract_2026-11-16.md)
+
+- [Clinic局部三机巡逻—应急—恢复闭环实测（2026-11-16）](../reports/benchmarks/clinic_dense_loop_2026-11-16.md)
+- [独立闭环运行契约](reviews/clinic_dense_loop_contract_2026-11-16.md)
+
+- [Clinic共享资源与反馈修复契约（2026-11-12）](reviews/clinic_resource_alignment_and_repair_contract_2026-11-12.md)
+- [Clinic占用对齐与动态修复实测（2026-11-12）](../reports/benchmarks/clinic_resource_alignment_2026-11-12.md)
+
 本目录用于长期维护项目说明文档，不再作为临时记录的平铺存放区。
+
+当前研究范围与下一步工作统一入口：[三项研究内容重新确认（2026-11-09）](reviews/research_scope_and_completion_plan_2026-11-09.md)。
 
 当前文档信息架构说明见：
 
@@ -41,6 +59,17 @@
 
 研究补充文档：
 
+- [Clinic医院新路线实际执行、服务反馈与事件—MILP接入](../reports/benchmarks/clinic_hospital_execution_2026-11-12.md)
+
+- [Clinic医院语义点位、常态路线及视线/路径验收](../reports/benchmarks/clinic_hospital_semantics_2026-11-10.md)
+- [Clinic医院语义、动态障碍与协同修复研究设计](reviews/clinic_dynamic_hospital_research_design_2026-11-10.md)
+- [Clinic脚本跌倒事件、协议到MILP及三机实际重分配](../reports/benchmarks/clinic_fall_milp_2026-11-10.md)
+- [Clinic L1三台TurtleBot4/Nav2与共享服务点互斥实测](../reports/benchmarks/clinic_l1_three_tb4_2026-11-10.md)
+- [Clinic L1单机Nav2与服务反馈实测](../reports/benchmarks/clinic_l1_nav2_services_2026-11-10.md)
+- [Clinic协同规划接入步骤与对比实验方案](reviews/clinic_cooperative_planning_integration_plan_2026-11-10.md)
+- [Clinic demo图形启动等待诊断与修复](reviews/rmf_clinic_gui_startup_diagnosis_2026-11-09.md)
+- [Open-RMF Clinic安装与启动验收](reviews/rmf_clinic_installation_2026-11-09.md)
+- [独立事件到任务协议 event-task/v1](event_task_protocol.md)
 - [FallVision 接入说明](fallvision_integration.md)
 - [Hard Negative 方案](hard_negative_plan.md)
 - [方法路线图](method_roadmap.md)
@@ -79,3 +108,7 @@
 - 已冻结但仍需追溯的 dated snapshot：保留原文件，并在稳定文档中提供统一入口
 
 不要继续把 `worklog_*.md`、`*_audit_*.md`、`*_summary_*.md` 直接放到 `docs/` 根目录。
+
+- [Clinic执行承诺保留与非全体等待修复实测（2026-11-13）](../reports/benchmarks/clinic_execution_prefix_repair_2026-11-13.md)
+
+- [Clinic六阶段事件—协同—修复—周期巡逻设计（2026-11-16）](reviews/clinic_six_stage_incident_patrol_design_2026-11-16.md)

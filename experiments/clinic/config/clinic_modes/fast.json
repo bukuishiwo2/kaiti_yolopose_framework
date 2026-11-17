@@ -1,0 +1,21 @@
+{
+  "schema": "clinic-experiment-mode/v1",
+  "version": "2026-11-17.1",
+  "seed": 20261117,
+  "base_scenario": "config/hospital_bed/scenario.json",
+  "base_scenario_sha256": "e306d7c2bf1b5dd90ba970584c098bfca1b16ecd82d8356dc44a247078284d03",
+  "navigation_guards": "unchanged",
+  "service_seconds": "unchanged including R1 90s routine check",
+  "budget_seconds": 25.0,
+  "initial_cycle_waypoints": 3,
+  "name": "fast",
+  "next_cycle_waypoints": 1,
+  "nominal_next_release": 0,
+  "release_policy": "max(nominal,event_closed+15)",
+  "target_sim_seconds": [
+    300,
+    500
+  ],
+  "expected_normal_services": 12,
+  "expected_event_services": 4
+}

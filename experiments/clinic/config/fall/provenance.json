@@ -1,0 +1,7 @@
+{
+  "original": "/home/yhc/kaiti_yolopose_framework/src/kaiti_task_sim/planner.py",
+  "original_sha256": "01a739a2f0d17c7823ae09bb662e1ec65d4c6307bd8cb85fe5a583c40e34ae41",
+  "adapter_sha256": "377a61fc0f7f6ad9ab87701902e1bcbff9664e1fafaacd24d5c5726abb4829c8",
+  "only_changed_function": "tau",
+  "map_sha256": "b30899f29ef247d3118c5819af6ee8046c372161325de27eb38fbc3886f2a79a"
+}

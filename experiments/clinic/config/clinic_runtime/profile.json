@@ -1,0 +1,11 @@
+{
+  "schema": "clinic-runtime/v1",
+  "scenario": "config/hospital_bed/scenario.json",
+  "nav2_template": "config/clinic_runtime/nav2.template.yaml",
+  "static_map": "config/hospital_aligned/semantic_navigation.yaml",
+  "collision_map": "verification/hospital_semantics/collision_audit.yaml",
+  "world": "worlds/clinic_l1_three.sdf",
+  "ros_setup": "/opt/ros/humble/setup.bash",
+  "rmf_setup": "/home/yhc/rmf_clinic_ws/install/setup.bash",
+  "default_domain": 79
+}
