@@ -1,5 +1,17 @@
 # Benchmarks Index
 
+当前研究内容与结论边界见[当前研究范围](../../docs/clinic_current_research_scope.md)。最新Clinic实验摘要：
+
+- [A区真实视频正例三机应急闭环（2026-11-18）](clinic_visual_positive_2026-11-18.md)
+- [真实视频误报核验与视频回放集成（2026-11-18）](clinic_visual_integration_2026-11-18.md)
+- [动态协同任务分配四策略强基线（离线）（2026-11-18）](clinic_dynamic_assignment_2026-11-18.md)
+- [动态修复方法对照（条件性离线证据）（2026-11-18）](clinic_repair_methods_2026-11-18.md)
+- [实体床扰动功能闭环（2026-11-18）](clinic_visual_bed_2026-11-18.md)
+- [视觉源可行性与仿真相机诊断（2026-11-18）](clinic_visual_source_feasibility_2026-11-18.md)
+- [误报语义任务的反事实分析（2026-11-18）](clinic_semantic_counterfactual_2026-11-18.md)
+
+配套的数学模型和实验设计审查见[reviews索引](../../docs/reviews/README.md)。报告中的绝对路径指向本机保护数据；GitHub不包含原始视频、模型、ROS历史日志或仿真运行目录。
+
 - [Clinic小影响范围配对与三种实验配置实测（2026-11-17）](clinic_sparse_repair_and_modes_2026-11-17.md)
 
 - [Clinic统一入口完整闭环复验与同快照对照（2026-11-17）](clinic_unified_full_loop_recheck_2026-11-17.md)

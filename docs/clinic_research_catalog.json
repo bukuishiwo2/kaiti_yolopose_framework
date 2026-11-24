@@ -1,0 +1,127 @@
+{
+  "schema": "clinic-research-catalog/v1",
+  "title": "Clinic 研究实验目录",
+  "name_rule": {
+    "format": "内容X｜问题｜场景｜方法｜证据",
+    "meaning": "面向展示的名称不使用 C/r/W 缩写；原始 run_id 和任务 ID 只作为审计字段保留。",
+    "task_id_note": "任务 ID 中的 C、r、W 是历史程序字段：周期、名义任务通道、站次。它们不决定实际执行机器人，也不表示地图节点。"
+  },
+  "primary": [
+    {
+      "key": "routine_baseline",
+      "run_id": "hospital_normal_v6",
+      "display_name_zh": "内容3｜常态任务基线｜无突发事件｜原MILP｜三机执行",
+      "short_name_zh": "常态任务基线（三机）",
+      "research_content": [3],
+      "roles": "R1、R2、R3执行常态巡检/服务任务；没有应急角色插入。",
+      "scene": "Clinic常态运行，A区无跌倒事件、无床阻挡。",
+      "task_plan": "任务由周期任务生成器产生，原MILP依据能力、空间节点、旅行时间、资源和时间约束排程。",
+      "event_insertion": "不插入事件；用于与事件驱动实验比较。",
+      "validates": "提供内容3的常态连续性基线。不能证明动态分配优于基线。",
+      "evidence_level": "真实保存的三机执行回放",
+      "status_display": "功能基线",
+      "source": "reports/benchmarks/clinic_visual_positive_2026-11-18.md"
+    },
+    {
+      "key": "semantic_false_alarm",
+      "run_id": "verification/visual_integration_2026-11-18_b1/visual_false_alarm_a1",
+      "display_name_zh": "内容1-2｜误报核验闭环｜adl-01视频｜候选→核验→关闭",
+      "short_name_zh": "误报核验与关闭",
+      "research_content": [1, 2, 3],
+      "roles": "R1执行核验；R2、R3保留常态任务；没有自动生成监护和取送。",
+      "scene": "A区视频源注册位置，输入为UR Fall的adl-01-cam0下蹲/日常活动片段。",
+      "task_plan": "真实YOLO Pose+32帧LSTM产生候选，只编译E1_verify；显式no_fall复核后关闭事件。",
+      "event_insertion": "模型稳定候选出现时插入；不是执行器直接注入跌倒。",
+      "validates": "内容1的模型输出进入内容2的候选/核验生命周期，并验证误报不会直接派发完整应急任务。",
+      "evidence_level": "真实视频ROS回放 + 三机核验执行",
+      "status_display": "功能证据；非泛化精度",
+      "source": "reports/benchmarks/clinic_visual_integration_2026-11-18.md"
+    },
+    {
+      "key": "semantic_positive",
+      "run_id": "verification/visual_positive_2026-11-18_c1/positive_02",
+      "display_name_zh": "内容1-2-3｜真实跌倒正例闭环｜fall-01视频｜核验→监护→取送",
+      "short_name_zh": "真实正例应急闭环",
+      "research_content": [1, 2, 3],
+      "roles": "R1核验并持续监护；R2同车完成取货/交付；R3继续常态任务。",
+      "scene": "Clinic A区；人体位置采用video_source_registered的预登记服务区域，不是RGB-D在线三维定位。",
+      "task_plan": "候选先生成E1_verify；独立fall复核通过后才生成E1_monitor、E1_pickup、E1_deliver，原MILP分配并由Nav2/服务ACK执行。",
+      "event_insertion": "fall-01-cam0真实模型稳定候选出现时插入；任务链在核验结果到达后分阶段释放。",
+      "validates": "有限条件下打通内容1→内容2→内容3的真实模型、语义任务、规划、执行反馈链。",
+      "evidence_level": "真实视频ROS回放 + 三机Nav2/服务ACK",
+      "status_display": "功能闭环；训练/开发域",
+      "source": "reports/benchmarks/clinic_visual_positive_2026-11-18.md"
+    },
+    {
+      "key": "dynamic_local_repair",
+      "run_id": "unified_bed_local_r1",
+      "display_name_zh": "内容3｜执行扰动恢复｜持续床阻挡｜承诺保护下局部修复",
+      "short_name_zh": "局部修复（持续阻挡）",
+      "research_content": [3],
+      "roles": "R1保留活动监护；R2保留取送/携货承诺；R3保留未受影响常态后缀（具体以快照为准）。",
+      "scene": "A区已接受计划执行期间出现可观测床阻挡；本样本是同一持续阻挡下的滚动修复。",
+      "task_plan": "旧计划先运行；观测到资源/通道/完成时间约束失效后，保留硬承诺前缀，释放影响闭包内后缀重新求解。",
+      "event_insertion": "不是新的视觉跌倒事件；扰动发生在已接受计划执行中。",
+      "validates": "验证承诺保护、版本控制和修复执行功能；释放范围不等于实际改派。",
+      "evidence_level": "真实执行状态与保存计划回放",
+      "status_display": "条件性功能证据；不支持普遍算法优势",
+      "source": "docs/reviews/clinic_three_repairs_diagnosis_2026-11-24.md"
+    },
+    {
+      "key": "dynamic_full_replan",
+      "run_id": "unified_bed_full_r1",
+      "display_name_zh": "内容3｜执行扰动恢复对照｜持续床阻挡｜热启动全量重规划",
+      "short_name_zh": "全量重规划对照",
+      "research_content": [3],
+      "roles": "与局部修复使用同类三机承诺和任务状态；活动监护/携货约束仍保留。",
+      "scene": "与局部修复相近的A区床阻挡执行场景；输入和计划版本必须逐项核对，不能把相近场景当成同快照。",
+      "task_plan": "扰动后对可调整任务进行全量热启动重规划，与局部影响闭包结果作描述性对照。",
+      "event_insertion": "执行中床阻挡观测达到触发条件后插入。",
+      "validates": "提供内容3执行恢复的全量基线；当前证据不支持局部方法全面优于全量。",
+      "evidence_level": "真实保存计划/求解/执行证据",
+      "status_display": "对照证据；条件有限",
+      "source": "docs/reviews/clinic_three_repairs_diagnosis_2026-11-24.md"
+    }
+  ],
+  "supporting": [
+    {
+      "key": "assignment_strong_baselines",
+      "display_name_zh": "内容3｜动态分配强基线｜固定归属/贪心/受限MILP/联合MILP",
+      "research_content": [3],
+      "roles": "离线快照中的三机器人能力、ready时间、常态任务和应急任务角色。",
+      "scene": "反事实任务快照，不是一次新的三机实体运行。",
+      "task_plan": "比较固定归属重定时、预计最早服务贪心、受限事件插入MILP和合法联合MILP。",
+      "event_insertion": "在冻结快照的task_planning_release时刻插入语义任务束。",
+      "validates": "用于判断联合动态分配是否比强基线多解决问题；现有结果不支持普遍优越。",
+      "evidence_level": "离线模型与独立约束审计",
+      "status_display": "条件性离线证据",
+      "source": "experiments/clinic_assignment_insert/report_2026-11-18.md"
+    },
+    {
+      "key": "coupling_scenarios",
+      "display_name_zh": "内容3｜五类任务耦合场景｜S1-S5｜必要性分析",
+      "research_content": [3],
+      "roles": "最近机器人不可用、双事件、共享资源、携货阻挡、后续期限冲突等控制角色。",
+      "scene": "冻结规则生成的离线医院语义场景；保留简单场景作为方法适用边界。",
+      "task_plan": "在相同任务、约束、预算下比较固定归属、贪心、受限MILP和联合MILP。",
+      "event_insertion": "按每个场景定义的事件/扰动时刻插入，不由结果筛选样本。",
+      "validates": "检验联合分配的实际必要性；结果显示多数实例相同或存在反例。",
+      "evidence_level": "离线场景与约束审计",
+      "status_display": "研究诊断；非实体闭环",
+      "source": "experiments/clinic_coupling_necessity/report_2026-11-23.md"
+    },
+    {
+      "key": "multi_event_capability",
+      "display_name_zh": "内容2-3｜多事件表达能力｜E1/E2并发｜离线能力验证",
+      "research_content": [2, 3],
+      "roles": "E1活动监护与E2新事件共享三机器人和G1资源；不自动取消E1。",
+      "scene": "由历史活动监护快照构造的多事件离线状态，不是当前正式运行时整链。",
+      "task_plan": "事件索引化后分别保留核验、监护、取货、交付义务，检查共享资源和承诺。",
+      "event_insertion": "E2在E1未关闭时到达，用于验证模型边界和不可行情况。",
+      "validates": "扩展内容2到内容3的任务表示能力；尚未证明实体多事件执行。",
+      "evidence_level": "离线模型、LTLf/约束能力测试",
+      "status_display": "能力验证；未接实体执行",
+      "source": "experiments/clinic_multievent/report_2026-11-23.md"
+    }
+  ]
+}

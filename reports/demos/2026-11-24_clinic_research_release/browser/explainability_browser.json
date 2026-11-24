@@ -1,0 +1,94 @@
+{
+  "passed": true,
+  "url": "http://127.0.0.1:8878/",
+  "checks": [
+    {
+      "name": "seven pages, semantic adapter and readable 14px main tables",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "explicit research catalog, roles, scene, task plan and event insertion timing",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "event coordinate, registered service goals and sensor-estimated boundary are visible",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "searchable Chinese catalog, independent raw IDs and persistent favorites",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "structured cycle/stop naming and nominal R3 versus actual R1 ownership",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "E1 association excludes 0.56 initial commit and shows 187.65 verification commit",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "correct map/world roundtrip, five trajectory modes and three desktop viewport widths",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "22 registered nodes with source SHA256, clickable details and separate saved travel matrix",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "explicit task DAG/guard/resource types, per-version three-robot sequences and semantic dictionary",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "plan/actual/overlay lanes, evidence-derived commitment locks and demo/audit name toggle",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "six plan commits and three budget-stopped repairs with 10/11 release and zero actual reassignment",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "required full/local, failure/success normal, real-video positive/negative and injected historical samples",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "actual task-release constraint differences prevent unsupported same-condition quantitative claims",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "semantic registries, experiment mapping and complete explanatory summary export",
+      "status": "PASS",
+      "detail": null
+    },
+    {
+      "name": "no uncaught JavaScript exceptions in second-round feature checks",
+      "status": "PASS",
+      "detail": null
+    }
+  ],
+  "screenshots": [
+    "selector_chinese_search_favorites.png",
+    "semantic_corrected_187_65.png",
+    "space_1366x768.png",
+    "space_1440x900.png",
+    "space_1920x1080.png",
+    "travel_matrix_sources.png",
+    "explicit_task_dependency_graph.png",
+    "robot_sequence_changes.png",
+    "three_repairs_budget_scope.png"
+  ],
+  "uncaught_exceptions": [],
+  "notes": "Read-only UI and existing evidence verification. No ROS/Gazebo/planner run."
+}

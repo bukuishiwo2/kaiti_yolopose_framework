@@ -1,0 +1,144 @@
+#!/usr/bin/env node
+/* Browser-only, evidence-preserving regression checks. No ROS or solver processes. */
+const fs=require('fs'),path=require('path'),os=require('os'),cp=require('child_process'),assert=require('assert/strict');
+const args=process.argv.slice(2),get=(name,fallback)=>{const i=args.indexOf(name);return i>=0?args[i+1]:fallback};
+const url=get('--url','http://127.0.0.1:8765/'),out=path.resolve(get('--out',fs.mkdtempSync(path.join(os.tmpdir(),'clinic-research-browser-'))));
+fs.mkdirSync(out,{recursive:true});
+const checks=[],blocked=[],screenshots=[],sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function wait(test,timeout=45000){const deadline=Date.now()+timeout;let last;while(deadline>Date.now()){try{if(await test())return}catch(e){last=e}await sleep(90)}throw Error('Timeout after '+checks.length+' checks: '+(last?.message||'condition'))}
+let chrome,ws;
+(async()=>{
+ const profile=fs.mkdtempSync(path.join(os.tmpdir(),'clinic-research-chrome-'));
+ chrome=cp.spawn(process.env.CLINIC_REVIEW_CHROME||'/usr/bin/google-chrome',['--headless','--no-sandbox','--disable-gpu','--no-proxy-server','--remote-debugging-port=0','--user-data-dir='+profile,'about:blank'],{stdio:'ignore'});
+ const portFile=path.join(profile,'DevToolsActivePort');await wait(()=>fs.existsSync(portFile),15000);
+ const port=fs.readFileSync(portFile,'utf8').split(String.fromCharCode(10))[0],tabs=await(await fetch('http://127.0.0.1:'+port+'/json/list')).json();
+ ws=new WebSocket(tabs.find(tab=>tab.type==='page').webSocketDebuggerUrl);await new Promise((resolve,reject)=>{ws.onopen=resolve;ws.onerror=reject});
+ let next=0;const pending=new Map(),exceptions=[];
+ ws.onmessage=e=>{const m=JSON.parse(e.data);if(m.id){const task=pending.get(m.id);pending.delete(m.id);if(m.error)task.reject(Error(JSON.stringify(m.error)));else task.resolve(m.result)}else if(m.method==='Runtime.exceptionThrown')exceptions.push(m.params)};
+ function send(method,params={}){return new Promise((resolve,reject)=>{const id=++next;pending.set(id,{resolve,reject});ws.send(JSON.stringify({id,method,params}))})}
+ async function evaluate(expression){const r=await send('Runtime.evaluate',{expression,returnByValue:true,awaitPromise:true});if(r.exceptionDetails)throw Error(JSON.stringify(r.exceptionDetails));return r.result.value}
+ async function select(name){await evaluate("$('run').value="+JSON.stringify(name)+";load()");await wait(()=>evaluate("data?.name==="+JSON.stringify(name)+"&&!$('clock').disabled"))}
+ async function shot(name){const screenshot=await send('Page.captureScreenshot',{format:'png',captureBeyondViewport:false});fs.writeFileSync(path.join(out,name),Buffer.from(screenshot.data,'base64'));screenshots.push(name)}
+ function pass(name,detail){checks.push({name,status:'PASS',detail:detail??null})}
+ await send('Page.enable');await send('Runtime.enable');
+ await send('Emulation.setDeviceMetricsOverride',{width:1440,height:900,deviceScaleFactor:1,mobile:false});
+ await send('Page.navigate',{url});
+ await wait(()=>evaluate("typeof Platform!=='undefined'&&data?.name==='unified_bed_local_r1'&&document.querySelectorAll('#primary-gantt svg').length===1&&Review.grid!==null"));
+ assert.equal(await evaluate("document.querySelectorAll('nav button').length"),7);pass('seven primary navigation pages and preserved sandbox');
+ await shot('overview_1440x900.png');
+ for(const[width,height]of [[1920,1080],[1440,900],[1366,768]]){
+  await send('Emulation.setDeviceMetricsOverride',{width,height,deviceScaleFactor:1,mobile:false});
+  await evaluate("openTab('replay');chooseTime(500)");
+  const geometry=await evaluate("({map:$('map').getBoundingClientRect().toJSON(),lanes:$('primary-gantt').getBoundingClientRect().toJSON(),viewport:innerHeight,width:document.documentElement.scrollWidth,screen:innerWidth})");
+  assert.ok(geometry.screen>=geometry.width,'desktop horizontal overflow '+JSON.stringify(geometry));
+  assert.ok(geometry.map.height>=300,'map must remain readable '+JSON.stringify(geometry));
+  await shot('space_'+width+'x'+height+'.png');
+ }
+ pass('desktop layouts preserve readable map and scrollable primary lanes at 1920/1440/1366 widths');
+ await select('hospital_normal_v5');
+ assert.equal(await evaluate("data.passed"),false);
+ assert.equal(await evaluate("data.failure_info.code"),'ARRIVAL_NOT_STABLE');
+ assert.equal(await evaluate("data.failure_info.robot"),'r3');
+ assert.equal(await evaluate("data.failure_info.thresholds.stable_hold_seconds"),.7);
+ assert.equal(await evaluate("data.failure_info.thresholds.stabilizing_timeout_seconds"),12);
+ assert.equal(await evaluate("$('failure-banner').hidden"),false);
+ await evaluate("$('failure-jump').click()");
+ assert.ok(.11>Math.abs(await evaluate("Number($('clock').value)-data.failure_info.at")));
+ assert.ok(await evaluate("document.querySelectorAll('#guard-curves svg').length>=2"));
+ await shot('failure_arrival_not_stable.png');
+ pass('hospital_normal_v5 failure code, R3, actual frozen thresholds, guard curves and failure jump');
+ const sourceLine=await evaluate("data.events.find(e=>e.phase==='execution_failed')._review_trace_line");
+ const raw=await(await fetch(new URL('/api/raw?name=hospital_normal_v5&line='+sourceLine,url))).json();
+ assert.equal(JSON.parse(raw.raw_text).at,243.4);assert.equal(raw.timestamps_modified,false);pass('raw failure line preserves original absolute timestamp');
+ const eventsPage=await(await fetch(new URL('/api/events?name=hospital_normal_v5&q=guard_sample&page=2&size=80',url))).json();
+ assert.equal(eventsPage.rows.length,80);assert.ok(eventsPage.total>30000);pass('large guard event list filtered and paginated on backend',eventsPage.total);
+ await select('hospital_normal_v6');
+ assert.equal(await evaluate("data.semantic_events.length"),0);
+ await evaluate("openTab('semantic')");
+ assert.ok(await evaluate("$('semantic-note').textContent.includes('未记录语义事件')"));pass('ordinary run explicitly shows no semantic episode');
+ await select('verification/visual_integration_2026-11-18_b1/visual_false_alarm_a1');
+ await evaluate("openTab('semantic')");
+ assert.equal(await evaluate("data.semantic_events[0].final.event.closed_reason"),'no_fall');
+ assert.equal(await evaluate("data.semantic_events[0].final.event.lifecycle"),'CLOSED');
+ assert.equal(await evaluate("data.records.filter(r=>['monitor','pickup','deliver'].includes(r.role)).length"),0);
+ assert.ok(await evaluate("data.clock.source.includes('consistent')"));
+ await wait(()=>evaluate("document.querySelector('#semantic-media img')?.complete&&document.querySelector('#semantic-media img').naturalWidth>0"));
+ await shot('semantic_no_fall.png');pass('real visual false alarm, verified epoch derivation, explicit no_fall closure and original image');
+ await select('verification/visual_positive_2026-11-18_c1/positive_02');
+ await evaluate("openTab('semantic')");
+ for(const role of ['verify','monitor','pickup','deliver'])assert.ok(await evaluate("data.records.some(r=>r.role==="+JSON.stringify(role)+")"));
+ assert.equal(await evaluate("data.semantic_events[0].final.event.lifecycle"),'COMPLETED');
+ assert.equal(await evaluate("data.semantic_events[0].final.event.cargo_disposition"),'DELIVERED');
+ assert.equal(await evaluate("data.semantic_events[0].review.human_review"),false);
+ assert.equal(await evaluate("data.availability.future_path_geometry"),false);
+ assert.equal(await evaluate("document.querySelector('[data-layer=plans]').disabled"),true);
+ await shot('semantic_positive.png');pass('real positive verify/monitor/pickup/deliver chain with controlled-review provenance');
+ await select('verification/visual_bed_2026-11-18_d1/bed_before_pickup_04');
+ assert.equal(await evaluate("data.records.length"),14);assert.ok(await evaluate("data.samples.some(s=>s.source_kind==='measured_pose_sample')"));
+ pass('visual-bed success uses its own measured trace and seven saved commits');
+ await select('unified_bed_local_r1');
+ assert.equal(await evaluate("data.records.length"),22);
+ assert.equal(await evaluate("data.plan_versions.length"),6);
+ assert.ok(await evaluate("data.plan_versions.some(p=>p.changes.some(c=>c.released===true))"));
+ await evaluate("openTab('planning')");
+ assert.ok(await evaluate("document.querySelectorAll('#changes-table tbody tr').length>0"));pass('dynamic repair versions and independent released/reassigned/order/time fields');
+ await evaluate("openTab('replay');$('lane-show-plan').checked=true;drawMainGantt();chooseTime(600)");
+ assert.ok(await evaluate("document.querySelectorAll('#primary-gantt .lane-cursor').length===1"));
+ await evaluate("document.querySelector('#primary-gantt .task-hit').dispatchEvent(new MouseEvent('click',{bubbles:true}))");
+ assert.ok(await evaluate("Platform.selected!==null"));pass('task lane click links selected target, primary clock and evidence drawer');
+ const before=await evaluate("Number($('clock').value)");await evaluate("$('play').click()");await sleep(450);await evaluate("$('play').click()");
+ assert.ok((await evaluate("Number($('clock').value)"))>before);pass('global playback, pause and speed');
+ const canvasRect=await evaluate("$('map').getBoundingClientRect().toJSON()");
+ await send('Input.dispatchMouseEvent',{type:'mousePressed',x:canvasRect.x+80,y:canvasRect.y+80,button:'left',clickCount:1});
+ await send('Input.dispatchMouseEvent',{type:'mouseMoved',x:canvasRect.x+120,y:canvasRect.y+95,buttons:1});
+ await send('Input.dispatchMouseEvent',{type:'mouseReleased',x:canvasRect.x+120,y:canvasRect.y+95,button:'left',clickCount:1});
+ assert.ok(await evaluate("Platform.camera!==null"));pass('map pointer pan');
+ const fullscreen=await evaluate("document.fullscreenEnabled");
+ if(fullscreen){
+  await send('Runtime.evaluate',{expression:"$('map-fullscreen').click()",userGesture:true,awaitPromise:true,returnByValue:true});
+  await wait(()=>evaluate("document.fullscreenElement!==null"),5000);
+  await evaluate("document.exitFullscreen()");
+  pass('map fullscreen enters and exits through browser API');
+ }else blocked.push({name:'map fullscreen',status:'BLOCKED',reason:'Browser reports fullscreen API unavailable.'});
+ await evaluate("openTab('planning');$('sync-count').value='2';syncSelectors();loadSync()");
+ await wait(()=>evaluate("Platform.sync.length===2&&document.querySelectorAll('#sync-cards canvas').length===2"));
+ assert.notEqual(await evaluate("Platform.sync[0].run.name"),await evaluate("Platform.sync[1].run.name"));
+ assert.notEqual(await evaluate("Platform.sync[0].run.sources.find(s=>s.path.endsWith('trace.jsonl')).sha256"),await evaluate("Platform.sync[1].run.sources.find(s=>s.path.endsWith('trace.jsonl')).sha256"));
+ await evaluate("$('sync-align').value='event';$('sync-align').dispatchEvent(new Event('change'))");
+ const aligned=await evaluate("Platform.sync.map(i=>Math.abs(i.local-i.run.metrics.event_sim))");assert.ok(aligned.every(value=>.11>value));pass('dual independent-source maps and event-zero alignment');
+ const conditions=await evaluate("comparisonChecks(Platform.sync.map(i=>i.run))");
+ if(conditions.every(row=>row.status==='MATCH'))pass('dual recorded comparability fields match',conditions.map(c=>c.label));else blocked.push({name:'verified same-condition dual quantitative comparison',status:'BLOCKED',reason:'Saved condition fingerprints contain differences or missing fields; UI marks not directly quantitatively comparable.',conditions});
+ await shot('dual_sync.png');
+ await evaluate("$('sync-count').value='3';syncSelectors();loadSync()");
+ await wait(()=>evaluate("Platform.sync.length===3&&document.querySelectorAll('#sync-cards canvas').length===3"));
+ assert.equal(await evaluate("new Set(Platform.sync.map(i=>i.run.name)).size"),3);pass('three independent historical replay sources');
+ const tripleConditions=await evaluate("comparisonChecks(Platform.sync.map(i=>i.run))");
+ if(tripleConditions.every(row=>row.status==='MATCH'))pass('triple recorded comparability fields match');else blocked.push({name:'verified same-condition three-strategy quantitative comparison',status:'BLOCKED',reason:'No verified third same-condition strategy established by available provenance.',conditions:tripleConditions});
+ await evaluate("$('sync-play').click()");await sleep(300);await evaluate("$('sync-pause').click()");
+ assert.ok(await evaluate("Platform.syncT>0"));pass('unified comparison play and pause');
+ await shot('triple_sync.png');
+ await evaluate("loadOffline()");
+ await wait(()=>evaluate("Platform.offline?.rows.length===180"));
+ assert.equal(await evaluate("new Set(Platform.offline.rows.map(r=>r.id)).size"),36);
+ await evaluate("$('offline-scale').value='6';$('offline-scale').dispatchEvent(new Event('change'))");
+ assert.ok(await evaluate("Platform.offlineFiltered.every(r=>r.tasks===6)"));pass('36 offline instances, 180 saved calls, scale filtering and real status denominators');
+ await evaluate("openTab('sandbox');demoGrid()");
+ assert.ok(await evaluate("Review.path.length>1&&Review.path.every((id,i)=>!blocked(id)&&(!i||neighbors(Review.path[i-1]).includes(id)))"));
+ const draft=await evaluate("(()=>{const snapshotBefore=JSON.stringify(snapshot());importDraft(draftDocument());return snapshotBefore===JSON.stringify(snapshot())})()");
+ assert.equal(draft,true);pass('original static-grid sandbox and draft round-trip preserved');
+ await send('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:out});
+ await evaluate("openTab('evidence');$('export-language').value='en';$('export-language').dispatchEvent(new Event('change'));$('export-space-svg').click();$('export-space-png').click();$('export-lane-svg').click();$('export-lane-png').click();$('export-semantic-svg').click();$('export-comparison-svg').click();$('export-changes-csv').click();$('export-metrics-csv').click();$('export-summary').click()");
+ const outputs=['clinic-space-en.svg','clinic-space-en.png','clinic-lanes-en.svg','clinic-lanes-en.png','clinic-semantic-en.svg','clinic-comparison-en.svg','clinic-plan-changes.csv','clinic-metrics.csv','unified_bed_local_r1-research-summary.json'];
+ await wait(()=>outputs.every(name=>fs.existsSync(path.join(out,name))));
+ for(const name of outputs)assert.ok(fs.statSync(path.join(out,name)).size>100);
+ const svg=fs.readFileSync(path.join(out,'clinic-space-en.svg'),'utf8');assert.ok(svg.includes('unified_bed_local_r1')&&svg.includes('SHA256')&&svg.includes('metadata'));
+ const summary=JSON.parse(fs.readFileSync(path.join(out,'unified_bed_local_r1-research-summary.json'),'utf8'));assert.equal(summary.clock.mode,'episode_relative');assert.ok(summary.sources.length>=2);
+ pass('PNG/SVG figure and CSV/JSON exports include experiment and provenance',outputs);
+ await send('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+ for(const tab of ['overview','replay','semantic','diagnostics','planning','sandbox','evidence']){await evaluate('openTab('+JSON.stringify(tab)+')');const size=await evaluate("({viewport:innerWidth,content:document.documentElement.scrollWidth})");assert.ok(size.viewport>=size.content,'mobile overflow '+tab+': '+JSON.stringify(size))}
+ await shot('mobile.png');pass('seven pages retain mobile page-width fit');
+ assert.equal(exceptions.length,0);pass('no uncaught browser exceptions');
+ blocked.push({name:'synchronized replay video export',status:'NOT_RUN',reason:'Real-time encoding and cross-source clock reliability not certified; page does not present video export as available.'});
+ const receipt={passed:true,url,checks,blocked,screenshots,artifact_directory:out,uncaught_exceptions:exceptions,notes:'PASS applies only to listed UI/evidence checks. No ROS/Gazebo/physical experiment was started.'};
+ fs.writeFileSync(path.join(out,'browser_verification.json'),JSON.stringify(receipt,null,2));console.log(JSON.stringify(receipt,null,2));ws.close();chrome.kill('SIGTERM');
+})().catch(error=>{if(ws)ws.close();if(chrome)chrome.kill('SIGTERM');const receipt={passed:false,url,checks,blocked,error:error.stack,screenshots,artifact_directory:out};fs.writeFileSync(path.join(out,'browser_verification.json'),JSON.stringify(receipt,null,2));console.error(JSON.stringify(receipt,null,2));process.exitCode=1});

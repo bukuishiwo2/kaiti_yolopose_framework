@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "purpose": "Independent finite execution-trace acceptance for event-indexed Clinic obligations.",
+  "integration_status": "ISOLATED_RULE_DEFINITIONS_NOT_A_RUNTIME_EXECUTION_RESULT",
+  "semantics": {
+    "scope_key": "event_id",
+    "identity_binding": "Normalize actual feedback only after checking the event, protocol task, robot, revision and attempt. An E1 receipt must not update E2 propositions.",
+    "clock": "Use the actual Clinic episode clock for ordering; do not mix worker ROS timestamps with episode timestamps.",
+    "pulse_facts": [
+      "candidate_open",
+      "monitor_started",
+      "pickup_started",
+      "deliver_started"
+    ],
+    "latched_facts": [
+      "verify_done",
+      "fall_confirmed",
+      "pickup_done",
+      "deliver_done",
+      "handover_done",
+      "monitor_done",
+      "response_complete",
+      "event_completed",
+      "event_closed_negative",
+      "event_cancelled_safe"
+    ],
+    "monitor_active": "Retain the actual event-specific monitor obligation across plan revisions. Predicted finish, evidence TTL expiry and a cancellation request are not a release ACK.",
+    "fall_confirmed": "Requires explicit event-bound verification evidence. Verify service success alone does not establish this proposition.",
+    "response_complete": "Requires this event actual verify, pickup, delivery, handover and monitor completion evidence; predicted schedule times are insufficient.",
+    "handover_done": "Requires this event explicit actual receiver evidence after actual delivery; it is never synthesized from delivery success.",
+    "event_cancelled_safe": "Requires an explicit supported terminal cancellation path. Unsupported active monitor or cargo transfers must not establish this fact.",
+    "version_inheritance": "A new plan revision preserves monitor instances, latched facts and outstanding obligations. It does not reset an event automaton.",
+    "prefix_handling": "Truncated or still-running traces retain INCONCLUSIVE obligations. A prediction-only input is not an actual execution trace.",
+    "coverage": "Report triggering coverage separately; a rule that never triggers is not evidence that its response behavior was exercised.",
+    "unsupported": [
+      "Physical monitor handover",
+      "Physical cargo handover between robots",
+      "Inferring three-dimensional human position from a registered video region",
+      "Treating MILP forecasts as actual execution or actual event closure"
+    ]
+  },
+  "specifications": [
+    {
+      "id": "candidate_eventually_resolved",
+      "scope": "event",
+      "formula": "G (candidate_open -> F (verify_done | event_closed_negative | event_cancelled_safe))"
+    },
+    {
+      "id": "confirmed_response_eventually_completed",
+      "scope": "event",
+      "formula": "G (fall_confirmed -> F response_complete)"
+    },
+    {
+      "id": "monitor_obligation_continuity",
+      "scope": "event",
+      "formula": "G (monitor_started -> (monitor_active U (deliver_done & handover_done)))"
+    },
+    {
+      "id": "response_requires_explicit_confirmation",
+      "scope": "event",
+      "formula": "G ((monitor_started | pickup_started | deliver_started) -> fall_confirmed)"
+    },
+    {
+      "id": "custody_eventually_delivered",
+      "scope": "event",
+      "formula": "G (pickup_done -> F deliver_done)"
+    },
+    {
+      "id": "handover_requires_own_delivery",
+      "scope": "event",
+      "formula": "G (handover_done -> deliver_done)"
+    },
+    {
+      "id": "completed_requires_own_evidence",
+      "scope": "event",
+      "formula": "G (event_completed -> (verify_done & monitor_done & pickup_done & deliver_done & handover_done))"
+    },
+    {
+      "id": "negative_event_cannot_start_response",
+      "scope": "event",
+      "formula": "G (event_closed_negative -> !(monitor_started | pickup_started | deliver_started))"
+    }
+  ]
+}

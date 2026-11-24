@@ -1,5 +1,7 @@
 # Reviews Index
 
+本仓库的当前主线是Clinic三项研究内容，当前事实以[研究范围与证据边界](../clinic_current_research_scope.md)和最新实验报告为准。2026-07的public-space V3、2026-07的house方案和更早的研究路线文档均为历史阶段记录。
+
 - [Clinic实体床活动应急扰动完整实测报告](../../reports/benchmarks/clinic_active_bed_repair_2026-11-16.md)
 
 - [Clinic实体床扰动与活动事件修复契约（2026-11-16）](clinic_active_bed_repair_contract_2026-11-16.md)
@@ -26,7 +28,18 @@
 - 评审文档允许保留当时的命令、路径和上下文快照
 - 当前正式规则应以 `README.md`、`docs/project_conventions.md`、`docs/system_*.md` 为准
 
-## 当前文档
+## 当前Clinic阶段审查
+
+- [当前研究范围与证据边界](../clinic_current_research_scope.md)
+- [GitHub公开研究范围与Clinic实验整理](clinic_github_scope_cleanup_2026-11-24.md)
+- [语义事件驱动的动态分配模型审查（2026-11-18）](clinic_dynamic_assignment_model_audit_2026-11-18.md)
+- [视觉事件到任务/规划的串联准备度（2026-11-18）](clinic_semantic_end_to_end_readiness_2026-11-18.md)
+- [多事件表达能力与承诺状态审查（2026-11-23）](clinic_temporal_logic_adoption_2026-11-23.md)
+- [工作台规划可解释性与实验归类（2026-11-24）](clinic_workbench_explainability_2026-11-24.md)
+- [节点、旅行代价与执行路径来源（2026-11-24）](clinic_node_path_sources_2026-11-24.md)
+- [持续床阻挡下的三次滚动修复诊断（2026-11-24）](clinic_three_repairs_diagnosis_2026-11-24.md)
+
+## 历史Clinic设计与其他阶段审查
 
 - [Clinic医院语义场景、行人避障与协同修复研究验证设计（2026-11-10）](clinic_dynamic_hospital_research_design_2026-11-10.md)
 

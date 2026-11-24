@@ -1,23 +1,16 @@
 # kaiti-yolopose-framework
 
-近期协同规划与Clinic实验：见[小影响范围配对与分级模式实测](reports/benchmarks/clinic_sparse_repair_and_modes_2026-11-17.md)及[独立Clinic源码快照](experiments/clinic/README.md)。Fast/Standard功能验收通过，时间压缩目标未达；研究主链和原生Clinic保持不变。
+本项目当前服务于硕士论文《动态环境下融合语义感知的多智能体协同规划研究》。研究主线固定为：
 
-2026-11-09研究方向与完成路线已重新确认，优先阅读[三项研究内容：已有成果、停止项与完成路线](docs/reviews/research_scope_and_completion_plan_2026-11-09.md)。该文汇总最新实测边界与后续投入；下文部分S0/S1状态保留早期口径，不代表最新阶段审计结论。
+1. 动态环境下的环境认知与人体行为感知；
+2. 面向动态视觉事件的语义建模与任务生成；
+3. 面向动态事件的多智能体协同任务分配、排程与可执行性恢复。
 
-面向动态语义事件驱动移动机器人任务系统的研究型工程仓库。当前已经形成两条稳定主线：
+当前Clinic阶段成果和边界见[研究范围与实验目录](docs/clinic_current_research_scope.md)及[Clinic研究实验与任务规划说明](docs/clinic_research_experiment_guide.md)。实际 Clinic 工作区为 `/home/yhc/clinic_planning_ws`；仓库内 `experiments/clinic` 是上传用源码快照，不是实际运行工作区。
 
-- 感知主线：基于人体关键点的跌倒检测、时序模型、语义事件稳定化
-- 系统主线：ROS2 骨架、感知到任务层桥接、后续 `RTAB-Map / Nav2 / PlanSys2 / LTL` 接口预留
+近期证据包括真实UR Fall视频经YOLO Pose/LSTM产生候选并进入A区三机核验/应急执行，以及独立离线的动态任务分配、多事件能力和局部修复分析。这些结果分别支持有限功能闭环或离线能力，不代表泛化性能、全面性能优势或三项研究全部完成。Fast/Standard功能验收通过，但时间目标未达；局部修复只有条件性证据。
 
-当前研究版本分层：
-
-- v2 house 场景继续作为回归与历史实验基线；
-- v3 已冻结医院公共空间双机器人 P0；S0 配置与测试协议已完成，等待用户检查 diff，
-  未启动 S1。
-
-当前仓库的准确定位是：
-
-`面向不确定视觉事件、动态语义空间与多机器人协同响应的研究框架`
+此前的家居场景毕业方案和医院公共空间双机器人V3计划保留作历史版本，不是当前执行路线；不据其旧S0/S1状态推断当前Clinic进度。
 
 ## 1. 当前默认与阶段结论
 
@@ -35,13 +28,11 @@
 
 当前结论：
 
-- `YOLOPose + 时序模型` 已经形成可训练、可推理、可评估、可调参的完整闭环
+- `YOLOPose + LSTM` 已形成可训练、可推理、可评估、可调参的感知闭环；该项模型指标来自相应原评估划分，不等于Clinic外部泛化
 - `ROS2` 已经打通最小闭环：`/perception/events -> /system/supervisor/status -> /task_planner/request -> /task_planner/status`
 - topic 仍使用 `std_msgs/msg/String + JSON`，但接口语义已经收敛为稳定 schema v1
-- 当前默认学习型正式结果：`Precision=0.8657`、`Recall=0.7401`、`F1=0.7979`
-- 医院公共空间 P0 已在 [硕士学位论文研究计划 V3.0.1](docs/research_plan_v3_0_1.md)中冻结参数、接口、
-  安全边界和验收门槛；[S0配置与测试协议](docs/public_space_v3_s0_protocol.md)已通过本地
-  门禁，等待用户确认后才能进入 S1
+- 已报告的 UR Fall 默认学习型模型结果：`Precision=0.8657`、`Recall=0.7401`、`F1=0.7979`（对应原评估划分，不代表Clinic独立外部测试）
+- 当前三项研究内容、Clinic证据层级和执行边界以[当前研究范围](docs/clinic_current_research_scope.md)为准；历史公共空间V3与house方案不再作为当前路线
 
 关键 benchmark 摘要：
 
@@ -68,9 +59,13 @@ kaiti_yolopose_framework/
 ├── models/                     # 本地模型目录，仓库内只保留说明文件
 ├── outputs/                    # 本地运行产物目录，仓库内只保留说明文件
 ├── reports/                    # 长期保留的 benchmark 摘要与阶段结论
+├── experiments/clinic_*/        # Clinic独立离线研究和证据适配入口
 ├── ros2_ws/                    # ROS2 工作区与系统骨架
 ├── scripts/                    # 入口脚本
-├── src/yolopose/               # 可复用源码
+├── src/yolopose/               # 人体姿态/时序感知源码
+├── src/kaiti_task_sim/         # 事件协议、Clinic任务编译与分配模型
+├── src/kaiti_review/           # 只读实验解释工作台适配器
+├── web/clinic/                 # Clinic实验展示前端
 └── AGENTS.md                   # 项目级协作边界
 ```
 
@@ -96,9 +91,9 @@ kaiti_yolopose_framework/
 
 建议阅读顺序：
 
-1. [项目约定](docs/project_conventions.md)
-2. [医院公共空间硕士学位论文研究计划 V3.0.1](docs/research_plan_v3_0_1.md)
-3. [医院公共空间 V3.0.1 S0配置与测试协议](docs/public_space_v3_s0_protocol.md)
+1. [当前研究范围与证据边界](docs/clinic_current_research_scope.md)
+2. [Clinic研究实验目录与任务规划说明](docs/clinic_research_experiment_guide.md)
+3. [项目约定](docs/project_conventions.md)
 4. [开题目标对齐](docs/kaiti_alignment.md)
 5. [系统架构说明](docs/system_architecture.md)
 6. [ROS2 最小骨架说明](docs/system_bringup_skeleton.md)
@@ -316,11 +311,13 @@ python scripts/eval_fall_batch.py \
 
 ## 8. ROS2 系统主线
 
-`ros2_ws/` 当前只做三件事：
+`ros2_ws/` 是通用感知/系统骨架，保留 mock、视频文件和ROS图像输入。它与 Clinic 三机 Nav2 执行不是同一个运行入口；Clinic真视频实验通过独立脚本回放并桥接到任务层。不要根据 skeleton topic 连通推断完整研究闭环。
+
+通用骨架负责：
 
 1. 将感知链路封装为 ROS2 节点入口
 2. 输出稳定的系统桥接 topic
-3. 为后续 `RTAB-Map / Nav2 / PlanSys2 / Gazebo` 预留稳定边界
+3. 维护可复用的感知消息与模块接口
 
 当前最小消息边界：
 
@@ -383,10 +380,11 @@ bash scripts/clean_local_artifacts.sh
 make help
 ```
 
-## 12. 下一步重点
+## 12. 当前研究推进重点
 
-当前最应该推进的是三类收口：
+1. 研究内容三：用同一冻结快照和相同约束比较固定归属、贪心插入、受限MILP与合法联合动态MILP，界定联合分配何时有必要。
+2. 研究内容二：分别检验误报核验、事件/位置有效性和依赖关系对错误任务生成及可执行性的影响。
+3. 研究内容一：单独完成RGB-D人体位置估计与误差实验；区域注册位置不能替代传感器估计证据。
+4. 三机实体策略配对仅在机器人角色、服务点、资源和并发条件通过资格检查后运行；不因离线可行直接派发。
 
-1. 保持默认 `LSTM` 主线不变，并将规则法稳定定位为 baseline/debug
-2. 在当前 schema v1 基础上继续冻结系统层正式接口，再平滑迁移到 `kaiti_msgs`
-3. 用补充数据和 external validation 补齐慢跌倒、家居场景与遮挡场景盲区
+每项结果分别报告工程功能、独立性能收益和学术贡献证据。历史文档中的旧S0/S1或预计时间线不替代上述当前门槛。

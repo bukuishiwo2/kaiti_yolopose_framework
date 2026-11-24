@@ -203,13 +203,17 @@ class EventTaskProtocol:
             return None
         return dict(frame='map', xy=list(point), space_revision=e['space_revision'])
 
+    def position_evidence_valid(self, event):
+        """Default sensor/observation TTL; explicit source policies may override."""
+        stamp = event['position_source_at']
+        return bool(event['space'] and event['space']['valid'] and stamp is not None and
+                    0 <= self.now-stamp <= self.position_ttl)
+
     def _reconcile(self):
         if not self.event:
             return
         e = self.event
-        stamp = e['position_source_at']
-        e['position_valid'] = bool(e['space'] and e['space']['valid'] and stamp is not None and
-                                   0 <= self.now-stamp <= self.position_ttl)
+        e['position_valid'] = self.position_evidence_valid(e)
         if e['lifecycle'] == 'COMPLETED':
             return
         if e['lifecycle'] != 'CLOSED' and e['position_valid']:

@@ -1,9 +1,12 @@
 # AGENTS
 
-本仓库是面向动态家居场景移动机器人任务系统的研究仓库。当前阶段有两条主线：
+本仓库当前服务于《动态环境下融合语义感知的多智能体协同规划研究》，以Clinic医院场景的任务语义和多机器人规划验证为主。三个研究内容为：
 
-1. 感知主线：跌倒检测、时序模型、语义事件稳定化
-2. 系统主线：ROS2 骨架、感知到任务层桥接、后续 `RTAB-Map / Nav2 / PlanSys2 / LTL` 接口预留
+1. 动态环境下的环境认知与人体行为感知；
+2. 面向动态视觉事件的语义建模与任务生成；
+3. 面向动态事件的多智能体协同任务分配、排程与可执行性恢复。
+
+旧 house / public-space V3 研究计划仅作为历史方案或回归资产，不代表当前主线。Clinic实际运行工作区是`/home/yhc/clinic_planning_ws`，仓库内`experiments/clinic`是上传用源码快照。实际运行前先读当前研究范围与当轮Clinic实验手册。
 
 ## Working Conventions
 
@@ -31,6 +34,10 @@
 - `ros2_ws/`
 - `docs/system_*.md`
 - `docs/kaiti_alignment.md`
+- `src/kaiti_task_sim/clinic_*.py`
+- `src/kaiti_planning/`
+- `experiments/clinic_*/`
+- `web/clinic/` 与 `src/kaiti_review/`
 
 `architect` 主要维护：
 
@@ -39,6 +46,8 @@
 - `docs/`
 - `reports/`
 - `.codex/`
+
+近期本地独有或未提交的改动必须先检查来源和当前分支，不要未经筛选全部加入共享提交。特别保护旧S1、用户本地模型/数据/输出以及原始Clinic运行证据。
 
 ## Documentation Rules
 

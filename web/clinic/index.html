@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clinic · 实验评审工作台</title>
+<style>
+:root{font:13px "Noto Sans CJK SC","Microsoft YaHei",sans-serif;color:#29434c;background:#f4f7f8}*{box-sizing:border-box}body{margin:0}header{background:white;padding:28px 4%;border-bottom:1px solid #dbe4e7;display:flex;justify-content:space-between;align-items:center}h1{font-size:26px;margin:9px 0}h2{font-size:16px}p{color:#71858d;line-height:1.9}.eyebrow{font-size:10px;letter-spacing:2px;color:#83969d}main{padding:20px 4%;max-width:1700px;margin:auto}.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:18px}button,select,input{font:inherit}button,select{padding:8px 12px;background:#fff;border:1px solid #cedce0;border-radius:4px;color:#365963;cursor:pointer}button:hover{background:#edf4f5}button:disabled{opacity:.4;cursor:default}select{max-width:100%}.panel{background:white;border:1px solid #dce5e8;border-radius:5px;padding:20px;margin-bottom:18px;min-width:0}.grid{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:18px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.stats .panel{padding:16px;font-size:11px;color:#83969d}.stats strong{display:block;font-size:24px;color:#28515b;margin-top:8px;font-weight:500}canvas{width:100%;height:440px;background:#fafcfc;border:1px solid #e6edef;display:block}.playbar{display:flex;gap:10px;align-items:center;margin-top:15px}.playbar input{flex:1;min-width:40px;accent-color:#285963}.muted{font-size:11px;color:#80939a}.legend{display:flex;gap:18px;margin:13px 0;font-size:11px}#events{max-height:440px;overflow:auto}.event{display:block;border:0;border-bottom:1px solid #edf2f3;border-radius:0;width:100%;text-align:left;font-size:11px;overflow-wrap:anywhere;padding:10px 2px}#filter{padding:8px;width:100%;border:1px solid #dae4e7;margin:10px 0}.task{display:grid;grid-template-columns:180px 1fr;align-items:center;gap:10px;font-size:10px;margin:6px 0}.task button{font-size:10px;text-align:left;border:0;padding:5px 0;overflow:hidden;text-overflow:ellipsis}.track{background:#f1f5f6;height:16px;position:relative}.track button{position:absolute;height:16px;border:0;padding:0;border-radius:2px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:11px/1.8 monospace;max-height:500px;overflow:auto}#error{background:#fff0ea;color:#9b543c;padding:12px;border:1px solid #edcabb;margin-bottom:15px}#boundary{line-height:2}.badge{color:#458365;font-size:12px}.cards{display:grid;grid-template-columns:1fr 1fr;gap:15px}footer{color:#8c9ca3;font-size:10px;border-top:1px solid #dce5e8;padding:18px 0}a{color:#226a7e}[hidden]{display:none!important}@media(max-width:900px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.cards{grid-template-columns:1fr}.badge{display:none}.task{grid-template-columns:110px 1fr}}
+</style>
+</head>
+<body>
+<header><div><div class="eyebrow">CLINIC RESEARCH / EVIDENCE WORKBENCH</div><h1>实验评审工作台</h1><p>动态语义事件 · 三机协同响应 · 执行承诺与局部修复</p></div><span class="badge">● 本地只读 · 历史日志回放</span></header>
+<main>
+<div class="tools"><label for="run">运行记录</label><select id="run"></select><button id="reload">刷新记录</button><button id="export" disabled>导出摘要</button><span id="status" class="muted" role="status">正在读取工作区…</span></div>
+<nav class="tools" aria-label="评审视图"><button data-view="replay">空间与执行</button><button data-view="boundary">成果与证据边界</button><button data-view="documents">报告与运行手册</button></nav>
+<div id="error" role="alert" hidden></div>
+<section id="replay" class="view">
+<div id="stats" class="stats"></div>
+<div class="grid"><section class="panel"><div class="eyebrow">SPATIAL REPLAY</div><h2>Clinic L1 · 实际采样轨迹</h2>
+<canvas id="map" aria-label="实际采样位姿与服务锚点"></canvas>
+<div class="legend"><span style="color:#1485b5">● R1</span><span style="color:#cb7546">● R2</span><span style="color:#608e68">● R3</span><span>○ 服务锚点</span></div>
+<div class="playbar"><button id="play" disabled>▶ 播放</button><input id="clock" type="range" min="0" max="1" step=".1" value="0" aria-label="仿真时间" disabled><select id="speed" aria-label="回放倍速"><option value="1">1×</option><option value="10" selected>10×</option><option value="30">30×</option></select><output id="time">— s</output></div>
+<p id="mapnote" class="muted">正在读取 Clinic L1 原始占用地图…</p></section>
+<aside class="panel"><div class="eyebrow">EVENT INSPECTION</div><h2>事件与反馈定位</h2><input id="filter" type="search" placeholder="筛选 repair / service / event" aria-label="筛选事件"><div id="events"></div></aside></div>
+<section class="panel"><h2>任务执行时间轴</h2><p class="muted">条带使用原始 begin / end 仿真时钟；点击查看记录。未结束任务仅显示起点。</p><div id="timeline"></div></section>
+<section class="panel"><details><summary>选中记录与来源 SHA256</summary><pre id="detail">选择事件或任务。</pre><pre id="sources"></pre></details></section>
+</section>
+<section id="boundary" class="view" hidden><div class="eyebrow">REVIEW SNAPSHOT / 2026-11-23</div><h2>当前成果与证据缺口</h2><p>以下为文档结论快照；运行文件 passed 字段不替代独立审计，也不证明算法优势。</p>
+<div class="cards">
+<article class="panel"><h2>三机执行闭环 · 已有功能证据</h2><p>统一入口局部 / 热启动全量各完成 22 项服务，独立审计 554 / 551 项通过。仍缺多轮稳定性；Fast / Standard 功能通过，时间目标未达。</p></article>
+<article class="panel"><h2>视觉正例与实体床 · 单次运行边界</h2><p>A 区已有 YOLO Pose + LSTM、显式复核、三机 Nav2 与服务 ACK 正例链。实体床 14 / 14 项任务、93 项审计通过。缺活动监护撤销恢复、携货交接及实体策略配对；三个滚动快照属于同一次运行。</p></article>
+<article class="panel"><h2>动态分配与局部修复 · 离线证据</h2><p>24 个主体输入：B3 对 B1 为 1 胜 23 平，对 B2 为 1 胜 17 平 6 负。修复方法有 36 个构造实例 × 5 策略 = 180 次调用及 687 项审计；存在反例，不支持全面优势，新角色分工缺实体资格。</p></article>
+<article class="panel"><h2>LTLf · 实际入口尚待接线</h2><p>已有有限轨迹监测表与专项测试。最新评审建议补充核验响应、持续监护交接和重规划后的恢复验收；尚未在 Clinic 实际入口查到监测器接线。</p></article>
+</div></section>
+<section id="documents" class="view" hidden><h2>报告与实际运行手册</h2><div class="tools"><select id="document" aria-label="选择文档"></select><a id="doclink" target="_blank" rel="noopener">打开原文 ↗</a></div><pre id="docbody" class="panel">读取文档…</pre></section>
+<footer>Clinic Review · 本地只读 · 不启动 ROS / Gazebo · 新运行保存为 result.json + trace.jsonl 后刷新列表</footer>
+</main>
+<script>
+'use strict';
+const $=id=>document.getElementById(id),colors={r1:'#1485b5',r2:'#cb7546',r3:'#608e68'};
+let data=null,playing=false,last=0,serial=0,bounds=null,mapMeta=null,mapRaster=null;
+async function loadMap(){
+ try{const m=await api('/api/map'),bytes=atob(m.pixels),off=document.createElement('canvas');off.width=m.width;off.height=m.height;const context=off.getContext('2d'),image=context.createImageData(m.width,m.height);for(let i=0;i!==bytes.length;i++){const gray=bytes.charCodeAt(i);image.data[i*4]=gray;image.data[i*4+1]=gray;image.data[i*4+2]=gray;image.data[i*4+3]=255}context.putImageData(image,0,0);mapMeta=m;mapRaster=off;delete mapMeta.pixels;$('mapnote').textContent='原始 Clinic L1 占用地图 · '+m.resolution+' m / px · 离散采样连线不构成碰撞证明。';render()}catch(e){$('mapnote').textContent='底图不可用：'+e.message+'。仅显示保存位姿与服务锚点。'}
+}
+function el(tag,text){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;return e}
+function error(e){$('error').hidden=false;$('error').textContent=e.message||String(e)}
+async function api(url){const r=await fetch(url);const j=await r.json();if(!r.ok)throw Error(j.error);return j}
+function seconds(n){return typeof n==='number'&&Number.isFinite(n)?n.toFixed(1)+' s':'未记录'}
+function inspect(row){$('detail').textContent=JSON.stringify(row,null,2);$('clock').value=row.at??row.begin??data.start;render()}
+function events(){if(!data)return;$('events').replaceChildren();const q=$('filter').value.toLowerCase(),rows=data.events.filter(e=>JSON.stringify(e).toLowerCase().includes(q));for(const row of rows.slice(0,400)){const b=el('button',seconds(row.at)+' · '+(row.phase||'event'));b.className='event';b.onclick=()=>inspect(row);$('events').append(b)}$('events').append(el('p',rows.length+' 条匹配；最多显示前 400 条。'))}
+function timeline(){$('timeline').replaceChildren();for(const row of data.records){const line=el('div'),label=el('button',(row.robot||'?')+' · '+(row.job_id||row.role||row.task_id)),track=el('div');line.className='task';track.className='track';label.onclick=()=>inspect(row);if(Number.isFinite(row.begin)){const bar=el('button');bar.style.background=colors[row.robot]||'#899ca3';bar.style.left=(100*(row.begin-data.start)/Math.max(1,data.end-data.start))+'%';bar.style.width=Math.max(.3,100*((row.end??row.begin)-row.begin)/Math.max(1,data.end-data.start))+'%';bar.title=seconds(row.begin)+' → '+seconds(row.end)+' · '+row.status;bar.setAttribute('aria-label',label.textContent+' '+bar.title);bar.onclick=()=>inspect(row);track.append(bar)}line.append(label,track);$('timeline').append(line)}}
+function getBounds(){let xmin=Infinity,xmax=-Infinity,ymin=Infinity,ymax=-Infinity;function add(x,y){if(Number.isFinite(x)&&Number.isFinite(y)){xmin=Math.min(xmin,x);xmax=Math.max(xmax,x);ymin=Math.min(ymin,y);ymax=Math.max(ymax,y)}}for(const s of data.samples)for(const p of Object.values(s.poses||{}))if(p)add(p.x,p.y);for(const p of Object.values(data.anchors||{}))if(Array.isArray(p))add(p[0],p[1]);return Number.isFinite(xmin)?{xmin:xmin-2,xmax:xmax+2,ymin:ymin-2,ymax:ymax+2}:null}
+function render(){
+ if(!data||$('replay').hidden)return;const t=Number($('clock').value);$('time').textContent=seconds(t);
+ const canvas=$('map'),r=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;canvas.width=r.width*dpr;canvas.height=r.height*dpr;const c=canvas.getContext('2d');c.scale(dpr,dpr);
+ if(!bounds){c.fillText('没有可用位姿或锚点；不生成示意轨迹。',20,30);return}
+ const {xmin,xmax,ymin,ymax}=bounds,scale=Math.min((r.width-50)/(xmax-xmin),(r.height-40)/(ymax-ymin)),ox=(r.width-(xmax-xmin)*scale)/2,oy=(r.height-(ymax-ymin)*scale)/2,xy=(x,y)=>[ox+(x-xmin)*scale,oy+(ymax-y)*scale];
+ if(mapRaster&&mapMeta){const m=mapMeta,[left,top]=xy(m.origin[0],m.origin[1]+m.height*m.resolution);c.save();c.beginPath();c.rect(0,0,r.width,r.height);c.clip();c.drawImage(mapRaster,left,top,m.width*m.resolution*scale,m.height*m.resolution*scale);c.restore()}
+ c.font='10px sans-serif';c.fillStyle='#53707b';c.fillText('map frame / m · 北向 +y',14,18);
+ for(const [name,p]of Object.entries(data.anchors||{})){if(!Array.isArray(p)||!Number.isFinite(p[0])||!Number.isFinite(p[1]))continue;const [x,y]=xy(p[0],p[1]);c.strokeStyle='#a6b7be';c.beginPath();c.arc(x,y,3,0,Math.PI*2);c.stroke();c.fillText(name,x+5,y-4)}
+ for(const robot of ['r1','r2','r3']){let prev=null,current=null;c.beginPath();c.strokeStyle=colors[robot];c.lineWidth=1.7;for(const s of data.samples){if(s.at>t)break;const p=s.poses?.[robot];if(!p||!Number.isFinite(p.x)||!Number.isFinite(p.y)){prev=null;continue}const [x,y]=xy(p.x,p.y);if(prev&&2>=s.at-prev.at&&s.at>=prev.at)c.lineTo(x,y);else c.moveTo(x,y);prev=s;current={x,y,at:s.at}}c.stroke();if(current&&2>=t-current.at){c.fillStyle=colors[robot];c.beginPath();c.arc(current.x,current.y,5,0,2*Math.PI);c.fill();c.fillText(robot.toUpperCase(),current.x+7,current.y-7)}}
+}
+function clearRun(){data=null;bounds=null;$('play').disabled=true;$('clock').disabled=true;$('export').disabled=true;$('stats').replaceChildren();$('events').replaceChildren();$('timeline').replaceChildren();$('sources').textContent='';$('detail').textContent='无已加载运行。';const c=$('map');c.getContext('2d').clearRect(0,0,c.width,c.height)}
+async function load(){
+ const token=++serial;playing=false;$('play').textContent='▶ 播放';clearRun();$('error').hidden=true;$('status').textContent='读取日志与校验值…';
+ try{const next=await api('/api/run?name='+encodeURIComponent($('run').value));if(token!==serial)return;data=next;bounds=getBounds();$('clock').min=data.start;$('clock').max=Math.max(data.start+.1,data.end);$('clock').value=data.start;$('clock').disabled=false;$('play').disabled=false;$('export').disabled=false;$('status').textContent=data.name;
+ for(const [label,value]of [['保存结果 passed',data.passed===true?'PASS':data.passed===false?'FAIL':'未知'],['任务记录',data.records.length],['回放时段',seconds(data.end-data.start)],['位姿采样',data.samples.length]]){const p=el('div',label);p.className='panel';p.append(el('strong',value));$('stats').append(p)}
+ $('sources').textContent=JSON.stringify({sources:data.sources,map:mapMeta,strategy:data.strategy,skipped_rows:data.skipped_rows,nonfinite_fields:data.nonfinite_fields,failure:data.failure},null,2);$('detail').textContent='选择事件或任务。';events();timeline();render();const unknown=data.nonfinite_fields?.length||0;if(data.skipped_rows||unknown)error(Error('跳过 '+data.skipped_rows+' 行无效记录；'+unknown+' 个非有限数值显示为未知 (null)，原日志未修改。字段路径见来源详情。'));
+ }catch(e){if(token===serial){clearRun();error(e);$('status').textContent='读取失败'}}
+}
+async function documentLoad(){const url='/api/document?id='+encodeURIComponent($('document').value);$('doclink').href=url;try{const r=await fetch(url);if(!r.ok)throw Error((await r.json()).error);$('docbody').textContent=await r.text()}catch(e){$('docbody').textContent=e.message}}
+async function refresh(){try{const c=await api('/api/catalog'),old=$('run').value;$('run').replaceChildren();for(const name of c.runs)$('run').append(new Option(name,name));if(c.runs.includes(old))$('run').value=old;else if(c.runs.includes('unified_bed_local_r1'))$('run').value='unified_bed_local_r1';$('document').replaceChildren();for(const name of c.documents)$('document').append(new Option(name,name));documentLoad();if(c.runs.length)await load();else{clearRun();$('status').textContent=c.workspace;error(Error('没有可读取运行，请核对 --workspace。'))}}catch(e){error(e)}}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{document.querySelectorAll('.view').forEach(v=>v.hidden=v.id!==b.dataset.view);render()});
+$('run').onchange=load;$('reload').onclick=refresh;$('filter').oninput=events;$('clock').oninput=render;$('document').onchange=documentLoad;window.addEventListener('resize',render);
+$('play').onclick=()=>{if(!data)return;if(Number($('clock').value)>=data.end)$('clock').value=data.start;playing=!playing;$('play').textContent=playing?'Ⅱ 暂停':'▶ 播放'};
+$('export').onclick=()=>{if(!data)return;const blob=new Blob([JSON.stringify({name:data.name,passed:data.passed,strategy:data.strategy,records:data.records,sources:data.sources,skipped_rows:data.skipped_rows,nonfinite_fields:data.nonfinite_fields,note:'保存字段与原始记录；非新增独立审计结论。非有限数值为未知 null，路径列于 nonfinite_fields。'},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=el('a');a.href=url;a.download=data.name+'-review.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)};
+function frame(now){if(playing&&data){$('clock').value=Math.min(data.end,Number($('clock').value)+Math.min(.1,(now-last)/1000)*Number($('speed').value));render();if(Number($('clock').value)>=data.end){playing=false;$('play').textContent='▶ 播放'}}last=now;requestAnimationFrame(frame)}requestAnimationFrame(frame);
+</script>
+<link rel="stylesheet" href="/review.css">
+<script src="/review.js"></script>
+<link rel="stylesheet" href="/platform.css">
+<script src="/platform.js"></script>
+<link rel="stylesheet" href="/explain.css">
+<script src="/explain.js"></script>
+</body>
+</html>
