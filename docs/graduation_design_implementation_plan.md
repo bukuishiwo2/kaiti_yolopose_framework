@@ -1,5 +1,7 @@
 # Graduation Design Implementation Plan
 
+> 本页记录旧 house/通用 ROS2 原型的接口或方案。当前 Clinic 研究与开发使用[研究范围与完成计划](research_scope_and_completion_plan.md)和[系统架构](system_architecture.md)。
+
 ## 1. Goal
 
 本文件将冻结版毕业设计方案转成仓库内可执行实施基线。后续实现必须遵守以下固定主线：

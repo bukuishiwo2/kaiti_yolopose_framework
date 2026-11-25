@@ -1,5 +1,7 @@
 # Simulation Bringup Plan
 
+> 本页记录旧 house/通用 ROS2 原型的接口或方案。当前 Clinic 研究与开发使用[研究范围与完成计划](research_scope_and_completion_plan.md)和[系统架构](system_architecture.md)。
+
 ## 1. Recommendation
 
 当前阶段优先选择：

@@ -1,5 +1,7 @@
 # System Interface Contract
 
+> 本页记录旧 house/通用 ROS2 原型的接口或方案。当前 Clinic 研究与开发使用[研究范围与完成计划](research_scope_and_completion_plan.md)和[系统架构](system_architecture.md)。
+
 本文件定义当前系统主线默认遵守的稳定接口口径。
 
 当前阶段仍使用 `std_msgs/msg/String + JSON` 传输，但从业务语义上，已经把接口收敛成稳定逻辑消息，而不是“随手拼 JSON”。

@@ -1,5 +1,7 @@
 # Docs Index
 
+当前研究总入口是[研究范围收口与完成计划](research_scope_and_completion_plan.md)。house、public-space V3 和早期架构计划按文档中的历史标记使用。
+
 当前论文和Clinic状态以[当前研究范围与证据边界](clinic_current_research_scope.md)为准。旧的house毕业方案和医院公共空间双机器人V3文档保留为历史版本，不作为当前实施计划。
 
 - [Clinic小影响范围配对与Fast/Standard/Benchmark实测（2026-11-17）](../reports/benchmarks/clinic_sparse_repair_and_modes_2026-11-17.md)

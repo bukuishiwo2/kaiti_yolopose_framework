@@ -1,5 +1,7 @@
 # House World、建图复用与 v2 可视化验收
 
+> 本页记录旧 house/通用 ROS2 原型的接口或方案。当前 Clinic 研究与开发使用[研究范围与完成计划](research_scope_and_completion_plan.md)和[系统架构](system_architecture.md)。
+
 ## 1. 冻结结论
 
 当前 `kaiti_house_world` 的墙体结构不需要整体重做。它已经具备本课题需要的四类空间语义：起始/巡检点、跌倒核验区 B、物资点 S、充电点 D，以及一个可形成共享资源冲突的窄通道。

@@ -1,6 +1,6 @@
 # Graduation Design Execution Plan v2
 
-> **历史执行计划说明（2026-11-24）：**本文服务于旧的house场景v2方案，当前只作为历史实现记录。当前研究内容、入口和证据状态以[Clinic当前研究范围](clinic_current_research_scope.md)为准。
+> 本页保留 house v2 的历史实施与验收参考。当前开发计划见[研究范围与完成计划](research_scope_and_completion_plan.md)。
 
 本文件由研究方案 v2 的冻结内容派生，是后续实现和验收的执行基线。任何范围变化必须先修改 `graduation_research_plan_v2.md`、重新生成 DOCX/manifest，再更新本文件。
 

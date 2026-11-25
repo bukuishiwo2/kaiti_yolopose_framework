@@ -1,5 +1,7 @@
 # ROS2 Skeleton
 
+> 本页记录旧 house/通用 ROS2 原型的接口或方案。当前 Clinic 研究与开发使用[研究范围与完成计划](research_scope_and_completion_plan.md)和[系统架构](system_architecture.md)。
+
 本文件说明 `ros2_ws/` 里当前已经准备好的系统级骨架，以及下一步如何往 `RTAB-Map`、`Nav2`、`PlanSys2` 对接。
 
 接口字段级约定统一见：
