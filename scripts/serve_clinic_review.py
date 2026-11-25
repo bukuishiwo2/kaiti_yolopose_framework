@@ -3,6 +3,7 @@
 import argparse
 import json
 import mimetypes
+import re
 import sys
 from pathlib import Path
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -16,6 +17,7 @@ REPORTS = {
     '节点与路径来源': 'docs/reviews/clinic_node_path_sources_2026-11-24.md',
     '三次修复诊断': 'docs/reviews/clinic_three_repairs_diagnosis_2026-11-24.md',
     '最新评审': 'docs/reviews/clinic_temporal_logic_adoption_2026-11-23.md',
+    '应急插入四格对照': 'reports/benchmarks/clinic_factorial_2026-11-25.md',
     '动态分配': 'reports/benchmarks/clinic_dynamic_assignment_2026-11-18.md',
     '修复对照': 'reports/benchmarks/clinic_repair_methods_2026-11-18.md',
     '视觉正例': 'reports/benchmarks/clinic_visual_positive_2026-11-18.md',
@@ -61,6 +63,16 @@ def main():
                     self.reply({'runs': catalog(root), 'metadata': catalog_metadata(root, descriptors(root)),
                                 'research_catalog': research_catalog(), 'documents': list(docs),
                                 'workspace': str(root), 'read_only': True})
+                elif url.path == '/api/factorial':
+                    name = query.get('name', [''])[0]
+                    verification = root / 'verification'
+                    if name:
+                        if not re.fullmatch(r'factorial_[\w-]+', name):
+                            raise ValueError('实验名称无效。')
+                        self.reply(json.loads((verification / name / 'viewer.json').read_text()))
+                    else:
+                        self.reply(sorted((p.parent.name for p in verification.glob('factorial_*/viewer.json')),
+                                          reverse=True))
                 elif url.path == '/api/run':
                     self.reply(load_run(root, query.get('name', [''])[0]))
                 elif url.path == '/api/map':
@@ -80,6 +92,9 @@ def main():
                     self.reply(path.read_bytes(), mimetypes.guess_type(path)[0] or 'application/octet-stream')
                 elif url.path == '/api/document':
                     self.reply(docs[query.get('id', [''])[0]].read_bytes(), 'text/plain; charset=utf-8')
+                elif url.path in ('/factorial.html', '/factorial.js', '/factorial.css'):
+                    path = WEB / url.path[1:]
+                    self.reply(path.read_bytes(), mimetypes.guess_type(path)[0] + '; charset=utf-8')
                 elif url.path in ('/review.js', '/review.css', '/platform.js', '/platform.css', '/explain.js', '/explain.css'):
                     mime = 'text/javascript; charset=utf-8' if url.path.endswith('.js') else 'text/css; charset=utf-8'
                     self.reply((WEB / url.path[1:]).read_bytes(), mime)

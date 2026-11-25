@@ -6,6 +6,8 @@
 
 ## 当前优先实验
 
+当前内容三对照见[应急插入与资源预约四格](../reports/benchmarks/clinic_factorial_2026-11-25.md)。工作台首页提供四格图、甘特图、目标点以及独立 Gazebo 见证入口。
+
 [Clinic优先级配对实验](../reports/benchmarks/clinic_priority_paired_experiments_2026-11-25.md)是当前内容三的首轮配对结果，并同时登记内容二语义状态和内容一观测质量回放。其输出位于 `/home/yhc/clinic_planning_ws/verification/priority_2026-11-25_02`。
 
 ## 实验名称怎么读

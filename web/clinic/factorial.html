@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>应急插入与资源竞争 | Clinic 实验工作台</title>
+<link rel="stylesheet" href="/factorial.css">
+<script src="/factorial.js" defer></script>
+</head>
+<body>
+<header><div class="wrap">
+<a href="/">返回 Clinic 实验工作台</a>
+<h1>应急插入与资源竞争</h1>
+<p>三台机器人正在完成常态任务。如果此时增加应急响应，物资站又暂时被占用，原有分工还能完成任务吗？</p>
+</div></header>
+<main class="wrap">
+<p id="status" role="status">正在读取实验结果…</p>
+<div id="study" hidden>
+<section aria-labelledby="overview">
+<h2 id="overview">四个条件的对照</h2>
+<p>每组使用同一执行快照。已派发任务保留原分工。“应急”指核验后插入监护和物资取送。资源扰动指 <strong id="hold"></strong>。</p>
+<div class="filters">
+<label>实验运行<select id="experiment"></select></label>
+<label>执行快照<select id="snapshot"></select></label>
+<label>延误评价线<select id="margin"></select></label>
+</div>
+<div id="matrix" aria-label="四格实验条件"></div>
+<figure class="factor-chart">
+<figcaption>各条件下的常态任务延误（累计任务秒）</figcaption>
+<div id="offset-chart"></div>
+</figure>
+<button id="mechanism" type="button">查看原归属失效的机制检查</button>
+</section>
+<section aria-labelledby="comparison">
+<h2 id="comparison">策略结果</h2>
+<p id="conclusion"></p>
+<div id="metrics" class="scroll"></div>
+<details><summary>查看四格可行率和额外叠加延误</summary>
+<p>额外叠加延误 = 两者叠加 − 仅有应急 − 仅有占用 + 无应急无占用。单位为累计任务秒。</p>
+<div id="interactions" class="scroll"></div></details>
+<p class="note">首次可验证解耗时使用求解进程的墙钟。交付从当前快照的应急确认时刻计算，时间轴与延误均为模型预测。完工正向偏移只累计晚于原计划的部分。</p>
+</section>
+<section aria-labelledby="timeline">
+<div class="section-heading"><h2 id="timeline">三台机器人的任务甘特图</h2><label>比较策略<select id="method"></select></label></div>
+<p id="prefix"></p>
+<div class="legend"><span>■ 常态任务</span><span>■ 应急任务</span></div>
+<div id="gantt" class="scroll"></div>
+<p class="note">条带表示服务开始至完成，空白包含旅行、等待及驶离。上下两组用同一时间刻度。选择条带可查看目标点。</p>
+</section>
+<section aria-labelledby="locations">
+<h2 id="locations">服务目标与地图</h2>
+<div class="spatial">
+<figure><canvas id="map" aria-label="Clinic 占用地图及服务目标点"></canvas><figcaption id="map-caption">地图中的点是模型服务目标，坐标单位为米。</figcaption></figure>
+<div id="targets" class="scroll"></div>
+</div>
+<p id="task-detail" role="status"></p>
+<details><summary>查看各项常态任务的完工偏移</summary><p>负值表示比原计划提前。</p><div id="task-offsets" class="scroll"></div></details>
+</section>
+<section aria-labelledby="execution">
+<h2 id="execution">Gazebo 执行与派发资格</h2>
+<div id="execution-evidence"></div>
+<p id="qualification"></p>
+</section>
+<section aria-labelledby="perception">
+<h2 id="perception">真实视频观测片段</h2>
+<div id="observation-evidence" class="scroll"></div>
+</section>
+</div>
+</main>
+</body>
+</html>

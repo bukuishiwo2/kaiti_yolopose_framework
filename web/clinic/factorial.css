@@ -1,0 +1,59 @@
+:root{font:16px/1.6 "Source Sans 3","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif;color:#1b2c35;background:#f2f6f7;--ink:#123a47;--line:#d2dfe3;--muted:#49616c;--normal:#2b5c73;--event:#a24726}
+*{box-sizing:border-box}
+body{margin:0}
+header{background:#103845;color:#fff;padding:1.7rem 0 2rem}
+header a{color:#ddf0f3}
+header p{max-width:48rem;margin:.45rem 0 0;color:#e2edf1}
+.wrap{width:min(1160px,calc(100% - 2rem));margin-inline:auto}
+h1,h2,p,figure{margin:0}
+h1{font-size:clamp(1.8rem,4vw,2.7rem);line-height:1.25;margin-top:.7rem}
+h2{font-size:1.42rem;line-height:1.35;margin-bottom:.5rem}
+main{padding:1rem 0 2rem}
+section{background:#fff;border:1px solid var(--line);border-radius:.65rem;padding:clamp(.9rem,3vw,1.6rem);margin-bottom:1rem}
+select,button{font:inherit;color:var(--ink);border:1px solid #a9bec6;background:#fff;border-radius:.35rem;padding:.32rem .65rem}
+button{cursor:pointer}
+:focus-visible{outline:3px solid #20819c;outline-offset:2px}
+.filters,.section-heading,.legend{display:flex;align-items:center;flex-wrap:wrap;gap:.65rem 1rem;margin:.9rem 0}
+.filters label,.section-heading label{display:grid;gap:.25rem}
+.section-heading{justify-content:space-between}
+#matrix{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:.8rem 0}
+#matrix button{text-align:left;padding:.65rem .8rem}
+#matrix button[aria-pressed=true],#mechanism[aria-pressed=true]{background:#e4f2f4;border-color:#207085}
+#matrix small{display:block;font-size:.92rem;color:var(--muted)}
+.note,figcaption{color:var(--muted);margin-top:.65rem}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;margin-top:.55rem;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:.5rem .65rem;border-bottom:1px solid var(--line)}
+th{font-weight:650;background:#edf4f5}
+#metrics table{min-width:740px}
+#targets table{min-width:330px}
+.legend span:first-child{color:var(--normal)}
+.legend span:last-child{color:var(--event)}
+.gantt{min-width:640px;display:grid;grid-template-columns:6.6rem 1fr;gap:.4rem .6rem;align-items:center;padding-bottom:.55rem}
+.gantt h3{grid-column:1/-1;margin:.6rem 0 0;font-size:1rem}
+.track,.ruler{position:relative;min-height:2.45rem}
+.track{border:1px solid var(--line);background:#f2f6f7;border-radius:.25rem}
+.track button{padding:0 .3rem;position:absolute;top:.25rem;height:1.85rem;min-width:4px;background:var(--normal);color:#fff;border:0;overflow:hidden;white-space:nowrap;text-align:left;font-size:.875rem}
+.track button.event{background:var(--event)}
+.ruler span{position:absolute;white-space:nowrap;transform:translateX(-50%);font-size:.875rem}
+.ruler span:first-child{transform:none}
+.ruler span:last-child{transform:translateX(-100%)}
+.spatial{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start;gap:1rem}
+canvas{display:block;width:100%;height:clamp(235px,34vw,340px);background:#e7eff0;border-radius:.35rem}
+#task-detail{margin-top:.55rem;font-weight:600}
+#status:not(:empty){margin-bottom:.65rem}
+#execution-evidence p,#observation-evidence p{margin:.4rem 0}
+@media(max-width:720px){.spatial{grid-template-columns:1fr}.filters{align-items:stretch}.filters label{width:100%}}
+:where(select){max-width:100%}
+summary{cursor:pointer;color:var(--ink);font-weight:650;margin:.6rem 0}
+.factor-chart{margin:.9rem 0 1rem}
+.factor-chart figcaption{font-weight:650;color:var(--ink)}
+#offset-chart{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem 1rem;margin:.5rem 0}
+.offset-group{padding:.5rem .65rem;background:#f3f7f8;border-radius:.35rem}
+.offset-row{display:grid;grid-template-columns:auto minmax(1rem,1fr) 4rem;align-items:center;column-gap:.5rem;font-size:.93rem}
+.offset-row span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.offset-track{background:#e1eaed;height:.48rem;border-radius:.2rem}
+.offset-track span{display:block;height:100%;border-radius:.2rem;background:#286581}
+.targeted .offset-track span{background:#19746d}
+.full .offset-track span{background:#a24726}
+@media(max-width:720px){#offset-chart{grid-template-columns:1fr}}

@@ -191,3 +191,7 @@ PYTHONPATH=src python3 scripts/audit_clinic_workbench_explainability.py --out /t
 ```
 
 随后补入研究目录、普通用户实验说明及`video_source_registered`目标解释；研究目录计数、角色和任务插入说明见工作台页面与研究实验目录文档。工作台专项回归共15项，核心运行35页切换检查；这些只证明界面与保存证据可读，不是新机器人实验。研究结论和当前主线见[当前研究范围](../../docs/clinic_current_research_scope.md)。
+
+## 应急插入与资源竞争
+
+从首页进入四格对照，或访问 `/factorial.html`。页面自动列出实际工作区 `verification/factorial_*/viewer.json` 中已发布的批次。支持四格条件、快照、归属策略和评价线切换，显示常态延误、任务甘特图、地图目标点、Gazebo 服务记录与观测片段。新批次生成与发布见[实验说明](../../experiments/clinic_priority/README.md)。

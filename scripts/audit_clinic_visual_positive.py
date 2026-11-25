@@ -45,7 +45,7 @@ def qualification(run):
     return s,checks
 
 
-def positive(run):
+def positive(run, *, expect_cancel=True):
     s=json.loads((run/'summary.json').read_text());rows=[json.loads(l) for l in (run/'trace.jsonl').open()]
     records={r['job_id']:r for r in s.get('records',[])};checks={}
     checks['controller_completed']=s.get('passed') is True
@@ -80,16 +80,22 @@ def positive(run):
     checks['handover_before_monitor_release']=s.get('handover_ack') is True and any(q['phase']=='scripted_handover_ack' for q in rows)
     checks['online_checks']=bool(s.get('online_checks')) and all(q['passed'] for q in s['online_checks'])
     checks['monitor_protection_exercised']=any(q.get('monitor_release_guard',{}).get('allowed') is False for q in s.get('online_checks',[]) if q.get('monitor_release_guard'))
-    checks['real_nav_cancel_ACK_retry']=s.get('nav_cancel_tested') is True and any(q['phase']=='visual_navigation_cancel_ack' and q['passed'] for q in rows)
-    req=[(i,q) for i,q in enumerate(rows) if q['phase']=='visual_navigation_cancel_requested']
-    ack=[(i,q) for i,q in enumerate(rows) if q['phase']=='visual_navigation_cancel_ack']
-    if len(req)==len(ack)==1:
-        i,q=req[0];k,v=ack[0]
-        checks['issued_goal_preserved_until_cancel_ACK']=(i<k and q['action_goal_id']==v['action_goal_id'] and
-            q['task_id']==v['task_id'] and not any(row['phase']=='motion_path_released' and row.get('robot')==q['robot'] for row in rows[i:k]))
-        nav=records.get('E1_verify',{}).get('navigation_attempts',[])
-        checks['cancelled_navigation_actually_retried']=any(n.get('controlled_cancel') and n.get('status')==5 for n in nav) and len(nav)>=2 and nav[-1].get('status') in [4,5]
-    else: checks['issued_goal_preserved_until_cancel_ACK']=False
+    if expect_cancel:
+        checks['real_nav_cancel_ACK_retry']=s.get('nav_cancel_tested') is True and any(q['phase']=='visual_navigation_cancel_ack' and q['passed'] for q in rows)
+        req=[(i,q) for i,q in enumerate(rows) if q['phase']=='visual_navigation_cancel_requested']
+        ack=[(i,q) for i,q in enumerate(rows) if q['phase']=='visual_navigation_cancel_ack']
+        if len(req)==len(ack)==1:
+            i,q=req[0];k,v=ack[0]
+            checks['issued_goal_preserved_until_cancel_ACK']=(i<k and q['action_goal_id']==v['action_goal_id'] and
+                q['task_id']==v['task_id'] and not any(row['phase']=='motion_path_released' and row.get('robot')==q['robot'] for row in rows[i:k]))
+            nav=records.get('E1_verify',{}).get('navigation_attempts',[])
+            checks['cancelled_navigation_actually_retried']=any(n.get('controlled_cancel') and n.get('status')==5 for n in nav) and len(nav)>=2 and nav[-1].get('status') in [4,5]
+        else: checks['issued_goal_preserved_until_cancel_ACK']=False
+    else:
+        checks['ordinary_execution_without_controlled_cancel'] = (
+            s.get('nav_cancel_tested') is False and
+            not any(q['phase'] in {'visual_navigation_cancel_requested', 'visual_navigation_cancel_ack'}
+                    for q in rows))
     checks['cleanup']=json.loads((run/'cleanup.json').read_text()).get('passed') is True
     return s,checks
 
@@ -97,8 +103,13 @@ def positive(run):
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--run',type=Path,required=True)
     ap.add_argument('--out',type=Path,required=True);ap.add_argument('--qualification',action='store_true')
-    a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=False)
-    s,checks=qualification(a.run) if a.qualification else positive(a.run)
+    ap.add_argument('--no-controlled-cancel', action='store_true',
+                    help='audit a positive run without the optional navigation cancellation test')
+    a=ap.parse_args()
+    if a.qualification and a.no_controlled_cancel:
+        ap.error('--no-controlled-cancel applies only to positive execution')
+    a.out.mkdir(parents=True,exist_ok=False)
+    s,checks=qualification(a.run) if a.qualification else positive(a.run, expect_cancel=not a.no_controlled_cancel)
     passed=all(checks.values());result=dict(passed=passed,checks=checks,run=str(a.run),
         summary_sha256=hashlib.sha256((a.run/'summary.json').read_bytes()).hexdigest(),
         scope='A spatial service sequence and stationary monitor occupancy' if a.qualification else 'real video full positive emergency with native execution feedback',

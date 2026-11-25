@@ -35,6 +35,8 @@ RTAB-Map/SLAM、机器人自身定位、完整人体三维骨架重建、独立�
 
 ## 当前优先实验结果
 
+内容三四格配对、执行见证和工作台入口见[应急插入与资源预约四格](../reports/benchmarks/clinic_factorial_2026-11-25.md)。
+
 首轮“常态任务中插入一个应急事件”、语义状态矩阵和观测质量回放见[Clinic优先级配对实验](../reports/benchmarks/clinic_priority_paired_experiments_2026-11-25.md)。其中固定归属、只调时间、最小归属释放和完整影响闭包分开报告，所有新规划结果仍未获得实体派发资格。
 
 ## 当前推荐阅读
