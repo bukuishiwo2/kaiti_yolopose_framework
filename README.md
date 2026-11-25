@@ -8,7 +8,7 @@
 
 论文核心是第三项。第一项提供可靠事件信息，第二项将事件转换为带空间目标和依赖的可执行任务。统一闭环为“动态事件感知 → 语义事件向可执行任务转换 → 多智能体协同规划 → 执行反馈与动态协调”。当前研究边界、实现对应关系、保留成果和后续验收以[研究范围收口与完成计划](docs/research_scope_and_completion_plan.md)为准。
 
-当前Clinic阶段成果和边界见[研究范围与实验目录](docs/clinic_current_research_scope.md)及[Clinic研究实验与任务规划说明](docs/clinic_research_experiment_guide.md)。实际 Clinic 工作区为 `/home/yhc/clinic_planning_ws`；仓库内 `experiments/clinic` 是上传用源码快照，不是实际运行工作区。
+当前优先配对实验见[Clinic优先级配对实验](reports/benchmarks/clinic_priority_paired_experiments_2026-11-25.md)。当前Clinic阶段成果和边界见[研究范围与实验目录](docs/clinic_current_research_scope.md)及[Clinic研究实验与任务规划说明](docs/clinic_research_experiment_guide.md)。实际 Clinic 工作区为 `/home/yhc/clinic_planning_ws`；仓库内 `experiments/clinic` 是上传用源码快照，不是实际运行工作区。
 
 近期证据包括真实UR Fall视频经YOLO Pose/LSTM产生候选并进入A区三机核验/应急执行，以及独立离线的动态任务分配、多事件能力和局部修复分析。这些结果分别支持有限功能闭环或离线能力，不代表泛化性能、全面性能优势或三项研究全部完成。Fast/Standard功能验收通过，但时间目标未达；局部修复只有条件性证据。
 
