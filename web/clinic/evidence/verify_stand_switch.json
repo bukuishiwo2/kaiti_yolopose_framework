@@ -1,0 +1,762 @@
+{
+  "conditions": [
+    {
+      "condition": "original",
+      "center": [
+        15.4,
+        -10.8
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 2.03561895177955,
+          "endpoint": 0.0,
+          "points": 81
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 2.54693485777365,
+          "endpoint": 0.0,
+          "points": 102
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 2.2600000000000007,
+        "source_at": 2.2600000000000007,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.4,
+            -10.8
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {
+            "verify": [
+              14.5,
+              -13.7
+            ]
+          }
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "READY",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -13.7
+          ],
+          "space_revision": 1
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": "V1",
+      "plan": {
+        "status": "OPTIMAL",
+        "owner": "r1",
+        "start": 58.512813,
+        "finish": 61.512813,
+        "modelTarget": [
+          14.5,
+          -13.7
+        ],
+        "anchor": "V1",
+        "travelPrior": 21.252813417179773,
+        "travelLength": 2.03561895177955
+      }
+    },
+    {
+      "condition": "switch",
+      "center": [
+        15.45,
+        -13.1
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "endpoint": 0.0,
+          "points": 136
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 4.8900000000000015,
+        "source_at": 4.8900000000000015,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.45,
+            -13.1
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {
+            "verify": [
+              14.5,
+              -14.3
+            ]
+          }
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "READY",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": "A_VERIFY_S",
+      "plan": {
+        "status": "OPTIMAL",
+        "owner": "r1",
+        "start": 67.519389,
+        "finish": 70.519389,
+        "modelTarget": [
+          14.5,
+          -14.3
+        ],
+        "anchor": "A_VERIFY_S",
+        "travelPrior": 27.629389205874027,
+        "travelLength": 3.4384656252922863
+      }
+    },
+    {
+      "condition": "blocked",
+      "center": [
+        15.45,
+        -13.95
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 7.550000000000002,
+        "source_at": 7.550000000000002,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.45,
+            -13.95
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {}
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "PENDING",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": null,
+        "target_valid": false,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "service_point_missing"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": null,
+      "plan": null
+    }
+  ],
+  "execution": {
+    "target": "A_VERIFY_S",
+    "model": {
+      "status": "OPTIMAL",
+      "owner": "r1",
+      "start": 72.379389,
+      "finish": 75.379389,
+      "modelTarget": [
+        14.5,
+        -14.3
+      ],
+      "anchor": "A_VERIFY_S",
+      "travelPrior": 27.629389205874027,
+      "travelLength": 3.4384656252922863
+    },
+    "task": {
+      "task_id": "E1:verify",
+      "event_id": "E1",
+      "role": "verify",
+      "state": "READY",
+      "revision": 2,
+      "attempt": 1,
+      "generated_at": 0.0,
+      "capabilities": [
+        "move",
+        "camera"
+      ],
+      "completion_dependencies": [],
+      "runtime_guards": [
+        "valid_target"
+      ],
+      "duration_mode": "service_ack",
+      "target": {
+        "frame": "map",
+        "xy": [
+          14.5,
+          -14.3
+        ],
+        "space_revision": 2
+      },
+      "target_valid": true,
+      "required_owner": null,
+      "owner": null,
+      "execution_revision": null,
+      "execution_target": null,
+      "blockers": [],
+      "cancel_reason": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "goals": [
+      {
+        "at": 44.75,
+        "frame": "map",
+        "pose": [
+          14.5,
+          -14.3,
+          1.2698760924344712
+        ]
+      }
+    ],
+    "passed": true,
+    "record": {
+      "task_id": "verify_stand_switch_2026-11-26_01:E1_verify:r1",
+      "job_id": "E1_verify",
+      "robot": "r1",
+      "role": "verify",
+      "target": {
+        "x": 14.5,
+        "y": -14.3,
+        "yaw": 1.2698760924344712
+      },
+      "anchor": "A_VERIFY_S",
+      "begin": 44.75,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 44.83,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.4384656252922863,
+          "handoff": {
+            "requested_at": 60.82000000000001,
+            "near_since": 60.099999999999994,
+            "detail": {
+              "x": 14.458341280602651,
+              "y": -14.378532146605913,
+              "yaw": 1.0094106407825956,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.08889739564441443,
+              "yaw_error": 0.2604654516518756,
+              "speed": 7.766867617799397e-12,
+              "angular_speed": 0.23830830622813032,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.07000000000000739
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 60.879999999999995,
+          "heading_alignment": {
+            "begin": 61.21000000000001,
+            "target_yaw_delta": 0.19458341731537332,
+            "skip": false,
+            "status": 4,
+            "end": 62.10000000000001
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 44.83,
+          "leg": "service",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "direct": 2.5280928219074856,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.438465625292286,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 60.879999999999995,
+      "stable_at": 62.989999999999995,
+      "stable_since": 62.269999999999996,
+      "arrival": {
+        "x": 14.45912037522558,
+        "y": -14.37631729037187,
+        "yaw": 1.3229389667218152,
+        "tf_age": 0.009999999999990905,
+        "position_error": 0.0865763970802761,
+        "yaw_error": 0.05306287428734401,
+        "speed": 2.5266247862114356e-16,
+        "angular_speed": 9.285534767253854e-17,
+        "odom_age": 0.009999999999990905,
+        "scan_age": 0.04999999999999716
+      },
+      "arrival_ground_truth": {
+        "x": 14.459120375225579,
+        "y": -14.37631729037187,
+        "z": -0.00545669635800885,
+        "yaw": 1.3229389667218152
+      },
+      "protocol_ack_at": 72.38,
+      "protocol_ack_snapshot": {
+        "run_id": "verify_stand_switch_2026-11-26_01",
+        "received_at": 79.52000000000001,
+        "tasks": {
+          "E1:verify": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          }
+        }
+      },
+      "start_requested": 72.38,
+      "sent_revision": 2,
+      "service_started": 72.65,
+      "service_finished": 75.65,
+      "end": 75.66,
+      "ground_truth": {
+        "x": 14.459120361618245,
+        "y": -14.376317290713672,
+        "z": -0.0054565664828258,
+        "yaw": 1.3229389368242488
+      },
+      "final_anchor": "A_VERIFY_S"
+    },
+    "feedback": [
+      {
+        "task_id": "verify_stand_switch_2026-11-26_01:E1_verify:r1",
+        "attempt": 1,
+        "phase": "started",
+        "at": 79.85000000000001,
+        "reason": null,
+        "robot": "r1",
+        "protocol_task_id": "E1:verify",
+        "task_revision": 2,
+        "role": "verify",
+        "plan_revision": 1
+      },
+      {
+        "task_id": "verify_stand_switch_2026-11-26_01:E1_verify:r1",
+        "attempt": 1,
+        "phase": "succeeded",
+        "at": 82.85000000000001,
+        "reason": null,
+        "robot": "r1",
+        "protocol_task_id": "E1:verify",
+        "task_revision": 2,
+        "role": "verify",
+        "plan_revision": 1
+      }
+    ],
+    "checks": {
+      "tracking": true,
+      "stable_arrival": true,
+      "target_identity": true,
+      "worker_ack": true,
+      "nav2_goal": true,
+      "model_target": true,
+      "protocol_tokens": true
+    }
+  },
+  "failure": null,
+  "candidates": [
+    {
+      "id": "V1",
+      "label": "预登记核验点",
+      "pose": [
+        14.5,
+        -13.7,
+        1.2698760924344712
+      ],
+      "kind": "baseline"
+    },
+    {
+      "id": "A_VERIFY_S",
+      "label": "核验点南侧备选",
+      "pose": [
+        14.5,
+        -14.3,
+        1.2698760924344712
+      ],
+      "kind": "alternative"
+    }
+  ],
+  "origin": [
+    13.272390271051854,
+    -12.089180962403814,
+    -1.6329684856460933
+  ],
+  "protocol_final": {
+    "schema": "event-task/v1",
+    "time": 75.65,
+    "world_revision": 4,
+    "event": {
+      "event_id": "E1",
+      "lifecycle": "OPEN",
+      "perception": "confirmed",
+      "revision": 4,
+      "last_seen_at": 9.75,
+      "position_source_at": 9.75,
+      "space": {
+        "valid": true,
+        "frame": "map",
+        "event_xy": [
+          15.45,
+          -13.1
+        ],
+        "provenance": "controlled_gazebo_body_mask",
+        "service_points": {
+          "verify": [
+            14.5,
+            -14.3
+          ]
+        }
+      },
+      "space_revision": 2,
+      "position_valid": true,
+      "verified": true,
+      "closed_reason": null,
+      "cargo_owner": null,
+      "cargo_disposition": "NONE"
+    },
+    "tasks": {
+      "E1:verify": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "SUCCEEDED",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": "r1",
+        "execution_revision": 2,
+        "execution_target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": 72.65,
+        "finished_at": 75.65
+      },
+      "E1:monitor": {
+        "task_id": "E1:monitor",
+        "event_id": "E1",
+        "role": "monitor",
+        "state": "PENDING",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.65,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "until_delivery_and_finish_ack",
+        "target": null,
+        "target_valid": false,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "service_point_missing"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "E1:pickup": {
+        "task_id": "E1:pickup",
+        "event_id": "E1",
+        "role": "pickup",
+        "state": "PENDING",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.65,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            22.7,
+            -27.5
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "monitor_not_active"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "E1:deliver": {
+        "task_id": "E1:deliver",
+        "event_id": "E1",
+        "role": "deliver",
+        "state": "PENDING",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.65,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:pickup"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": null,
+        "target_valid": false,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "service_point_missing",
+          "dependency:E1:pickup",
+          "monitor_not_active"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      }
+    }
+  },
+  "cleanup": true,
+  "run": "verify_stand_switch_2026-11-26_01",
+  "evidence": {
+    "fixture.json": "1bfbc2dace1f6bb078bd569244e0472afad5f50f2b6069e7784fab38941792df",
+    "summary.json": "3cfa15ab463341fc07541d994dd3e054f44afdfdd460568ddc851ca973f519e0",
+    "trace.jsonl": "abdd0d690b3ce11a8f57a858bdd50a88673842560fbdd4ad54f52914884fc0d4",
+    "cleanup.json": "cedcc5a6a7c0c737562840f347cc8fc0d3611d9c3da339cfc510756a7e851d1d"
+  }
+}

@@ -117,3 +117,16 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
 ```
 
 使用空闲 ROS 域与新输出目录。工作台「在线协同配对」可查看坐标、筛选结果和代表点轨迹。[实测报告](../../reports/benchmarks/clinic_spatial_stand_2026-11-26.md)
+
+## 人体占区与正式核验目标切换
+
+同一个 Gazebo 回合依次改变登记人体位置，读取 R1 的实际人体安全占区和 Nav2 查询。用同一任务协议更新核验目标。通过筛选的方案分别提交原 Clinic MILP，目标为空的任务保持待核验。随后恢复切换条件，重新查询并真实执行一次核验任务。输出保留原生请求、求解、实际导航命令和回执。
+
+```bash
+source /home/yhc/clinic_planning_ws/support/clinic_runtime/environment.sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
+  experiments/clinic_priority/verify_stand_switch.py --domain 96 \
+  --out /home/yhc/clinic_planning_ws/verification/verify_stand_switch_NEW
+```
+
+使用空闲 ROS 域和新目录。受控人体占区只在该实验进程内启用。工作台「在线协同配对」读取实测摘要。[实测报告](../../reports/benchmarks/clinic_verify_stand_switch_2026-11-26.md)

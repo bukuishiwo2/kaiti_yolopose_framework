@@ -29,6 +29,8 @@
 
 A 区的人工备选站位试验独立报告路径筛选与执行验收。四个路径查询中三项通过。南侧代表点由 R1 实测跟踪、停稳并完成空间服务，东侧代表点仍只有查询证据。该结果对应单机受控占位条件。[A 区空间站位验收](../reports/benchmarks/clinic_spatial_stand_2026-11-26.md)
 
+在固定跌倒候选和机器人起点的占区对照中，Clinic 在 V1 存在占用时把既有 `E1:verify` 更新为南侧点。正式任务、MILP 输入及实际 Nav2 请求目标一致，原 worker 完成核验回执。两点均不可用时保留待核验任务。该对照使用受控地图占区及已限定的 R1 资格。[正式核验站位对照](../reports/benchmarks/clinic_verify_stand_switch_2026-11-26.md)
+
 **仿真与性能判断：**实际 Clinic 工作区为`/home/yhc/clinic_planning_ws`；仓库`experiments/clinic`是上传用源码快照。Fast/Standard功能验收通过但时间目标未达。不得把一次功能闭环、离线模型可行、仿真路线实测、性能收益和学术创新当成同一种结论。
 
 ## 不再扩展的方向

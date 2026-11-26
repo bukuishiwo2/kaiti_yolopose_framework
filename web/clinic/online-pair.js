@@ -16,7 +16,7 @@
     /PREFLIGHT/.test(r.reason) ? '启动预检未通过' :
     r.reason ? '执行未完成' : '审计未通过';
   const format = v => Number.isFinite(v) ? v.toFixed(2) : '—';
-  let pair, feedback, qualification, spatialStand;
+  let pair, feedback, qualification, spatialStand, standSwitch;
 
   const node = (tag, text, cls) => {
     const item = document.createElement(tag);
@@ -235,6 +235,35 @@
     return panel;
   }
 
+  function drawStandSwitch() {
+    const panel = node('section',null,'epw-qualification');
+    const labels = {original:'V1 空闲',switch:'V1 被占，南侧可用',blocked:'两处均被占'};
+    const explanation = {occupied_by_body_mask:'人体占区',nav2_path_rejected:'路径查询未通过',eligible:'路径通过'};
+    panel.append(node('h3','人体占用变化如何改变正式核验任务'),
+      node('p','同一地图、跌倒候选和机器人起点。三种条件只移动仿真人体安全占区。'));
+    panel.append(table(['条件','人体位置 / 米','V1','南侧备选','核验目标','任务状态','进入排程'],
+      standSwitch.conditions.map(c=>[
+        labels[c.condition],c.center.map(format).join(', '),...c.queries.map(q=>explanation[q.reason]),
+        c.selected || '等待合格目标',c.task.state==='READY'?'就绪':'待核验',
+        c.plan ? c.plan.owner.toUpperCase()+' · 行驶估计 '+format(c.plan.travelPrior)+' 秒' : '等待新目标'
+      ])));
+    const e = standSwitch.execution;
+    if (e) {
+      const coords = pose => pose?.slice(0,2).map(format).join(', ') || '—';
+      panel.append(node('h4','南侧备选点的正式任务与 Gazebo 执行'),
+        table(['环节','目标坐标 / 米','记录'],[
+          ['核验任务',coords(e.task.target.xy),e.task.task_id+' · 版本 '+e.task.revision],
+          ['MILP 排程',coords(e.model.modelTarget),e.model.owner.toUpperCase()+' · 计划服务 '+format(e.model.start)+'–'+format(e.model.finish)+' 秒'],
+          ['Nav2 实际请求',coords(e.goals[0]?.pose),e.goals.length+' 次路径请求'],
+          ['实际服务回执',coords(e.goals[0]?.pose),e.passed
+            ? '通过 · 停稳后服务 '+format(e.record.service_started)+'–'+format(e.record.service_finished)+' 秒'
+            : '未通过 · '+(standSwitch.failure || e.record?.status || '缺少执行回执')]
+        ]));
+    }
+    panel.append(node('p','证据覆盖受控人体占区、目标选择、任务排程及现场核验。','pair-note'));
+    return panel;
+  }
+
   function drawQualification() {
     const panel = node('section',null,'epw-qualification');
     const cases = qualification.cases;
@@ -270,6 +299,7 @@
 
   function draw() {
     section.replaceChildren(node('h2','在线协同配对'));
+    if (standSwitch?.conditions?.length) section.append(drawStandSwitch());
     if (spatialStand?.candidates?.length) section.append(drawSpatialStand());
     if (qualification?.cases?.length) section.append(drawQualification());
     if (feedback?.cases?.length) section.append(drawFeedback());
@@ -349,9 +379,10 @@
     openTab(section.id);
     section.replaceChildren(node('p','正在读取在线运行证据…'));
     try {
-      [pair, feedback, qualification, spatialStand] = await Promise.all([
+      [pair, feedback, qualification, spatialStand, standSwitch] = await Promise.all([
         api('/api/online-pair'), api('/api/feedback-repair').catch(() => null),
-        api('/api/epw2-qualification').catch(() => null), api('/api/spatial-stand').catch(() => null)
+        api('/api/epw2-qualification').catch(() => null), api('/api/spatial-stand').catch(() => null),
+        api('/api/verify-stand-switch').catch(() => null)
       ]);
       draw();
     } catch (error) {

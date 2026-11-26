@@ -5,6 +5,7 @@ The legacy worker remains unchanged. No model classification or event is
 generated here. Unknown/temporarily stale position retains the last obstacle.
 """
 import json
+import os
 from pathlib import Path
 import sys
 sys.path.insert(0,'/home/yhc/clinic_planning_ws/tools')
@@ -18,6 +19,10 @@ class VisualKeepout(Masks):
     def protocol(self,msg):
         p=json.loads(msg.data)
         self.body,xy=visual_obstacle(p,self.cfg['event']['center'])
+        if os.getenv('CLINIC_CONTROLLED_BODY') == '1' and p.get('controlled_body_fixture') is True:
+            space = (p.get('event') or {}).get('space') or {}
+            if space.get('provenance') == 'controlled_gazebo_body_mask':
+                self.body = True
         if xy!=self.cfg['event']['center']:
             self.cfg['event']['center']=xy
             self.signature=None  # geometry changes invalidate mask cache

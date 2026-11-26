@@ -105,13 +105,15 @@ class VisualEventBridge:
         return self.protocol.apply(msg)
 
 
-def compile_tasks(view, now, config, region, phases, navigation_certificate=None):
+def compile_tasks(view, now, config, region, phases, navigation_certificate=None, *, verify_anchor=None):
     """Replace the fixed-V1 compiler only in the explicit visual mode.
 
     Uses existing phase expansion and exact anchor travel tables. Requires an
     exact target match; arbitrary coordinates do not fall back to V1.
     """
     mapping = dict(region_registry(config)[region]['anchors'], pickup='G1')
+    if verify_anchor is not None:
+        mapping['verify'] = verify_anchor
     result = {}
     for task in view['tasks']:
         role = task['role']
