@@ -2,7 +2,9 @@
 
 > **历史分支** · 本分支保留公共空间 V3/S1 与阶段性 Clinic 实验快照。当前论文以多智能体协同规划为核心，沿动态事件感知、可执行任务生成、协同规划与执行反馈展开，Clinic 用于场景验证。当前实现和开发计划见[默认分支研究范围与完成计划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/docs/research_scope_and_completion_plan.md)。
 
-> 最新 Clinic 执行证据见[主线 EPW2 进站资格对照与反馈重规划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)。
+> A 区三机短队列完成从南侧核验到应急交付。[三机应急响应实测](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_stand_switch_response_2026-11-26.md)
+>
+> 长队列进站及反馈重规划记录见[主线 EPW2 资格对照与反馈重规划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)。
 
 近期协同规划与Clinic实验：见[小影响范围配对与分级模式实测](reports/benchmarks/clinic_sparse_repair_and_modes_2026-11-17.md)及[独立Clinic源码快照](experiments/clinic/README.md)。Fast/Standard功能验收通过，时间压缩目标未达；研究主链和原生Clinic保持不变。
 
