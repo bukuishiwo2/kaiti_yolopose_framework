@@ -104,3 +104,16 @@ done
 ```
 
 工作台默认读取本机验证目录。远端克隆也可通过工作台服务读取库内的只读发布摘要。[实测结果](../../reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)
+
+## A 区空间站位分阶段验收
+
+先查询预登记基线、两个备选点和占用栅格负对照，再按预设次序实跑首个通过的新站位。筛选与跟踪、停稳、同任务服务回执分字段记录。入口使用原 Nav2、到达守卫和 worker，输出 `fixture.json`、`summary.json`、`trace.jsonl` 与工作台摘要。
+
+```bash
+source /home/yhc/clinic_planning_ws/support/clinic_runtime/environment.sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
+  experiments/clinic_priority/qualify_spatial_stand.py --domain 96 \
+  --out /home/yhc/clinic_planning_ws/verification/spatial_stand_NEW
+```
+
+使用空闲 ROS 域与新输出目录。工作台「在线协同配对」可查看坐标、筛选结果和代表点轨迹。[实测报告](../../reports/benchmarks/clinic_spatial_stand_2026-11-26.md)

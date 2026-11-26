@@ -26,6 +26,7 @@
 #online-pair .epw-qualification svg text{font:14px system-ui,sans-serif;fill:#314d59}
 #online-pair .epw-grid{stroke:#d9e1e7}
 #online-pair .epw-anchor{fill:#314d59}
+#online-pair .stand-rejected{fill:#9f4828}
 #online-pair .epw-occupied{stroke:#205f7c;stroke-width:3;fill:none}
 #online-pair .epw-vacant{stroke:#9f4828;stroke-width:2.5;stroke-dasharray:5 4;fill:none}
 #online-pair circle.epw-occupied{fill:#205f7c}

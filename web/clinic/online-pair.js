@@ -16,7 +16,7 @@
     /PREFLIGHT/.test(r.reason) ? '启动预检未通过' :
     r.reason ? '执行未完成' : '审计未通过';
   const format = v => Number.isFinite(v) ? v.toFixed(2) : '—';
-  let pair, feedback, qualification;
+  let pair, feedback, qualification, spatialStand;
 
   const node = (tag, text, cls) => {
     const item = document.createElement(tag);
@@ -138,13 +138,14 @@
     return panel;
   }
 
+  function svg(tag, attributes, value) {
+    const element = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    for (const [name,v] of Object.entries(attributes)) element.setAttribute(name,v);
+    if (value) element.textContent = value;
+    return element;
+  }
+
   function measuredTrack(batch) {
-    const svg = (tag, attributes, value) => {
-      const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
-      for (const [name,v] of Object.entries(attributes)) el.setAttribute(name,v);
-      if (value) el.textContent = value;
-      return el;
-    };
     const graphic = svg('svg',{viewBox:'0 0 370 390',role:'img',
       'aria-label':'占位与空位条件下从 CTLR3 出发的 R3 实测轨迹均未到达 EPW2'});
     const project = ([x,y]) => [43+(x-13)*48,33+(-10.6-y)*48];
@@ -172,6 +173,66 @@
         svg('text',{x,y:y+dy,'text-anchor':key==='EPW2'?'end':'middle'},key));
     }
     return graphic;
+  }
+
+  function standTrack(batch) {
+    const graphic = svg('svg',{viewBox:'0 0 440 280',role:'img',
+      'aria-label':'R1 实测轨迹、新备选站位、原核验点和占用栅格负对照'});
+    const project = ([x,y]) => [50+(x-13)*64,24+(-11.8-y)*64];
+    for (let x=13; x<=18; x++) {
+      const [px] = project([x,0]);
+      graphic.append(svg('line',{x1:px,x2:px,y1:24,y2:234,class:'epw-grid'}),
+        svg('text',{x:px,y:255,'text-anchor':'middle'},x+' m'));
+    }
+    for (let y=-15; y<=-12; y++) {
+      const [,py] = project([0,y]);
+      graphic.append(svg('line',{x1:50,x2:370,y1:py,y2:py,class:'epw-grid'}),
+        svg('text',{x:44,y:py+5,'text-anchor':'end'},String(y)));
+    }
+    const points = batch.actual.track.map(([,x,y]) => project([x,y]));
+    graphic.append(svg('polyline',{points:points.map(p=>p.join(',')).join(' '),class:'epw-occupied'}));
+    const [sx,sy] = project(batch.origin);
+    graphic.append(svg('circle',{cx:sx,cy:sy,r:4,class:'epw-anchor'}),
+      svg('text',{x:sx+8,y:sy-9},'起点 V3'));
+    for (const candidate of batch.candidates) {
+      const [x,y] = project(candidate.pose);
+      const label = {baseline:'原核验点',negative:'负对照'}[candidate.kind] ||
+        (candidate.id===batch.actual.selected ? '实跑备选点' : '东侧备选');
+      graphic.append(svg('circle',{cx:x,cy:y,r:4,class:candidate.passed?'epw-anchor':'stand-rejected'}),
+        svg('text',{x,y:y+(candidate.kind==='baseline' || candidate.id===batch.actual.selected?19:-9),
+          'text-anchor':candidate.kind==='negative'?'end':'middle'},label));
+    }
+    return graphic;
+  }
+
+  function drawSpatialStand() {
+    const panel = node('section',null,'epw-qualification');
+    const result = spatialStand.actual;
+    const selected = spatialStand.candidates.find(c=>c.id===result.selected);
+    panel.append(node('h3','A 区空间站位验收'),
+      node('p','R1 从同一实测位置查询四个预设目标，使用相同的事件占区和其他机器人站位。通过路径筛选的首个备选点进入实跑。'));
+    panel.append(node('h4','第一步 · Nav2 全局路径筛选'),
+      table(['候选站位','地图坐标 / 米','路径查询','路径长度 / 米','实际服务'],
+      spatialStand.candidates.map(c=>[c.label,c.pose.slice(0,2).map(format).join(', '),
+        c.passed?'通过':'未通过',c.passed?format(c.length):'—',
+        c.id===result.selected?(result.status==='PASS'?'实测通过':'实测未通过'):'未执行'])));
+    if (selected) {
+      const report = {
+        tracking:result.follow.map(f=>f.status===5 && result.checks.tracking?
+          '到位后交给姿态控制':f.status===4?'跟踪完成':'终态 '+f.status).join('、') || '无跟踪记录',
+        stable:'停稳 '+format(result.stableDuration)+' 秒，位置误差 '+format(result.arrival?.position_error)+' 米',
+        worker:result.workerFeedback.map(s=>({started:'开始',succeeded:'成功'})[s] || s).join(' → ') || '无回执'
+      };
+      panel.append(node('h4','第二步 · Gazebo 跟踪、停稳和服务'),
+        table(['实测环节','结果','记录'],[
+          ['跟踪',result.checks.tracking?'通过':'未通过',report.tracking],
+          ['稳定到达',result.checks.stable_arrival?'通过':'未通过',report.stable],
+          ['执行回执',result.checks.worker_ack?'通过':'未通过',report.worker+' · '+format(result.serviceStart)+'–'+format(result.serviceFinish)+' 仿真秒']
+        ]),
+        node('p','蓝线为实测轨迹。圆点标记查询目标。','pair-note'),standTrack(spatialStand));
+    }
+    panel.append(node('p','本例验证单机到达与服务，场景使用人工地图坐标、静止同伴和原服务回执。','pair-note'));
+    return panel;
   }
 
   function drawQualification() {
@@ -209,6 +270,7 @@
 
   function draw() {
     section.replaceChildren(node('h2','在线协同配对'));
+    if (spatialStand?.candidates?.length) section.append(drawSpatialStand());
     if (qualification?.cases?.length) section.append(drawQualification());
     if (feedback?.cases?.length) section.append(drawFeedback());
     if (!pair) {
@@ -287,9 +349,9 @@
     openTab(section.id);
     section.replaceChildren(node('p','正在读取在线运行证据…'));
     try {
-      [pair, feedback, qualification] = await Promise.all([
+      [pair, feedback, qualification, spatialStand] = await Promise.all([
         api('/api/online-pair'), api('/api/feedback-repair').catch(() => null),
-        api('/api/epw2-qualification').catch(() => null)
+        api('/api/epw2-qualification').catch(() => null), api('/api/spatial-stand').catch(() => null)
       ]);
       draw();
     } catch (error) {

@@ -21,6 +21,7 @@ REPORTS = {
     '在线协同配对': 'reports/benchmarks/clinic_online_pair_2026-11-26.md',
     '路径拒绝反馈重规划': 'reports/benchmarks/clinic_feedback_repair_2026-11-26.md',
     'EPW2 进站资格对照': 'reports/benchmarks/clinic_epw2_qualification_2026-11-26.md',
+    'A 区空间站位分阶段验收': 'reports/benchmarks/clinic_spatial_stand_2026-11-26.md',
     '应急插入四格对照': 'reports/benchmarks/clinic_factorial_2026-11-25.md',
     '动态分配': 'reports/benchmarks/clinic_dynamic_assignment_2026-11-18.md',
     '修复对照': 'reports/benchmarks/clinic_repair_methods_2026-11-18.md',
@@ -79,6 +80,8 @@ def main():
                     self.reply(latest('feedback_repair'))
                 elif url.path == '/api/epw2-qualification':
                     self.reply(latest('epw2_qualification'))
+                elif url.path == '/api/spatial-stand':
+                    self.reply(latest('spatial_stand'))
                 elif url.path == '/api/factorial':
                     name = query.get('name', [''])[0]
                     verification = root / 'verification'
