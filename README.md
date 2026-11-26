@@ -2,7 +2,9 @@
 
 > **历史分支** · 本分支保留house 仿真与 Nav2 预检回归。当前论文以多智能体协同规划为核心，沿动态事件感知、可执行任务生成、协同规划与执行反馈展开，Clinic 用于场景验证。当前实现和开发计划见[默认分支研究范围与完成计划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/docs/research_scope_and_completion_plan.md)。
 
-> 最新 Clinic 执行证据见[主线 EPW2 进站资格对照与反馈重规划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)。
+> A 区三机短队列完成从南侧核验到应急交付。[三机应急响应实测](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_stand_switch_response_2026-11-26.md)
+>
+> 长队列进站及反馈重规划记录见[主线 EPW2 资格对照与反馈重规划](https://github.com/bukuishiwo2/kaiti_yolopose_framework/blob/main/reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)。
 
 面向动态家居场景移动机器人任务系统的研究型工程仓库。当前已经形成两条稳定主线：
 
