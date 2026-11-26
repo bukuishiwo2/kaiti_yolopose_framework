@@ -10,13 +10,14 @@
 
   const labels = {fixed:'固定常态分工', full:'允许常态改派'};
   const names = {E1_verify:'现场核验', E1_monitor:'现场监护', E1_pickup:'领取物资', E1_deliver:'送达物资'};
+  const responseName = job => names[job] || (job==='E1_monitor_approach'?'监护前中间停稳':'已派发巡检');
   const failureLabel = r => r.passed ? '审计通过' :
     /Nav2 route qualification/.test(r.reason) ? '路径资格未通过' :
     /PROTOCOL_ACK_TIMEOUT/.test(r.reason) ? '核验就绪回执超时' :
     /PREFLIGHT/.test(r.reason) ? '启动预检未通过' :
     r.reason ? '执行未完成' : '审计未通过';
   const format = v => Number.isFinite(v) ? v.toFixed(2) : '—';
-  let pair, feedback, qualification, spatialStand, standSwitch;
+  let pair, feedback, qualification, spatialStand, standSwitch, standResponse;
 
   const node = (tag, text, cls) => {
     const item = document.createElement(tag);
@@ -64,9 +65,12 @@
           const booking = node('span', null, 'pair-booking');
           booking.style.left = r.reservation[0]/limit*100 + '%';
           booking.style.width = (Math.min(limit,r.reservation[1])-r.reservation[0])/limit*100 + '%';
+          lane.append(booking);
+        }
+        if (Number.isFinite(r.confirmed)) {
           const confirm = node('span', null, 'pair-confirmation');
           confirm.style.left = r.confirmed/limit*100 + '%';
-          lane.append(booking,confirm);
+          lane.append(confirm);
         }
         for (const task of r[key].filter(t => t.robot===robot)) {
           const bar = node('button', task.anchor, 'pair-bar'+(names[task.job] ? ' pair-emergency' : ''));
@@ -264,6 +268,55 @@
     return panel;
   }
 
+  function drawStandResponse() {
+    const panel = node('section',null,'epw-qualification');
+    const {response,execution,runtime_records:records=[]} = standResponse;
+    panel.append(node('h3','南侧核验点切换后的三机应急响应'),
+      node('p','R1 在南侧点核验并接续监护，R2 负责取送，R3 继续之前已派发的巡检。人体占区和核验结论由实验设定。'));
+    if (!response?.passed) {
+      panel.append(node('p','完整协作未通过。'+(standResponse.failure || '请查看已保存的执行记录。')));
+    } else {
+      const cargo = records.find(r=>r.job_id==='E1_deliver');
+      panel.append(node('p','第 '+format(response.confirmed)+' 秒确认应急事件，第 '+format(cargo.service_finished)+
+        ' 秒送达物资。R3 的巡检保留原派发身份，并完成 TL 工位服务和释放。'));
+      if (response.monitorAfterPatrol) {
+        const patrol = records.find(r=>r.job_id==='C0_r3_W1');
+        panel.append(node('p','响应计划保留 R3 的原巡检。R1 收到 TL 驶离及租约释放后才出发去 M1，R2 到达 G1 后等待监护开始回执。巡检于第 '+format(patrol.end)+' 秒结束。'));
+      }
+    }
+    panel.append(table(['任务','机器人','服务点','实际导航派发','停稳','服务开始','服务结束','租约释放'],
+      records.map(r=>[responseName(r.job_id),r.robot.toUpperCase(),r.anchor,
+        ...[r.begin,r.stable_at,r.service_started,r.service_finished,r.lease_released_at].map(format)])));
+    const completed = records.filter(r=>r.status==='SUCCEEDED' && Number.isFinite(r.service_finished));
+    if (completed.length) {
+      const graph = node('div',null,'pair-graph');
+      const scroll = node('div',null,'pair-graph-scroll');
+      const detail = node('p',null,'pair-task-detail');
+      scroll.append(graph);
+      panel.append(node('p','甘特图只画实际服务区间。横轴为本次 Gazebo 回合时间，虚线标记核验成功。','pair-note'),scroll,detail);
+      timeline(graph,detail,[{title:'三机实际服务',confirmed:response?.confirmed,actual:completed.map(r=>({
+        robot:r.robot,job:r.job_id,label:responseName(r.job_id),anchor:r.anchor,
+        xy:[r.target.x,r.target.y],start:r.service_started,finish:r.service_finished
+      }))}],false);
+    }
+    if (execution?.passed && response?.path_queries) {
+      const routes = node('details');
+      routes.append(node('summary','查看切换后的响应路径查询'),
+        table(['机器人','起点','目标','全局路径长度 / 米','结果'],
+          response.path_queries.map(q=>[q.robot.toUpperCase(),q.source,q.id,format(q.length),q.passed?'通过':'未通过'])));
+      panel.append(routes);
+    }
+    if (standResponse.priorAttempts?.length) {
+      panel.append(node('h4','先前两次跟踪中止'),
+        table(['监护接近方案','中止目标','全局查询','跟踪中止次数','停止 / 仿真秒'],
+          standResponse.priorAttempts.map(a=>[
+            a.viaV3?'经 V3 停稳':'直接前往 M1',a.anchor,a.pathPassed?'通过':'未通过',
+            a.aborts,format(a.stop)
+          ])));
+    }
+    return panel;
+  }
+
   function drawQualification() {
     const panel = node('section',null,'epw-qualification');
     const cases = qualification.cases;
@@ -299,6 +352,7 @@
 
   function draw() {
     section.replaceChildren(node('h2','在线协同配对'));
+    if (standResponse) section.append(drawStandResponse());
     if (standSwitch?.conditions?.length) section.append(drawStandSwitch());
     if (spatialStand?.candidates?.length) section.append(drawSpatialStand());
     if (qualification?.cases?.length) section.append(drawQualification());
@@ -379,10 +433,10 @@
     openTab(section.id);
     section.replaceChildren(node('p','正在读取在线运行证据…'));
     try {
-      [pair, feedback, qualification, spatialStand, standSwitch] = await Promise.all([
+      [pair, feedback, qualification, spatialStand, standSwitch, standResponse] = await Promise.all([
         api('/api/online-pair'), api('/api/feedback-repair').catch(() => null),
         api('/api/epw2-qualification').catch(() => null), api('/api/spatial-stand').catch(() => null),
-        api('/api/verify-stand-switch').catch(() => null)
+        api('/api/verify-stand-switch').catch(() => null), api('/api/stand-switch-response').catch(() => null)
       ]);
       draw();
     } catch (error) {

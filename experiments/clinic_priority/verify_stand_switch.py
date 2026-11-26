@@ -11,7 +11,7 @@ import time
 
 from factorial import READ, WRITE, WORKSPACE, benchmark
 from qualify_spatial_stand import ORIGIN, ROBOT, SOURCE, execution_checks, points, screen_passed
-from kaiti_task_sim.clinic_visual import compile_tasks, execution_fence, execution_tokens
+from kaiti_task_sim.clinic_visual import compile_tasks, execution_fence, execution_tokens, registered_space
 from kaiti_task_sim.event_protocol import EventTaskProtocol
 
 
@@ -24,17 +24,20 @@ def select(rows):
     return next((row for row in rows if not row['occupied'] and row['passed']), None)
 
 
-def observation(protocol, at, center, selected, label):
+def observation(protocol, at, center, selected, label, response_points=None):
+    service_points = dict(response_points or {})
+    if selected:
+        service_points['verify'] = selected['pose'][:2]
     msg = dict(schema='event-task/v1', kind='observation', event_id='E1',
                message_id=label, at=at, source_at=at, status='confirmed',
                space=dict(valid=True, frame='map', event_xy=center,
                           provenance='controlled_gazebo_body_mask',
-                          service_points={'verify': selected['pose'][:2]} if selected else {}))
+                          service_points=service_points))
     protocol.apply(msg)
     return msg
 
 
-def run(out, domain):
+def run(out, domain, response=False, via_v3=False, after_patrol=False):
     sys.path[:0] = [str(WORKSPACE), str(WORKSPACE/'tools')]
     import dense_tasks as dt
     from dense_validate import validate
@@ -59,12 +62,20 @@ def run(out, domain):
     expected_masks = dict(original=[False,False], switch=[True,False], blocked=[True,True])
     poses = {r:[history[j]['ground_truth'][k] for k in ('x','y','yaw')]
              for r,j in (('r1','C0_r1_W2'),('r2','C0_r2_W2'),('r3','C0_r3_W1'))}
+    anchors = {'r1':ORIGIN,'r2':'CPW2','r3':'CTLR3'}
+    if response:
+        from stand_switch_response import fixture
+        prior = fixture(cfg)
+        poses.update(prior['poses'])
+        anchors.update(prior['anchors'])
     out.mkdir(parents=True,exist_ok=False)
     WRITE(out/'poses.json',poses)
     WRITE(out/'fixture.json',dict(centers=centers,candidates=candidates,poses=poses,
         mask_expectations=expected_masks, source=SOURCE.name, source_sha256=benchmark.sha(SOURCE/'result.json'),
         eligible={'E1_verify':[ROBOT]}, verdict='controlled positive after actual verify worker ACK',
-        representative='switch', method='ordered unoccupied Nav2-screened candidates from prior execution evidence'))
+        representative='switch', method='ordered unoccupied Nav2-screened candidates from prior execution evidence',
+        response=prior if response else None, monitor_approach='V3' if via_v3 else 'direct',
+        monitor_after_patrol=after_patrol))
     require_static(out)
     for robot,path in prepare(out/'prepared').items():
         path = Path(path)
@@ -75,7 +86,16 @@ def run(out, domain):
     os.environ.update(CLINIC_PROBE_POSES=str(out/'poses.json'), CLINIC_CONTROLLED_BODY='1')
     result = dict(conditions=[], execution=None, failure=None, candidates=candidates, origin=poses[ROBOT])
     with visual_world(out,domain,out/'prepared'):
-        runtime_gate(out,120.)
+        try:
+            runtime_gate(out,120.)
+        except RuntimeError:
+            checks=READ(out/'runtime_preflight.json')['robots']
+            failed=[k for entries in checks.values() for k,v in entries.items() if not v]
+            if not failed or any(not k.startswith('live:') for k in failed):
+                raise
+            retry=out/'runtime_recheck'
+            retry.mkdir()
+            runtime_gate(retry,60.)
         rclpy.init()
 
         class Episode(bed.Episode):
@@ -90,7 +110,7 @@ def run(out, domain):
         c = Episode(out,opts)
         executor = SingleThreadedExecutor()
         executor.add_node(c)
-        for rid, anchor in {'r1':ORIGIN,'r2':'CPW2','r3':'CTLR3'}.items():
+        for rid, anchor in anchors.items():
             peer = bed.Bot(rid,c)
             peer.anchor=anchor
             c.peers[rid]=peer
@@ -115,7 +135,8 @@ def run(out, domain):
                 c.update_motion()
                 c.update_neck()
                 if move:
-                    b.step()
+                    for peer in c.peers.values():
+                        peer.step()
                     c.publish()
 
         def mask_values(msg, positions):
@@ -136,22 +157,27 @@ def run(out, domain):
             wait(lambda:c.elapsed()>=end,12.)
             return measured
 
-        def query(candidate, occupied):
+        def query(candidate, occupied, peer=b, source=None):
             goal=ComputePathToPose.Goal()
-            goal.use_start=False
+            goal.use_start=source is not None
             goal.planner_id='GridBased'
             goal.goal.header.frame_id='map'
-            goal.goal.header.stamp=b.get_clock().now().to_msg()
+            goal.goal.header.stamp=peer.get_clock().now().to_msg()
+            if source:
+                x0,y0,yaw0=source
+                goal.start.header=goal.goal.header
+                goal.start.pose.position.x,goal.start.pose.position.y=x0,y0
+                goal.start.pose.orientation.z,goal.start.pose.orientation.w=math.sin(yaw0/2),math.cos(yaw0/2)
             x,y,yaw=candidate['pose']
             goal.goal.pose.position.x,goal.goal.pose.position.y=x,y
             goal.goal.pose.orientation.z,goal.goal.pose.orientation.w=math.sin(yaw/2),math.cos(yaw/2)
-            future=b.path_action.send_goal_async(goal)
-            wait(future.done,10.)
+            future=peer.path_action.send_goal_async(goal)
+            wait(future.done,10.,move=response and c.peers['r3'].job is not None)
             action=future.result()
             status,path=None,[]
             if action.accepted:
                 future=action.get_result_async()
-                wait(future.done,15.)
+                wait(future.done,15.,move=response and c.peers['r3'].job is not None)
                 reply=future.result()
                 status=reply.status
                 path=[(p.pose.position.x,p.pose.position.y) for p in reply.result.path.poses]
@@ -226,9 +252,13 @@ def run(out, domain):
             chosen=select([query(site,value==100) for site,value in zip(candidates,mask)])
             if not chosen or chosen['id']!=alternative['id']:
                 raise ValueError('Fresh runtime gate did not select the same alternative')
-            protocol=EventTaskProtocol(position_ttl=180.,supply=cfg['anchors']['G1'][:2])
-            observation(protocol,0.,centers['original'],baseline,'reference')
-            observation(protocol,c.elapsed(),centers['switch'],chosen,'current')
+            protocol=EventTaskProtocol(position_ttl=700. if response else 180.,supply=cfg['anchors']['G1'][:2])
+            response_points=None
+            if response:
+                response_points=registered_space(cfg,'A')['service_points']
+                del response_points['verify']
+            observation(protocol,0.,centers['original'],baseline,'reference',response_points)
+            observation(protocol,c.elapsed(),centers['switch'],chosen,'current',response_points)
             c.protocol=protocol
             tokens=execution_tokens(protocol,[TASK])
             cfg_exec,c.tasks,c.plan,model=plan(out/'execution',chosen,protocol)
@@ -254,6 +284,9 @@ def run(out, domain):
             result['execution']=dict(target=chosen['id'],model=model,task=deepcopy(protocol.tasks[TASK]),
                                      goals=recorded_goals, passed=False)
             c.log('formal_verify_plan_committed',task=protocol.tasks[TASK],model=model)
+            if response:
+                from stand_switch_response import issue_routine
+                issue_routine(c,prior,wait)
             wait(lambda:(c.dispatch_dense(b) or b.job==JOB),90.,move=True)
             wait(lambda:JOB in c.completed,120.,move=True)
             rec=c.completed[JOB]
@@ -265,12 +298,24 @@ def run(out, domain):
                           protocol_tokens=protocol.tasks[TASK]['state']=='SUCCEEDED'
                           and all(v['protocol_task_id']==TASK and v['task_revision']==tokens[TASK]['revision'] for v in ack))
             result['execution'].update(record=rec,feedback=ack,checks=checks,passed=all(checks.values()))
+            if response:
+                from stand_switch_response import continue_response
+                if not result['execution']['passed']:
+                    raise ValueError('Formal verification did not pass independent execution checks')
+                b.path_action.send_goal_async=send
+                result['response']={}
+                continue_response(c,out,query,wait,result['response'],
+                                  via_v3=via_v3,after_patrol=after_patrol)
         except Exception as error:
             result['failure']=repr(error)
         finally:
             if result['execution'] is not None and c.records and 'record' not in result['execution']:
                 result['execution']['record']=c.records[-1]
             result['protocol_final']=c.protocol.snapshot()
+            if response:
+                result['runtime_records']=c.records
+                result['runtime_completed']=c.completed
+                result['resource_events']=c.resource_events
             c.file.close()
             for node in (*c.peers.values(),c):
                 if getattr(node,'nav_handle',None) and node.state!='IDLE':
@@ -285,13 +330,21 @@ def run(out, domain):
     viewer.update(run=out.name,evidence={name:benchmark.sha(out/name) for name in
                   ('fixture.json','summary.json','trace.jsonl','cleanup.json')})
     WRITE(out/'viewer.json',viewer)
-    print(out, result['failure'], bool((result['execution'] or {}).get('passed')),flush=True)
-    return result['cleanup'] and bool((result['execution'] or {}).get('passed'))
+    passed = result['cleanup'] and result['failure'] is None and bool((result['execution'] or {}).get('passed'))
+    if response:
+        passed = passed and result.get('response',{}).get('passed',False)
+    print(out, result['failure'], passed,flush=True)
+    return passed
 
 
 if __name__=='__main__':
     cli=argparse.ArgumentParser(description=__doc__)
     cli.add_argument('--out',required=True,type=Path)
     cli.add_argument('--domain',default=96,type=int)
+    cli.add_argument('--response',action='store_true',help='Continue the verified alternate stand through the A-area response')
+    cli.add_argument('--via-v3',action='store_true',help='Use a V3 stop before the monitor approach')
+    cli.add_argument('--after-patrol',action='store_true',help='Require the committed patrol to clear before dispatching monitor')
     args=cli.parse_args()
-    raise SystemExit(0 if run(args.out.resolve(),args.domain) else 1)
+    if (args.via_v3 or args.after_patrol) and not args.response:
+        cli.error('Monitor approach options require --response')
+    raise SystemExit(0 if run(args.out.resolve(),args.domain,args.response,args.via_v3,args.after_patrol) else 1)

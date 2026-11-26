@@ -1,0 +1,3713 @@
+{
+  "conditions": [
+    {
+      "condition": "original",
+      "center": [
+        15.4,
+        -10.8
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 2.03561895177955,
+          "endpoint": 0.0,
+          "points": 81
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 2.54693485777365,
+          "endpoint": 0.0,
+          "points": 102
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 2.1800000000000015,
+        "source_at": 2.1800000000000015,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.4,
+            -10.8
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {
+            "verify": [
+              14.5,
+              -13.7
+            ]
+          }
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "READY",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -13.7
+          ],
+          "space_revision": 1
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": "V1",
+      "plan": {
+        "status": "OPTIMAL",
+        "owner": "r1",
+        "start": 58.432813,
+        "finish": 61.432813,
+        "modelTarget": [
+          14.5,
+          -13.7
+        ],
+        "anchor": "V1",
+        "travelPrior": 21.252813417179773,
+        "travelLength": 2.03561895177955
+      }
+    },
+    {
+      "condition": "switch",
+      "center": [
+        15.45,
+        -13.1
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": false,
+          "passed": true,
+          "reason": "eligible",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "endpoint": 0.0,
+          "points": 136
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 4.750000000000002,
+        "source_at": 4.750000000000002,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.45,
+            -13.1
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {
+            "verify": [
+              14.5,
+              -14.3
+            ]
+          }
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "READY",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": "A_VERIFY_S",
+      "plan": {
+        "status": "OPTIMAL",
+        "owner": "r1",
+        "start": 67.379389,
+        "finish": 70.379389,
+        "modelTarget": [
+          14.5,
+          -14.3
+        ],
+        "anchor": "A_VERIFY_S",
+        "travelPrior": 27.629389205874027,
+        "travelLength": 3.4384656252922863
+      }
+    },
+    {
+      "condition": "blocked",
+      "center": [
+        15.45,
+        -13.95
+      ],
+      "queries": [
+        {
+          "id": "V1",
+          "label": "预登记核验点",
+          "pose": [
+            14.5,
+            -13.7,
+            1.2698760924344712
+          ],
+          "kind": "baseline",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        },
+        {
+          "id": "A_VERIFY_S",
+          "label": "核验点南侧备选",
+          "pose": [
+            14.5,
+            -14.3,
+            1.2698760924344712
+          ],
+          "kind": "alternative",
+          "occupied": true,
+          "passed": false,
+          "reason": "occupied_by_body_mask",
+          "status": 6,
+          "length": 0,
+          "endpoint": null,
+          "points": 0
+        }
+      ],
+      "observation": {
+        "schema": "event-task/v1",
+        "kind": "observation",
+        "event_id": "E1",
+        "message_id": "current",
+        "at": 7.360000000000003,
+        "source_at": 7.360000000000003,
+        "status": "confirmed",
+        "space": {
+          "valid": true,
+          "frame": "map",
+          "event_xy": [
+            15.45,
+            -13.95
+          ],
+          "provenance": "controlled_gazebo_body_mask",
+          "service_points": {}
+        }
+      },
+      "task": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "PENDING",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": null,
+        "target_valid": false,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "service_point_missing"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      "selected": null,
+      "plan": null
+    }
+  ],
+  "execution": {
+    "target": "A_VERIFY_S",
+    "model": {
+      "status": "OPTIMAL",
+      "owner": "r1",
+      "start": 72.159389,
+      "finish": 75.159389,
+      "modelTarget": [
+        14.5,
+        -14.3
+      ],
+      "anchor": "A_VERIFY_S",
+      "travelPrior": 27.629389205874027,
+      "travelLength": 3.4384656252922863
+    },
+    "task": {
+      "task_id": "E1:verify",
+      "event_id": "E1",
+      "role": "verify",
+      "state": "READY",
+      "revision": 2,
+      "attempt": 1,
+      "generated_at": 0.0,
+      "capabilities": [
+        "move",
+        "camera"
+      ],
+      "completion_dependencies": [],
+      "runtime_guards": [
+        "valid_target"
+      ],
+      "duration_mode": "service_ack",
+      "target": {
+        "frame": "map",
+        "xy": [
+          14.5,
+          -14.3
+        ],
+        "space_revision": 2
+      },
+      "target_valid": true,
+      "required_owner": null,
+      "owner": null,
+      "execution_revision": null,
+      "execution_target": null,
+      "blockers": [],
+      "cancel_reason": null,
+      "started_at": null,
+      "finished_at": null
+    },
+    "goals": [
+      {
+        "at": 44.53,
+        "frame": "map",
+        "pose": [
+          14.5,
+          -14.3,
+          1.2698760924344712
+        ]
+      }
+    ],
+    "passed": true,
+    "record": {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_verify:r1",
+      "job_id": "E1_verify",
+      "robot": "r1",
+      "role": "verify",
+      "target": {
+        "x": 14.5,
+        "y": -14.3,
+        "yaw": 1.2698760924344712
+      },
+      "anchor": "A_VERIFY_S",
+      "begin": 44.53,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 44.6,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.4384656252922863,
+          "handoff": {
+            "requested_at": 61.06000000000001,
+            "near_since": 60.34000000000001,
+            "detail": {
+              "x": 14.456998489800494,
+              "y": -14.384491776091467,
+              "yaw": 1.0673220269844237,
+              "tf_age": 0.010000000000005116,
+              "position_error": 0.09480501097794744,
+              "yaw_error": 0.2025540654500475,
+              "speed": 9.508420873584395e-12,
+              "angular_speed": 0.349999999661067,
+              "odom_age": 0.010000000000005116,
+              "scan_age": 0.09000000000000341
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 61.18,
+          "heading_alignment": {
+            "begin": 61.4,
+            "target_yaw_delta": 0.13576784858269478,
+            "skip": false,
+            "status": 4,
+            "end": 61.68
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 44.6,
+          "leg": "service",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "direct": 2.5280928219074856,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.438465625292286,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 61.18,
+      "stable_at": 62.56000000000001,
+      "stable_since": 61.84000000000001,
+      "arrival": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200324,
+        "yaw": 1.29683641693009,
+        "tf_age": 0.010000000000005116,
+        "position_error": 0.0930958547875167,
+        "yaw_error": 0.026960324495618915,
+        "speed": 4.708906953491122e-16,
+        "angular_speed": 1.9767802627764154e-16,
+        "odom_age": 0.010000000000005116,
+        "scan_age": 0.09000000000000341
+      },
+      "arrival_ground_truth": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200326,
+        "z": -0.006166184384476107,
+        "yaw": 1.2968364169300903
+      },
+      "protocol_ack_at": 72.17000000000002,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 80.80000000000001,
+        "tasks": {
+          "E1:verify": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          }
+        }
+      },
+      "start_requested": 72.17000000000002,
+      "sent_revision": 2,
+      "service_started": 72.42000000000002,
+      "service_finished": 75.42000000000002,
+      "end": 75.45000000000002,
+      "ground_truth": {
+        "x": 14.457498484251682,
+        "y": -14.382827901912888,
+        "z": -0.006165813185137458,
+        "yaw": 1.2968364748654044
+      },
+      "final_anchor": "A_VERIFY_S"
+    },
+    "feedback": [
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:E1_verify:r1",
+        "attempt": 1,
+        "phase": "started",
+        "at": 81.10000000000001,
+        "reason": null,
+        "robot": "r1",
+        "protocol_task_id": "E1:verify",
+        "task_revision": 2,
+        "role": "verify",
+        "plan_revision": 1
+      },
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:E1_verify:r1",
+        "attempt": 1,
+        "phase": "succeeded",
+        "at": 84.10000000000001,
+        "reason": null,
+        "robot": "r1",
+        "protocol_task_id": "E1:verify",
+        "task_revision": 2,
+        "role": "verify",
+        "plan_revision": 1
+      }
+    ],
+    "checks": {
+      "tracking": true,
+      "stable_arrival": true,
+      "target_identity": true,
+      "worker_ack": true,
+      "nav2_goal": true,
+      "model_target": true,
+      "protocol_tokens": true
+    }
+  },
+  "failure": null,
+  "candidates": [
+    {
+      "id": "V1",
+      "label": "预登记核验点",
+      "pose": [
+        14.5,
+        -13.7,
+        1.2698760924344712
+      ],
+      "kind": "baseline"
+    },
+    {
+      "id": "A_VERIFY_S",
+      "label": "核验点南侧备选",
+      "pose": [
+        14.5,
+        -14.3,
+        1.2698760924344712
+      ],
+      "kind": "alternative"
+    }
+  ],
+  "origin": [
+    13.272390271051854,
+    -12.089180962403814,
+    -1.6329684856460933
+  ],
+  "response": {
+    "confirmed": 75.42000000000002,
+    "released_tasks": [
+      {
+        "task_id": "E1:monitor",
+        "event_id": "E1",
+        "role": "monitor",
+        "state": "READY",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "until_delivery_and_finish_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            18.3,
+            -12.0
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      {
+        "task_id": "E1:pickup",
+        "event_id": "E1",
+        "role": "pickup",
+        "state": "PENDING",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            22.7,
+            -27.5
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "monitor_not_active"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      },
+      {
+        "task_id": "E1:deliver",
+        "event_id": "E1",
+        "role": "deliver",
+        "state": "PENDING",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:pickup"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            19.0,
+            -12.4
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": null,
+        "execution_revision": null,
+        "execution_target": null,
+        "blockers": [
+          "dependency:E1:pickup",
+          "monitor_not_active"
+        ],
+        "cancel_reason": null,
+        "started_at": null,
+        "finished_at": null
+      }
+    ],
+    "passed": true,
+    "monitorApproach": "direct",
+    "monitorAfterPatrol": true,
+    "path_queries": [
+      {
+        "id": "M1",
+        "pose": [
+          18.3,
+          -12.0,
+          2.7492525093742777
+        ],
+        "occupied": false,
+        "passed": true,
+        "reason": "eligible",
+        "status": 4,
+        "length": 8.299932925672218,
+        "endpoint": 0.0,
+        "points": 332,
+        "robot": "r1",
+        "source": "A_VERIFY_S"
+      },
+      {
+        "id": "AG1",
+        "pose": [
+          22.4,
+          -25.4,
+          -1.5707963267948966
+        ],
+        "occupied": false,
+        "passed": true,
+        "reason": "eligible",
+        "status": 4,
+        "length": 3.921473466509636,
+        "endpoint": 0.0,
+        "points": 157,
+        "robot": "r2",
+        "source": "CDL"
+      },
+      {
+        "id": "H1",
+        "pose": [
+          19.0,
+          -12.4,
+          2.7233683240105644
+        ],
+        "occupied": false,
+        "passed": true,
+        "reason": "eligible",
+        "status": 4,
+        "length": 19.05539776240428,
+        "endpoint": 0.0,
+        "points": 762,
+        "robot": "r2",
+        "source": "CG1"
+      }
+    ],
+    "prefix": {
+      "jobs": [
+        "C0_r3_W1"
+      ],
+      "schedule": [
+        {
+          "job": "C0_r3_W1",
+          "owner": "r3",
+          "service_finish_forecast": 143.53,
+          "clear_forecast": 180.53,
+          "clear_anchor": "CTLR3"
+        }
+      ],
+      "actual_job": "C0_r3_W1",
+      "record_task_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3"
+    },
+    "plan": {
+      "routes": {
+        "r1": [
+          "E1_monitor"
+        ],
+        "r2": [
+          "E1_pickup",
+          "E1_deliver"
+        ],
+        "r3": []
+      },
+      "owners": {
+        "E1_deliver": "r2",
+        "E1_monitor": "r1",
+        "E1_pickup": "r2"
+      },
+      "starts": {
+        "E1_deliver": 309.15,
+        "E1_monitor": 180.53,
+        "E1_pickup": 180.53
+      },
+      "finishes": {
+        "E1_deliver": 315.15,
+        "E1_monitor": 315.15,
+        "E1_pickup": 188.53
+      },
+      "ends": {
+        "r1": 315.15,
+        "r2": 315.15,
+        "r3": 180.53
+      },
+      "energy_end": {
+        "r1": 1.0,
+        "r2": 1.0,
+        "r3": 1.0
+      }
+    },
+    "planStatus": "OPTIMAL",
+    "committed": 75.49000000000001,
+    "checks": {
+      "same_patrol_dispatch": true,
+      "native_arrivals": true,
+      "verify_before_response": true,
+      "monitor_coverage": true,
+      "courier_custody": true,
+      "resource_ack": true,
+      "protocol_ack": true,
+      "resources_clear": true,
+      "patrol_clear_before_approach": true
+    },
+    "actual": [
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:E1_monitor:r1",
+        "job_id": "E1_monitor",
+        "robot": "r1",
+        "role": "monitor",
+        "target": {
+          "x": 18.3,
+          "y": -12.0,
+          "yaw": 2.7492525093742777
+        },
+        "anchor": "M1",
+        "begin": 160.89000000000001,
+        "exit": false,
+        "status": "SUCCEEDED",
+        "plan_revision": 2,
+        "navigation_attempts": [
+          {
+            "begin": 161.01,
+            "reason": "approved_once_path",
+            "leg": "service",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 8.234834039401777,
+            "handoff": {
+              "requested_at": 198.84,
+              "near_since": 198.12,
+              "detail": {
+                "x": 18.217458074056168,
+                "y": -11.975106408479052,
+                "yaw": -0.24567337292999664,
+                "tf_age": 0.020000000000010232,
+                "position_error": 0.08621403851652577,
+                "yaw_error": 2.9949258823042744,
+                "speed": 1.7843654741170992e-11,
+                "angular_speed": 0.19222146391277223,
+                "odom_age": 0.020000000000010232,
+                "scan_age": 0.06999999999999318
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 198.95000000000002,
+            "heading_alignment": {
+              "begin": 199.29,
+              "target_yaw_delta": 2.918771733713641,
+              "skip": false,
+              "status": 4,
+              "end": 202.51000000000002
+            },
+            "arrival_guard_passed": true
+          }
+        ],
+        "path_checks": [
+          {
+            "at": 161.01,
+            "leg": "service",
+            "status": 4,
+            "length": 8.234834039401777,
+            "direct": 4.521358944903923,
+            "short_leg": false,
+            "limit": 14.450899999999999,
+            "static_prior_length": 8.3006,
+            "endpoint_error": 0.0,
+            "accepted": true
+          }
+        ],
+        "nav_status": 5,
+        "nav_end": 198.95000000000002,
+        "stable_at": 203.35,
+        "stable_since": 202.62,
+        "arrival": {
+          "x": 18.212097301256165,
+          "y": -11.98914104263071,
+          "yaw": 2.789323097715082,
+          "tf_age": 0.030000000000001137,
+          "position_error": 0.08857088348660423,
+          "yaw_error": 0.040070588340804125,
+          "speed": 1.502893955233888e-16,
+          "angular_speed": 1.1152455428689232e-15,
+          "odom_age": 0.030000000000001137,
+          "scan_age": 0.07999999999998408
+        },
+        "arrival_ground_truth": {
+          "x": 18.212097301256165,
+          "y": -11.98914104263071,
+          "z": -0.0052963100716010006,
+          "yaw": 2.789323097715082
+        },
+        "protocol_ack_at": 203.4,
+        "protocol_ack_snapshot": {
+          "run_id": "stand_switch_response_2026-11-26_09",
+          "received_at": 212.03,
+          "tasks": {
+            "E1:verify": {
+              "state": "SUCCEEDED",
+              "revision": 2,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:monitor": {
+              "state": "READY",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:pickup": {
+              "state": "PENDING",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r2"
+            },
+            "E1:deliver": {
+              "state": "PENDING",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r2"
+            }
+          }
+        },
+        "start_requested": 203.4,
+        "sent_revision": 1,
+        "service_started": 203.67000000000002,
+        "finish_requested": 318.49,
+        "service_finished": 318.52000000000004,
+        "end": 318.54,
+        "ground_truth": {
+          "x": 18.212097301256165,
+          "y": -11.98914104263071,
+          "z": -0.0052963100716010006,
+          "yaw": 2.789323097715082
+        },
+        "final_anchor": "M1"
+      },
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+        "job_id": "E1_pickup",
+        "robot": "r2",
+        "role": "pickup",
+        "target": {
+          "x": 22.7,
+          "y": -27.5,
+          "yaw": 3.141592653589793
+        },
+        "anchor": "G1",
+        "begin": 127.71000000000001,
+        "exit": false,
+        "status": "SUCCEEDED",
+        "plan_revision": 2,
+        "navigation_attempts": [
+          {
+            "begin": 127.77000000000001,
+            "reason": "approved_once_path",
+            "leg": "entry",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 3.921473466509636,
+            "handoff": {
+              "requested_at": 142.33,
+              "near_since": 141.61,
+              "detail": {
+                "x": 22.424791042088426,
+                "y": -25.310600377012374,
+                "yaw": -1.7380394378763697,
+                "tf_age": 0.010000000000019327,
+                "position_error": 0.0927733170591607,
+                "yaw_error": 0.16724311108147313,
+                "speed": 2.068363362529074e-11,
+                "angular_speed": 0.30839149723643755,
+                "odom_age": 0.010000000000019327,
+                "scan_age": 0.020000000000010232
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 142.39000000000001,
+            "heading_alignment": {
+              "begin": 142.67000000000002,
+              "target_yaw_delta": 0.10752784707679307,
+              "skip": false,
+              "status": 4,
+              "end": 143.05
+            },
+            "arrival_guard_passed": true
+          },
+          {
+            "begin": 157.73,
+            "reason": "approved_once_path",
+            "leg": "service",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 2.2598035360136843,
+            "handoff": {
+              "requested_at": 166.67000000000002,
+              "near_since": 165.95000000000002,
+              "detail": {
+                "x": 22.67488294671168,
+                "y": -27.4123954321607,
+                "yaw": -1.374430034333889,
+                "tf_age": 0.020000000000010232,
+                "position_error": 0.09113411365783265,
+                "yaw_error": 1.7671626192559045,
+                "speed": 2.0112940219551276e-11,
+                "angular_speed": 0.22920921964792246,
+                "odom_age": 0.010000000000019327,
+                "scan_age": 0.0700000000000216
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 166.73000000000002,
+            "heading_alignment": {
+              "begin": 167.06,
+              "target_yaw_delta": -1.7027689065803655,
+              "skip": false,
+              "status": 4,
+              "end": 169.01
+            },
+            "arrival_guard_passed": true
+          },
+          {
+            "begin": 212.17000000000002,
+            "reason": "approved_once_path",
+            "leg": "clear",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 2.063716896403915,
+            "handoff": {
+              "requested_at": 224.57000000000002,
+              "near_since": 223.85,
+              "detail": {
+                "x": 22.454278613249457,
+                "y": -29.327722948119153,
+                "yaw": -2.1337527030016674,
+                "tf_age": 0.020000000000038654,
+                "position_error": 0.09038882721260842,
+                "yaw_error": 0.562956376206771,
+                "speed": 7.944596629875844e-12,
+                "angular_speed": 0.0711847168339661,
+                "odom_age": 0.020000000000010232,
+                "scan_age": 0.060000000000002274
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 224.63,
+            "heading_alignment": {
+              "begin": 224.85,
+              "target_yaw_delta": 0.5351420697180069,
+              "skip": false,
+              "status": 4,
+              "end": 226.29000000000002
+            },
+            "arrival_guard_passed": true
+          }
+        ],
+        "path_checks": [
+          {
+            "at": 127.77000000000001,
+            "leg": "entry",
+            "status": 4,
+            "length": 3.921473466509636,
+            "direct": 3.8874078488750325,
+            "short_leg": false,
+            "limit": 8.0,
+            "static_prior_length": 3.9225999999999996,
+            "endpoint_error": 0.0,
+            "accepted": true
+          },
+          {
+            "at": 157.73,
+            "leg": "service",
+            "status": 4,
+            "length": 2.2598035360136843,
+            "direct": 2.206614871614088,
+            "short_leg": true,
+            "limit": 8.0,
+            "static_prior_length": 2.42,
+            "endpoint_error": 0.0,
+            "accepted": true
+          },
+          {
+            "at": 212.17000000000002,
+            "leg": "clear",
+            "status": 4,
+            "length": 2.063716896403915,
+            "direct": 2.007447516097278,
+            "short_leg": true,
+            "limit": 8.0,
+            "static_prior_length": 2.2,
+            "endpoint_error": 0.0,
+            "accepted": true
+          }
+        ],
+        "nav_status": 5,
+        "nav_end": 166.73000000000002,
+        "stable_at": 169.84,
+        "stable_since": 169.11,
+        "arrival": {
+          "x": 22.673903806794392,
+          "y": -27.41132651385184,
+          "yaw": -3.097668286604941,
+          "tf_age": 0.020000000000010232,
+          "position_error": 0.09243375165756436,
+          "yaw_error": 0.04392436698485216,
+          "speed": 1.399054408087319e-16,
+          "angular_speed": 2.6044378261722454e-16,
+          "odom_age": 0.020000000000010232,
+          "scan_age": 0.030000000000001137
+        },
+        "arrival_ground_truth": {
+          "x": 22.673903806794392,
+          "y": -27.41132651385184,
+          "z": -0.0070914756916540984,
+          "yaw": -3.097668286604941
+        },
+        "gate_arrival": 143.83,
+        "gate_anchor": "AG1",
+        "gate_ground_truth": {
+          "x": 22.424993744518304,
+          "y": -25.310588948809656,
+          "z": -0.0070914616168616254,
+          "yaw": -1.5466201828024975
+        },
+        "lease_granted_at": 157.61,
+        "protocol_ack_at": 203.73000000000002,
+        "protocol_ack_snapshot": {
+          "run_id": "stand_switch_response_2026-11-26_09",
+          "received_at": 212.35000000000002,
+          "tasks": {
+            "E1:verify": {
+              "state": "SUCCEEDED",
+              "revision": 2,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:monitor": {
+              "state": "RUNNING",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:pickup": {
+              "state": "READY",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r2"
+            },
+            "E1:deliver": {
+              "state": "PENDING",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r2"
+            }
+          }
+        },
+        "start_requested": 203.73000000000002,
+        "sent_revision": 1,
+        "service_started": 204.02,
+        "service_finished": 212.02,
+        "clear_departure": 212.07,
+        "clear_at": 227.18,
+        "clear_ground_truth": {
+          "x": 22.454855968788742,
+          "y": -29.327810112638645,
+          "z": -0.007091496654595414,
+          "yaw": -1.5695867516999578
+        },
+        "clear_anchor": "CG1",
+        "lease_released_at": 227.23000000000002,
+        "end": 227.23000000000002,
+        "ground_truth": {
+          "x": 22.454855968788742,
+          "y": -29.327810112638645,
+          "z": -0.007091496654595414,
+          "yaw": -1.5695867516999578
+        },
+        "final_anchor": "CG1"
+      },
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:E1_deliver:r2",
+        "job_id": "E1_deliver",
+        "robot": "r2",
+        "role": "deliver",
+        "target": {
+          "x": 19.0,
+          "y": -12.4,
+          "yaw": 2.7233683240105644
+        },
+        "anchor": "H1",
+        "begin": 227.23000000000002,
+        "exit": false,
+        "status": "SUCCEEDED",
+        "plan_revision": 2,
+        "navigation_attempts": [
+          {
+            "begin": 228.51000000000002,
+            "reason": "approved_once_path",
+            "leg": "service",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 18.934171905915502,
+            "handoff": {
+              "requested_at": 301.48,
+              "near_since": 300.77000000000004,
+              "detail": {
+                "x": 19.09141266962911,
+                "y": -12.38987689631344,
+                "yaw": -3.1052302914986933,
+                "tf_age": 0.03000000000002956,
+                "position_error": 0.09197148143294145,
+                "yaw_error": 0.45458669167032917,
+                "speed": 2.838656211134744e-11,
+                "angular_speed": 0.31498031174164154,
+                "odom_age": 0.009999999999990905,
+                "scan_age": 0.07999999999998408
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 301.59000000000003,
+            "heading_alignment": {
+              "begin": 301.94,
+              "target_yaw_delta": -0.3540081675313296,
+              "skip": false,
+              "status": 4,
+              "end": 302.89
+            },
+            "arrival_guard_passed": true
+          }
+        ],
+        "path_checks": [
+          {
+            "at": 227.35,
+            "leg": "service",
+            "status": 6,
+            "length": 0,
+            "direct": 17.27677009671155,
+            "short_leg": false,
+            "limit": 30.584600000000002,
+            "static_prior_length": 19.0564,
+            "endpoint_error": null,
+            "accepted": false
+          },
+          {
+            "at": 228.51000000000002,
+            "leg": "service",
+            "status": 4,
+            "length": 18.934171905915502,
+            "direct": 17.27677009671155,
+            "short_leg": false,
+            "limit": 30.584600000000002,
+            "static_prior_length": 19.0564,
+            "endpoint_error": 0.0,
+            "accepted": true
+          }
+        ],
+        "nav_status": 5,
+        "nav_end": 301.59000000000003,
+        "stable_at": 303.77000000000004,
+        "stable_since": 303.04,
+        "arrival": {
+          "x": 19.095099750943554,
+          "y": -12.39031933586335,
+          "yaw": 2.6835717284946523,
+          "tf_age": 0.010000000000047748,
+          "position_error": 0.09559120193643664,
+          "yaw_error": 0.03979659551591208,
+          "speed": 3.798177213584797e-16,
+          "angular_speed": 9.059269751961438e-17,
+          "odom_age": 0.010000000000047748,
+          "scan_age": 0.060000000000002274
+        },
+        "arrival_ground_truth": {
+          "x": 19.095099750943554,
+          "y": -12.390319335863351,
+          "z": -0.005950953623597541,
+          "yaw": 2.6835717284946523
+        },
+        "protocol_ack_at": 309.15000000000003,
+        "protocol_ack_snapshot": {
+          "run_id": "stand_switch_response_2026-11-26_09",
+          "received_at": 317.77000000000004,
+          "tasks": {
+            "E1:verify": {
+              "state": "SUCCEEDED",
+              "revision": 2,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:monitor": {
+              "state": "RUNNING",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r1"
+            },
+            "E1:pickup": {
+              "state": "SUCCEEDED",
+              "revision": 1,
+              "attempt": 1,
+              "owner": "r2"
+            },
+            "E1:deliver": {
+              "state": "READY",
+              "revision": 2,
+              "attempt": 1,
+              "owner": "r2"
+            }
+          }
+        },
+        "start_requested": 309.15000000000003,
+        "sent_revision": 2,
+        "service_started": 309.42,
+        "service_finished": 315.42,
+        "end": 315.44,
+        "ground_truth": {
+          "x": 19.095099750943554,
+          "y": -12.390319335863351,
+          "z": -0.005950953623597541,
+          "yaw": 2.6835717284946523
+        },
+        "final_anchor": "H1"
+      },
+      {
+        "task_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+        "job_id": "C0_r3_W1",
+        "robot": "r3",
+        "role": "patrol",
+        "target": {
+          "x": 12.7,
+          "y": -13.6,
+          "yaw": 3.141592653589793
+        },
+        "anchor": "TL",
+        "begin": 10.530000000000001,
+        "exit": false,
+        "status": "SUCCEEDED",
+        "plan_revision": 1,
+        "navigation_attempts": [
+          {
+            "begin": 10.600000000000001,
+            "reason": "approved_once_path",
+            "leg": "entry",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 20.61984447723116,
+            "handoff": {
+              "requested_at": 85.09,
+              "near_since": 84.37,
+              "detail": {
+                "x": 12.729592499472385,
+                "y": -15.788278744345057,
+                "yaw": 1.7921336182750867,
+                "tf_age": 0.010000000000005116,
+                "position_error": 0.0931066739184855,
+                "yaw_error": 0.2213372914801901,
+                "speed": 1.980698170582465e-11,
+                "angular_speed": 0.29737503828337436,
+                "odom_age": 0.010000000000005116,
+                "scan_age": 0.060000000000002274
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 85.20000000000002,
+            "heading_alignment": {
+              "begin": 85.48000000000002,
+              "target_yaw_delta": -0.1460239648181001,
+              "skip": false,
+              "status": 4,
+              "end": 85.92000000000002
+            },
+            "arrival_guard_passed": true
+          },
+          {
+            "begin": 116.70000000000002,
+            "reason": "approved_once_path",
+            "leg": "service",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 2.2207104614916386,
+            "handoff": {
+              "requested_at": 125.55000000000001,
+              "near_since": 124.83000000000001,
+              "detail": {
+                "x": 12.720526734612575,
+                "y": -13.690860307593084,
+                "yaw": 1.8623167927573931,
+                "tf_age": 0.020000000000010232,
+                "position_error": 0.09315010643990179,
+                "yaw_error": 1.2792758608324,
+                "speed": 1.866903580511872e-11,
+                "angular_speed": 0.3499999997059833,
+                "odom_age": 0.020000000000010232,
+                "scan_age": 0.020000000000010232
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 125.61000000000001,
+            "heading_alignment": {
+              "begin": 125.89000000000001,
+              "target_yaw_delta": 1.2171954272843772,
+              "skip": false,
+              "status": 4,
+              "end": 127.22
+            },
+            "arrival_guard_passed": true
+          },
+          {
+            "begin": 142.95,
+            "reason": "approved_once_path",
+            "leg": "clear",
+            "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+            "approved_length": 3.248516667910681,
+            "handoff": {
+              "requested_at": 159.17000000000002,
+              "near_since": 158.45000000000002,
+              "detail": {
+                "x": 13.558623227458387,
+                "y": -16.71549046000929,
+                "yaw": -1.228947220573517,
+                "tf_age": 0.010000000000019327,
+                "position_error": 0.0940951627630355,
+                "yaw_error": 0.34184910622137954,
+                "speed": 1.5099410523986535e-11,
+                "angular_speed": 0.34732276373075394,
+                "odom_age": 0.010000000000019327,
+                "scan_age": 0.040000000000020464
+              },
+              "reason": "position reached; transfer final yaw to Nav2 Spin"
+            },
+            "status": 5,
+            "end": 159.28,
+            "heading_alignment": {
+              "begin": 159.56,
+              "target_yaw_delta": -0.2645695718615948,
+              "skip": false,
+              "status": 4,
+              "end": 160.01
+            },
+            "arrival_guard_passed": true
+          }
+        ],
+        "path_checks": [
+          {
+            "at": 10.600000000000001,
+            "leg": "entry",
+            "status": 4,
+            "length": 20.61984447723116,
+            "direct": 16.7061288533024,
+            "short_leg": false,
+            "limit": 33.019999999999996,
+            "static_prior_length": 20.68,
+            "endpoint_error": 0.0,
+            "accepted": true
+          },
+          {
+            "at": 116.70000000000002,
+            "leg": "service",
+            "status": 4,
+            "length": 2.2207104614916386,
+            "direct": 2.1894276951720726,
+            "short_leg": true,
+            "limit": 8.0,
+            "static_prior_length": 2.2,
+            "endpoint_error": 0.0,
+            "accepted": true
+          },
+          {
+            "at": 142.95,
+            "leg": "clear",
+            "status": 4,
+            "length": 3.248516667910681,
+            "direct": 3.237984725008352,
+            "short_leg": true,
+            "limit": 8.0,
+            "static_prior_length": 3.74,
+            "endpoint_error": 0.0,
+            "accepted": true
+          }
+        ],
+        "nav_status": 5,
+        "nav_end": 125.61000000000001,
+        "stable_at": 128.11,
+        "stable_since": 127.39000000000001,
+        "arrival": {
+          "x": 12.712728176179688,
+          "y": -13.68595219761356,
+          "yaw": -3.1039350412843594,
+          "tf_age": 0.020000000000010232,
+          "position_error": 0.08688950882276676,
+          "yaw_error": 0.037657612305434435,
+          "speed": 4.745769791465361e-16,
+          "angular_speed": 2.195309627617192e-16,
+          "odom_age": 0.020000000000010232,
+          "scan_age": 0.0800000000000125
+        },
+        "arrival_ground_truth": {
+          "x": 12.712728176179686,
+          "y": -13.685952197613561,
+          "z": -0.0053548298749021925,
+          "yaw": -3.103935041284359
+        },
+        "gate_arrival": 86.76000000000002,
+        "gate_anchor": "ETL",
+        "gate_ground_truth": {
+          "x": 12.729835181434893,
+          "y": -15.789205818740285,
+          "z": -0.005893467515659502,
+          "yaw": 1.5543656037558553
+        },
+        "lease_granted_at": 116.6,
+        "start_requested": 138.55,
+        "sent_revision": null,
+        "service_started": 138.82,
+        "service_finished": 142.82,
+        "clear_departure": 142.83,
+        "clear_at": 160.83,
+        "clear_ground_truth": {
+          "x": 13.558037019082123,
+          "y": -16.71379587011582,
+          "z": -0.005603742358211402,
+          "yaw": -1.5916043781303706
+        },
+        "clear_anchor": "CTLR3",
+        "lease_released_at": 160.89000000000001,
+        "end": 160.89000000000001,
+        "ground_truth": {
+          "x": 13.558038285798261,
+          "y": -16.713795239538985,
+          "z": -0.005578905222650297,
+          "yaw": -1.5916078268480425
+        },
+        "final_anchor": "CTLR3"
+      }
+    ]
+  },
+  "protocol_final": {
+    "schema": "event-task/v1",
+    "time": 318.52000000000004,
+    "world_revision": 10,
+    "event": {
+      "event_id": "E1",
+      "lifecycle": "COMPLETED",
+      "perception": "confirmed",
+      "revision": 10,
+      "last_seen_at": 9.530000000000001,
+      "position_source_at": 9.530000000000001,
+      "space": {
+        "valid": true,
+        "frame": "map",
+        "event_xy": [
+          15.45,
+          -13.1
+        ],
+        "provenance": "controlled_gazebo_body_mask",
+        "service_points": {
+          "monitor": [
+            18.3,
+            -12.0
+          ],
+          "deliver": [
+            19.0,
+            -12.4
+          ],
+          "verify": [
+            14.5,
+            -14.3
+          ]
+        }
+      },
+      "space_revision": 2,
+      "position_valid": true,
+      "verified": true,
+      "closed_reason": null,
+      "cargo_owner": "r2",
+      "cargo_disposition": "DELIVERED"
+    },
+    "tasks": {
+      "E1:verify": {
+        "task_id": "E1:verify",
+        "event_id": "E1",
+        "role": "verify",
+        "state": "SUCCEEDED",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 0.0,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": "r1",
+        "execution_revision": 2,
+        "execution_target": {
+          "frame": "map",
+          "xy": [
+            14.5,
+            -14.3
+          ],
+          "space_revision": 2
+        },
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": 72.42000000000002,
+        "finished_at": 75.42000000000002
+      },
+      "E1:monitor": {
+        "task_id": "E1:monitor",
+        "event_id": "E1",
+        "role": "monitor",
+        "state": "SUCCEEDED",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "camera"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target"
+        ],
+        "duration_mode": "until_delivery_and_finish_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            18.3,
+            -12.0
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": "r1",
+        "execution_revision": 1,
+        "execution_target": {
+          "frame": "map",
+          "xy": [
+            18.3,
+            -12.0
+          ],
+          "space_revision": 2
+        },
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": 203.67000000000002,
+        "finished_at": 318.52000000000004
+      },
+      "E1:pickup": {
+        "task_id": "E1:pickup",
+        "event_id": "E1",
+        "role": "pickup",
+        "state": "SUCCEEDED",
+        "revision": 1,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:verify"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            22.7,
+            -27.5
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": null,
+        "owner": "r2",
+        "execution_revision": 1,
+        "execution_target": {
+          "frame": "map",
+          "xy": [
+            22.7,
+            -27.5
+          ],
+          "space_revision": 2
+        },
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": 204.02,
+        "finished_at": 212.02
+      },
+      "E1:deliver": {
+        "task_id": "E1:deliver",
+        "event_id": "E1",
+        "role": "deliver",
+        "state": "SUCCEEDED",
+        "revision": 2,
+        "attempt": 1,
+        "generated_at": 75.42000000000002,
+        "capabilities": [
+          "move",
+          "carry"
+        ],
+        "completion_dependencies": [
+          "E1:pickup"
+        ],
+        "runtime_guards": [
+          "valid_target",
+          "monitor_active"
+        ],
+        "duration_mode": "service_ack",
+        "target": {
+          "frame": "map",
+          "xy": [
+            19.0,
+            -12.4
+          ],
+          "space_revision": 2
+        },
+        "target_valid": true,
+        "required_owner": "r2",
+        "owner": "r2",
+        "execution_revision": 2,
+        "execution_target": {
+          "frame": "map",
+          "xy": [
+            19.0,
+            -12.4
+          ],
+          "space_revision": 2
+        },
+        "blockers": [],
+        "cancel_reason": null,
+        "started_at": 309.42,
+        "finished_at": 315.42
+      }
+    }
+  },
+  "runtime_records": [
+    {
+      "task_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+      "job_id": "C0_r3_W1",
+      "robot": "r3",
+      "role": "patrol",
+      "target": {
+        "x": 12.7,
+        "y": -13.6,
+        "yaw": 3.141592653589793
+      },
+      "anchor": "TL",
+      "begin": 10.530000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 10.600000000000001,
+          "reason": "approved_once_path",
+          "leg": "entry",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 20.61984447723116,
+          "handoff": {
+            "requested_at": 85.09,
+            "near_since": 84.37,
+            "detail": {
+              "x": 12.729592499472385,
+              "y": -15.788278744345057,
+              "yaw": 1.7921336182750867,
+              "tf_age": 0.010000000000005116,
+              "position_error": 0.0931066739184855,
+              "yaw_error": 0.2213372914801901,
+              "speed": 1.980698170582465e-11,
+              "angular_speed": 0.29737503828337436,
+              "odom_age": 0.010000000000005116,
+              "scan_age": 0.060000000000002274
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 85.20000000000002,
+          "heading_alignment": {
+            "begin": 85.48000000000002,
+            "target_yaw_delta": -0.1460239648181001,
+            "skip": false,
+            "status": 4,
+            "end": 85.92000000000002
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 116.70000000000002,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.2207104614916386,
+          "handoff": {
+            "requested_at": 125.55000000000001,
+            "near_since": 124.83000000000001,
+            "detail": {
+              "x": 12.720526734612575,
+              "y": -13.690860307593084,
+              "yaw": 1.8623167927573931,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.09315010643990179,
+              "yaw_error": 1.2792758608324,
+              "speed": 1.866903580511872e-11,
+              "angular_speed": 0.3499999997059833,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.020000000000010232
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 125.61000000000001,
+          "heading_alignment": {
+            "begin": 125.89000000000001,
+            "target_yaw_delta": 1.2171954272843772,
+            "skip": false,
+            "status": 4,
+            "end": 127.22
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 142.95,
+          "reason": "approved_once_path",
+          "leg": "clear",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.248516667910681,
+          "handoff": {
+            "requested_at": 159.17000000000002,
+            "near_since": 158.45000000000002,
+            "detail": {
+              "x": 13.558623227458387,
+              "y": -16.71549046000929,
+              "yaw": -1.228947220573517,
+              "tf_age": 0.010000000000019327,
+              "position_error": 0.0940951627630355,
+              "yaw_error": 0.34184910622137954,
+              "speed": 1.5099410523986535e-11,
+              "angular_speed": 0.34732276373075394,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.040000000000020464
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 159.28,
+          "heading_alignment": {
+            "begin": 159.56,
+            "target_yaw_delta": -0.2645695718615948,
+            "skip": false,
+            "status": 4,
+            "end": 160.01
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 10.600000000000001,
+          "leg": "entry",
+          "status": 4,
+          "length": 20.61984447723116,
+          "direct": 16.7061288533024,
+          "short_leg": false,
+          "limit": 33.019999999999996,
+          "static_prior_length": 20.68,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 116.70000000000002,
+          "leg": "service",
+          "status": 4,
+          "length": 2.2207104614916386,
+          "direct": 2.1894276951720726,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.2,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 142.95,
+          "leg": "clear",
+          "status": 4,
+          "length": 3.248516667910681,
+          "direct": 3.237984725008352,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 3.74,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 125.61000000000001,
+      "stable_at": 128.11,
+      "stable_since": 127.39000000000001,
+      "arrival": {
+        "x": 12.712728176179688,
+        "y": -13.68595219761356,
+        "yaw": -3.1039350412843594,
+        "tf_age": 0.020000000000010232,
+        "position_error": 0.08688950882276676,
+        "yaw_error": 0.037657612305434435,
+        "speed": 4.745769791465361e-16,
+        "angular_speed": 2.195309627617192e-16,
+        "odom_age": 0.020000000000010232,
+        "scan_age": 0.0800000000000125
+      },
+      "arrival_ground_truth": {
+        "x": 12.712728176179686,
+        "y": -13.685952197613561,
+        "z": -0.0053548298749021925,
+        "yaw": -3.103935041284359
+      },
+      "gate_arrival": 86.76000000000002,
+      "gate_anchor": "ETL",
+      "gate_ground_truth": {
+        "x": 12.729835181434893,
+        "y": -15.789205818740285,
+        "z": -0.005893467515659502,
+        "yaw": 1.5543656037558553
+      },
+      "lease_granted_at": 116.6,
+      "start_requested": 138.55,
+      "sent_revision": null,
+      "service_started": 138.82,
+      "service_finished": 142.82,
+      "clear_departure": 142.83,
+      "clear_at": 160.83,
+      "clear_ground_truth": {
+        "x": 13.558037019082123,
+        "y": -16.71379587011582,
+        "z": -0.005603742358211402,
+        "yaw": -1.5916043781303706
+      },
+      "clear_anchor": "CTLR3",
+      "lease_released_at": 160.89000000000001,
+      "end": 160.89000000000001,
+      "ground_truth": {
+        "x": 13.558038285798261,
+        "y": -16.713795239538985,
+        "z": -0.005578905222650297,
+        "yaw": -1.5916078268480425
+      },
+      "final_anchor": "CTLR3"
+    },
+    {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_verify:r1",
+      "job_id": "E1_verify",
+      "robot": "r1",
+      "role": "verify",
+      "target": {
+        "x": 14.5,
+        "y": -14.3,
+        "yaw": 1.2698760924344712
+      },
+      "anchor": "A_VERIFY_S",
+      "begin": 44.53,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 44.6,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.4384656252922863,
+          "handoff": {
+            "requested_at": 61.06000000000001,
+            "near_since": 60.34000000000001,
+            "detail": {
+              "x": 14.456998489800494,
+              "y": -14.384491776091467,
+              "yaw": 1.0673220269844237,
+              "tf_age": 0.010000000000005116,
+              "position_error": 0.09480501097794744,
+              "yaw_error": 0.2025540654500475,
+              "speed": 9.508420873584395e-12,
+              "angular_speed": 0.349999999661067,
+              "odom_age": 0.010000000000005116,
+              "scan_age": 0.09000000000000341
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 61.18,
+          "heading_alignment": {
+            "begin": 61.4,
+            "target_yaw_delta": 0.13576784858269478,
+            "skip": false,
+            "status": 4,
+            "end": 61.68
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 44.6,
+          "leg": "service",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "direct": 2.5280928219074856,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.438465625292286,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 61.18,
+      "stable_at": 62.56000000000001,
+      "stable_since": 61.84000000000001,
+      "arrival": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200324,
+        "yaw": 1.29683641693009,
+        "tf_age": 0.010000000000005116,
+        "position_error": 0.0930958547875167,
+        "yaw_error": 0.026960324495618915,
+        "speed": 4.708906953491122e-16,
+        "angular_speed": 1.9767802627764154e-16,
+        "odom_age": 0.010000000000005116,
+        "scan_age": 0.09000000000000341
+      },
+      "arrival_ground_truth": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200326,
+        "z": -0.006166184384476107,
+        "yaw": 1.2968364169300903
+      },
+      "protocol_ack_at": 72.17000000000002,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 80.80000000000001,
+        "tasks": {
+          "E1:verify": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          }
+        }
+      },
+      "start_requested": 72.17000000000002,
+      "sent_revision": 2,
+      "service_started": 72.42000000000002,
+      "service_finished": 75.42000000000002,
+      "end": 75.45000000000002,
+      "ground_truth": {
+        "x": 14.457498484251682,
+        "y": -14.382827901912888,
+        "z": -0.006165813185137458,
+        "yaw": 1.2968364748654044
+      },
+      "final_anchor": "A_VERIFY_S"
+    },
+    {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+      "job_id": "E1_pickup",
+      "robot": "r2",
+      "role": "pickup",
+      "target": {
+        "x": 22.7,
+        "y": -27.5,
+        "yaw": 3.141592653589793
+      },
+      "anchor": "G1",
+      "begin": 127.71000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 127.77000000000001,
+          "reason": "approved_once_path",
+          "leg": "entry",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.921473466509636,
+          "handoff": {
+            "requested_at": 142.33,
+            "near_since": 141.61,
+            "detail": {
+              "x": 22.424791042088426,
+              "y": -25.310600377012374,
+              "yaw": -1.7380394378763697,
+              "tf_age": 0.010000000000019327,
+              "position_error": 0.0927733170591607,
+              "yaw_error": 0.16724311108147313,
+              "speed": 2.068363362529074e-11,
+              "angular_speed": 0.30839149723643755,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.020000000000010232
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 142.39000000000001,
+          "heading_alignment": {
+            "begin": 142.67000000000002,
+            "target_yaw_delta": 0.10752784707679307,
+            "skip": false,
+            "status": 4,
+            "end": 143.05
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 157.73,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.2598035360136843,
+          "handoff": {
+            "requested_at": 166.67000000000002,
+            "near_since": 165.95000000000002,
+            "detail": {
+              "x": 22.67488294671168,
+              "y": -27.4123954321607,
+              "yaw": -1.374430034333889,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.09113411365783265,
+              "yaw_error": 1.7671626192559045,
+              "speed": 2.0112940219551276e-11,
+              "angular_speed": 0.22920921964792246,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.0700000000000216
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 166.73000000000002,
+          "heading_alignment": {
+            "begin": 167.06,
+            "target_yaw_delta": -1.7027689065803655,
+            "skip": false,
+            "status": 4,
+            "end": 169.01
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 212.17000000000002,
+          "reason": "approved_once_path",
+          "leg": "clear",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.063716896403915,
+          "handoff": {
+            "requested_at": 224.57000000000002,
+            "near_since": 223.85,
+            "detail": {
+              "x": 22.454278613249457,
+              "y": -29.327722948119153,
+              "yaw": -2.1337527030016674,
+              "tf_age": 0.020000000000038654,
+              "position_error": 0.09038882721260842,
+              "yaw_error": 0.562956376206771,
+              "speed": 7.944596629875844e-12,
+              "angular_speed": 0.0711847168339661,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.060000000000002274
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 224.63,
+          "heading_alignment": {
+            "begin": 224.85,
+            "target_yaw_delta": 0.5351420697180069,
+            "skip": false,
+            "status": 4,
+            "end": 226.29000000000002
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 127.77000000000001,
+          "leg": "entry",
+          "status": 4,
+          "length": 3.921473466509636,
+          "direct": 3.8874078488750325,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.9225999999999996,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 157.73,
+          "leg": "service",
+          "status": 4,
+          "length": 2.2598035360136843,
+          "direct": 2.206614871614088,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.42,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 212.17000000000002,
+          "leg": "clear",
+          "status": 4,
+          "length": 2.063716896403915,
+          "direct": 2.007447516097278,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.2,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 166.73000000000002,
+      "stable_at": 169.84,
+      "stable_since": 169.11,
+      "arrival": {
+        "x": 22.673903806794392,
+        "y": -27.41132651385184,
+        "yaw": -3.097668286604941,
+        "tf_age": 0.020000000000010232,
+        "position_error": 0.09243375165756436,
+        "yaw_error": 0.04392436698485216,
+        "speed": 1.399054408087319e-16,
+        "angular_speed": 2.6044378261722454e-16,
+        "odom_age": 0.020000000000010232,
+        "scan_age": 0.030000000000001137
+      },
+      "arrival_ground_truth": {
+        "x": 22.673903806794392,
+        "y": -27.41132651385184,
+        "z": -0.0070914756916540984,
+        "yaw": -3.097668286604941
+      },
+      "gate_arrival": 143.83,
+      "gate_anchor": "AG1",
+      "gate_ground_truth": {
+        "x": 22.424993744518304,
+        "y": -25.310588948809656,
+        "z": -0.0070914616168616254,
+        "yaw": -1.5466201828024975
+      },
+      "lease_granted_at": 157.61,
+      "protocol_ack_at": 203.73000000000002,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 212.35000000000002,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "RUNNING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "READY",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 203.73000000000002,
+      "sent_revision": 1,
+      "service_started": 204.02,
+      "service_finished": 212.02,
+      "clear_departure": 212.07,
+      "clear_at": 227.18,
+      "clear_ground_truth": {
+        "x": 22.454855968788742,
+        "y": -29.327810112638645,
+        "z": -0.007091496654595414,
+        "yaw": -1.5695867516999578
+      },
+      "clear_anchor": "CG1",
+      "lease_released_at": 227.23000000000002,
+      "end": 227.23000000000002,
+      "ground_truth": {
+        "x": 22.454855968788742,
+        "y": -29.327810112638645,
+        "z": -0.007091496654595414,
+        "yaw": -1.5695867516999578
+      },
+      "final_anchor": "CG1"
+    },
+    {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_monitor:r1",
+      "job_id": "E1_monitor",
+      "robot": "r1",
+      "role": "monitor",
+      "target": {
+        "x": 18.3,
+        "y": -12.0,
+        "yaw": 2.7492525093742777
+      },
+      "anchor": "M1",
+      "begin": 160.89000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 161.01,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 8.234834039401777,
+          "handoff": {
+            "requested_at": 198.84,
+            "near_since": 198.12,
+            "detail": {
+              "x": 18.217458074056168,
+              "y": -11.975106408479052,
+              "yaw": -0.24567337292999664,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.08621403851652577,
+              "yaw_error": 2.9949258823042744,
+              "speed": 1.7843654741170992e-11,
+              "angular_speed": 0.19222146391277223,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.06999999999999318
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 198.95000000000002,
+          "heading_alignment": {
+            "begin": 199.29,
+            "target_yaw_delta": 2.918771733713641,
+            "skip": false,
+            "status": 4,
+            "end": 202.51000000000002
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 161.01,
+          "leg": "service",
+          "status": 4,
+          "length": 8.234834039401777,
+          "direct": 4.521358944903923,
+          "short_leg": false,
+          "limit": 14.450899999999999,
+          "static_prior_length": 8.3006,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 198.95000000000002,
+      "stable_at": 203.35,
+      "stable_since": 202.62,
+      "arrival": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "yaw": 2.789323097715082,
+        "tf_age": 0.030000000000001137,
+        "position_error": 0.08857088348660423,
+        "yaw_error": 0.040070588340804125,
+        "speed": 1.502893955233888e-16,
+        "angular_speed": 1.1152455428689232e-15,
+        "odom_age": 0.030000000000001137,
+        "scan_age": 0.07999999999998408
+      },
+      "arrival_ground_truth": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "z": -0.0052963100716010006,
+        "yaw": 2.789323097715082
+      },
+      "protocol_ack_at": 203.4,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 212.03,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "READY",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 203.4,
+      "sent_revision": 1,
+      "service_started": 203.67000000000002,
+      "finish_requested": 318.49,
+      "service_finished": 318.52000000000004,
+      "end": 318.54,
+      "ground_truth": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "z": -0.0052963100716010006,
+        "yaw": 2.789323097715082
+      },
+      "final_anchor": "M1"
+    },
+    {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_deliver:r2",
+      "job_id": "E1_deliver",
+      "robot": "r2",
+      "role": "deliver",
+      "target": {
+        "x": 19.0,
+        "y": -12.4,
+        "yaw": 2.7233683240105644
+      },
+      "anchor": "H1",
+      "begin": 227.23000000000002,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 228.51000000000002,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 18.934171905915502,
+          "handoff": {
+            "requested_at": 301.48,
+            "near_since": 300.77000000000004,
+            "detail": {
+              "x": 19.09141266962911,
+              "y": -12.38987689631344,
+              "yaw": -3.1052302914986933,
+              "tf_age": 0.03000000000002956,
+              "position_error": 0.09197148143294145,
+              "yaw_error": 0.45458669167032917,
+              "speed": 2.838656211134744e-11,
+              "angular_speed": 0.31498031174164154,
+              "odom_age": 0.009999999999990905,
+              "scan_age": 0.07999999999998408
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 301.59000000000003,
+          "heading_alignment": {
+            "begin": 301.94,
+            "target_yaw_delta": -0.3540081675313296,
+            "skip": false,
+            "status": 4,
+            "end": 302.89
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 227.35,
+          "leg": "service",
+          "status": 6,
+          "length": 0,
+          "direct": 17.27677009671155,
+          "short_leg": false,
+          "limit": 30.584600000000002,
+          "static_prior_length": 19.0564,
+          "endpoint_error": null,
+          "accepted": false
+        },
+        {
+          "at": 228.51000000000002,
+          "leg": "service",
+          "status": 4,
+          "length": 18.934171905915502,
+          "direct": 17.27677009671155,
+          "short_leg": false,
+          "limit": 30.584600000000002,
+          "static_prior_length": 19.0564,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 301.59000000000003,
+      "stable_at": 303.77000000000004,
+      "stable_since": 303.04,
+      "arrival": {
+        "x": 19.095099750943554,
+        "y": -12.39031933586335,
+        "yaw": 2.6835717284946523,
+        "tf_age": 0.010000000000047748,
+        "position_error": 0.09559120193643664,
+        "yaw_error": 0.03979659551591208,
+        "speed": 3.798177213584797e-16,
+        "angular_speed": 9.059269751961438e-17,
+        "odom_age": 0.010000000000047748,
+        "scan_age": 0.060000000000002274
+      },
+      "arrival_ground_truth": {
+        "x": 19.095099750943554,
+        "y": -12.390319335863351,
+        "z": -0.005950953623597541,
+        "yaw": 2.6835717284946523
+      },
+      "protocol_ack_at": 309.15000000000003,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 317.77000000000004,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "RUNNING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "SUCCEEDED",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 309.15000000000003,
+      "sent_revision": 2,
+      "service_started": 309.42,
+      "service_finished": 315.42,
+      "end": 315.44,
+      "ground_truth": {
+        "x": 19.095099750943554,
+        "y": -12.390319335863351,
+        "z": -0.005950953623597541,
+        "yaw": 2.6835717284946523
+      },
+      "final_anchor": "H1"
+    }
+  ],
+  "runtime_completed": {
+    "E1_verify": {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_verify:r1",
+      "job_id": "E1_verify",
+      "robot": "r1",
+      "role": "verify",
+      "target": {
+        "x": 14.5,
+        "y": -14.3,
+        "yaw": 1.2698760924344712
+      },
+      "anchor": "A_VERIFY_S",
+      "begin": 44.53,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 44.6,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.4384656252922863,
+          "handoff": {
+            "requested_at": 61.06000000000001,
+            "near_since": 60.34000000000001,
+            "detail": {
+              "x": 14.456998489800494,
+              "y": -14.384491776091467,
+              "yaw": 1.0673220269844237,
+              "tf_age": 0.010000000000005116,
+              "position_error": 0.09480501097794744,
+              "yaw_error": 0.2025540654500475,
+              "speed": 9.508420873584395e-12,
+              "angular_speed": 0.349999999661067,
+              "odom_age": 0.010000000000005116,
+              "scan_age": 0.09000000000000341
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 61.18,
+          "heading_alignment": {
+            "begin": 61.4,
+            "target_yaw_delta": 0.13576784858269478,
+            "skip": false,
+            "status": 4,
+            "end": 61.68
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 44.6,
+          "leg": "service",
+          "status": 4,
+          "length": 3.4384656252922863,
+          "direct": 2.5280928219074856,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.438465625292286,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 61.18,
+      "stable_at": 62.56000000000001,
+      "stable_since": 61.84000000000001,
+      "arrival": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200324,
+        "yaw": 1.29683641693009,
+        "tf_age": 0.010000000000005116,
+        "position_error": 0.0930958547875167,
+        "yaw_error": 0.026960324495618915,
+        "speed": 4.708906953491122e-16,
+        "angular_speed": 1.9767802627764154e-16,
+        "odom_age": 0.010000000000005116,
+        "scan_age": 0.09000000000000341
+      },
+      "arrival_ground_truth": {
+        "x": 14.457498469335473,
+        "y": -14.382827882200326,
+        "z": -0.006166184384476107,
+        "yaw": 1.2968364169300903
+      },
+      "protocol_ack_at": 72.17000000000002,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 80.80000000000001,
+        "tasks": {
+          "E1:verify": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          }
+        }
+      },
+      "start_requested": 72.17000000000002,
+      "sent_revision": 2,
+      "service_started": 72.42000000000002,
+      "service_finished": 75.42000000000002,
+      "end": 75.45000000000002,
+      "ground_truth": {
+        "x": 14.457498484251682,
+        "y": -14.382827901912888,
+        "z": -0.006165813185137458,
+        "yaw": 1.2968364748654044
+      },
+      "final_anchor": "A_VERIFY_S"
+    },
+    "C0_r3_W1": {
+      "task_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+      "job_id": "C0_r3_W1",
+      "robot": "r3",
+      "role": "patrol",
+      "target": {
+        "x": 12.7,
+        "y": -13.6,
+        "yaw": 3.141592653589793
+      },
+      "anchor": "TL",
+      "begin": 10.530000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 1,
+      "navigation_attempts": [
+        {
+          "begin": 10.600000000000001,
+          "reason": "approved_once_path",
+          "leg": "entry",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 20.61984447723116,
+          "handoff": {
+            "requested_at": 85.09,
+            "near_since": 84.37,
+            "detail": {
+              "x": 12.729592499472385,
+              "y": -15.788278744345057,
+              "yaw": 1.7921336182750867,
+              "tf_age": 0.010000000000005116,
+              "position_error": 0.0931066739184855,
+              "yaw_error": 0.2213372914801901,
+              "speed": 1.980698170582465e-11,
+              "angular_speed": 0.29737503828337436,
+              "odom_age": 0.010000000000005116,
+              "scan_age": 0.060000000000002274
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 85.20000000000002,
+          "heading_alignment": {
+            "begin": 85.48000000000002,
+            "target_yaw_delta": -0.1460239648181001,
+            "skip": false,
+            "status": 4,
+            "end": 85.92000000000002
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 116.70000000000002,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.2207104614916386,
+          "handoff": {
+            "requested_at": 125.55000000000001,
+            "near_since": 124.83000000000001,
+            "detail": {
+              "x": 12.720526734612575,
+              "y": -13.690860307593084,
+              "yaw": 1.8623167927573931,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.09315010643990179,
+              "yaw_error": 1.2792758608324,
+              "speed": 1.866903580511872e-11,
+              "angular_speed": 0.3499999997059833,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.020000000000010232
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 125.61000000000001,
+          "heading_alignment": {
+            "begin": 125.89000000000001,
+            "target_yaw_delta": 1.2171954272843772,
+            "skip": false,
+            "status": 4,
+            "end": 127.22
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 142.95,
+          "reason": "approved_once_path",
+          "leg": "clear",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.248516667910681,
+          "handoff": {
+            "requested_at": 159.17000000000002,
+            "near_since": 158.45000000000002,
+            "detail": {
+              "x": 13.558623227458387,
+              "y": -16.71549046000929,
+              "yaw": -1.228947220573517,
+              "tf_age": 0.010000000000019327,
+              "position_error": 0.0940951627630355,
+              "yaw_error": 0.34184910622137954,
+              "speed": 1.5099410523986535e-11,
+              "angular_speed": 0.34732276373075394,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.040000000000020464
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 159.28,
+          "heading_alignment": {
+            "begin": 159.56,
+            "target_yaw_delta": -0.2645695718615948,
+            "skip": false,
+            "status": 4,
+            "end": 160.01
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 10.600000000000001,
+          "leg": "entry",
+          "status": 4,
+          "length": 20.61984447723116,
+          "direct": 16.7061288533024,
+          "short_leg": false,
+          "limit": 33.019999999999996,
+          "static_prior_length": 20.68,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 116.70000000000002,
+          "leg": "service",
+          "status": 4,
+          "length": 2.2207104614916386,
+          "direct": 2.1894276951720726,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.2,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 142.95,
+          "leg": "clear",
+          "status": 4,
+          "length": 3.248516667910681,
+          "direct": 3.237984725008352,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 3.74,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 125.61000000000001,
+      "stable_at": 128.11,
+      "stable_since": 127.39000000000001,
+      "arrival": {
+        "x": 12.712728176179688,
+        "y": -13.68595219761356,
+        "yaw": -3.1039350412843594,
+        "tf_age": 0.020000000000010232,
+        "position_error": 0.08688950882276676,
+        "yaw_error": 0.037657612305434435,
+        "speed": 4.745769791465361e-16,
+        "angular_speed": 2.195309627617192e-16,
+        "odom_age": 0.020000000000010232,
+        "scan_age": 0.0800000000000125
+      },
+      "arrival_ground_truth": {
+        "x": 12.712728176179686,
+        "y": -13.685952197613561,
+        "z": -0.0053548298749021925,
+        "yaw": -3.103935041284359
+      },
+      "gate_arrival": 86.76000000000002,
+      "gate_anchor": "ETL",
+      "gate_ground_truth": {
+        "x": 12.729835181434893,
+        "y": -15.789205818740285,
+        "z": -0.005893467515659502,
+        "yaw": 1.5543656037558553
+      },
+      "lease_granted_at": 116.6,
+      "start_requested": 138.55,
+      "sent_revision": null,
+      "service_started": 138.82,
+      "service_finished": 142.82,
+      "clear_departure": 142.83,
+      "clear_at": 160.83,
+      "clear_ground_truth": {
+        "x": 13.558037019082123,
+        "y": -16.71379587011582,
+        "z": -0.005603742358211402,
+        "yaw": -1.5916043781303706
+      },
+      "clear_anchor": "CTLR3",
+      "lease_released_at": 160.89000000000001,
+      "end": 160.89000000000001,
+      "ground_truth": {
+        "x": 13.558038285798261,
+        "y": -16.713795239538985,
+        "z": -0.005578905222650297,
+        "yaw": -1.5916078268480425
+      },
+      "final_anchor": "CTLR3"
+    },
+    "E1_pickup": {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+      "job_id": "E1_pickup",
+      "robot": "r2",
+      "role": "pickup",
+      "target": {
+        "x": 22.7,
+        "y": -27.5,
+        "yaw": 3.141592653589793
+      },
+      "anchor": "G1",
+      "begin": 127.71000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 127.77000000000001,
+          "reason": "approved_once_path",
+          "leg": "entry",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 3.921473466509636,
+          "handoff": {
+            "requested_at": 142.33,
+            "near_since": 141.61,
+            "detail": {
+              "x": 22.424791042088426,
+              "y": -25.310600377012374,
+              "yaw": -1.7380394378763697,
+              "tf_age": 0.010000000000019327,
+              "position_error": 0.0927733170591607,
+              "yaw_error": 0.16724311108147313,
+              "speed": 2.068363362529074e-11,
+              "angular_speed": 0.30839149723643755,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.020000000000010232
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 142.39000000000001,
+          "heading_alignment": {
+            "begin": 142.67000000000002,
+            "target_yaw_delta": 0.10752784707679307,
+            "skip": false,
+            "status": 4,
+            "end": 143.05
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 157.73,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.2598035360136843,
+          "handoff": {
+            "requested_at": 166.67000000000002,
+            "near_since": 165.95000000000002,
+            "detail": {
+              "x": 22.67488294671168,
+              "y": -27.4123954321607,
+              "yaw": -1.374430034333889,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.09113411365783265,
+              "yaw_error": 1.7671626192559045,
+              "speed": 2.0112940219551276e-11,
+              "angular_speed": 0.22920921964792246,
+              "odom_age": 0.010000000000019327,
+              "scan_age": 0.0700000000000216
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 166.73000000000002,
+          "heading_alignment": {
+            "begin": 167.06,
+            "target_yaw_delta": -1.7027689065803655,
+            "skip": false,
+            "status": 4,
+            "end": 169.01
+          },
+          "arrival_guard_passed": true
+        },
+        {
+          "begin": 212.17000000000002,
+          "reason": "approved_once_path",
+          "leg": "clear",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 2.063716896403915,
+          "handoff": {
+            "requested_at": 224.57000000000002,
+            "near_since": 223.85,
+            "detail": {
+              "x": 22.454278613249457,
+              "y": -29.327722948119153,
+              "yaw": -2.1337527030016674,
+              "tf_age": 0.020000000000038654,
+              "position_error": 0.09038882721260842,
+              "yaw_error": 0.562956376206771,
+              "speed": 7.944596629875844e-12,
+              "angular_speed": 0.0711847168339661,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.060000000000002274
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 224.63,
+          "heading_alignment": {
+            "begin": 224.85,
+            "target_yaw_delta": 0.5351420697180069,
+            "skip": false,
+            "status": 4,
+            "end": 226.29000000000002
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 127.77000000000001,
+          "leg": "entry",
+          "status": 4,
+          "length": 3.921473466509636,
+          "direct": 3.8874078488750325,
+          "short_leg": false,
+          "limit": 8.0,
+          "static_prior_length": 3.9225999999999996,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 157.73,
+          "leg": "service",
+          "status": 4,
+          "length": 2.2598035360136843,
+          "direct": 2.206614871614088,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.42,
+          "endpoint_error": 0.0,
+          "accepted": true
+        },
+        {
+          "at": 212.17000000000002,
+          "leg": "clear",
+          "status": 4,
+          "length": 2.063716896403915,
+          "direct": 2.007447516097278,
+          "short_leg": true,
+          "limit": 8.0,
+          "static_prior_length": 2.2,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 166.73000000000002,
+      "stable_at": 169.84,
+      "stable_since": 169.11,
+      "arrival": {
+        "x": 22.673903806794392,
+        "y": -27.41132651385184,
+        "yaw": -3.097668286604941,
+        "tf_age": 0.020000000000010232,
+        "position_error": 0.09243375165756436,
+        "yaw_error": 0.04392436698485216,
+        "speed": 1.399054408087319e-16,
+        "angular_speed": 2.6044378261722454e-16,
+        "odom_age": 0.020000000000010232,
+        "scan_age": 0.030000000000001137
+      },
+      "arrival_ground_truth": {
+        "x": 22.673903806794392,
+        "y": -27.41132651385184,
+        "z": -0.0070914756916540984,
+        "yaw": -3.097668286604941
+      },
+      "gate_arrival": 143.83,
+      "gate_anchor": "AG1",
+      "gate_ground_truth": {
+        "x": 22.424993744518304,
+        "y": -25.310588948809656,
+        "z": -0.0070914616168616254,
+        "yaw": -1.5466201828024975
+      },
+      "lease_granted_at": 157.61,
+      "protocol_ack_at": 203.73000000000002,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 212.35000000000002,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "RUNNING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "READY",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 203.73000000000002,
+      "sent_revision": 1,
+      "service_started": 204.02,
+      "service_finished": 212.02,
+      "clear_departure": 212.07,
+      "clear_at": 227.18,
+      "clear_ground_truth": {
+        "x": 22.454855968788742,
+        "y": -29.327810112638645,
+        "z": -0.007091496654595414,
+        "yaw": -1.5695867516999578
+      },
+      "clear_anchor": "CG1",
+      "lease_released_at": 227.23000000000002,
+      "end": 227.23000000000002,
+      "ground_truth": {
+        "x": 22.454855968788742,
+        "y": -29.327810112638645,
+        "z": -0.007091496654595414,
+        "yaw": -1.5695867516999578
+      },
+      "final_anchor": "CG1"
+    },
+    "E1_deliver": {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_deliver:r2",
+      "job_id": "E1_deliver",
+      "robot": "r2",
+      "role": "deliver",
+      "target": {
+        "x": 19.0,
+        "y": -12.4,
+        "yaw": 2.7233683240105644
+      },
+      "anchor": "H1",
+      "begin": 227.23000000000002,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 228.51000000000002,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 18.934171905915502,
+          "handoff": {
+            "requested_at": 301.48,
+            "near_since": 300.77000000000004,
+            "detail": {
+              "x": 19.09141266962911,
+              "y": -12.38987689631344,
+              "yaw": -3.1052302914986933,
+              "tf_age": 0.03000000000002956,
+              "position_error": 0.09197148143294145,
+              "yaw_error": 0.45458669167032917,
+              "speed": 2.838656211134744e-11,
+              "angular_speed": 0.31498031174164154,
+              "odom_age": 0.009999999999990905,
+              "scan_age": 0.07999999999998408
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 301.59000000000003,
+          "heading_alignment": {
+            "begin": 301.94,
+            "target_yaw_delta": -0.3540081675313296,
+            "skip": false,
+            "status": 4,
+            "end": 302.89
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 227.35,
+          "leg": "service",
+          "status": 6,
+          "length": 0,
+          "direct": 17.27677009671155,
+          "short_leg": false,
+          "limit": 30.584600000000002,
+          "static_prior_length": 19.0564,
+          "endpoint_error": null,
+          "accepted": false
+        },
+        {
+          "at": 228.51000000000002,
+          "leg": "service",
+          "status": 4,
+          "length": 18.934171905915502,
+          "direct": 17.27677009671155,
+          "short_leg": false,
+          "limit": 30.584600000000002,
+          "static_prior_length": 19.0564,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 301.59000000000003,
+      "stable_at": 303.77000000000004,
+      "stable_since": 303.04,
+      "arrival": {
+        "x": 19.095099750943554,
+        "y": -12.39031933586335,
+        "yaw": 2.6835717284946523,
+        "tf_age": 0.010000000000047748,
+        "position_error": 0.09559120193643664,
+        "yaw_error": 0.03979659551591208,
+        "speed": 3.798177213584797e-16,
+        "angular_speed": 9.059269751961438e-17,
+        "odom_age": 0.010000000000047748,
+        "scan_age": 0.060000000000002274
+      },
+      "arrival_ground_truth": {
+        "x": 19.095099750943554,
+        "y": -12.390319335863351,
+        "z": -0.005950953623597541,
+        "yaw": 2.6835717284946523
+      },
+      "protocol_ack_at": 309.15000000000003,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 317.77000000000004,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "RUNNING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "SUCCEEDED",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "READY",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 309.15000000000003,
+      "sent_revision": 2,
+      "service_started": 309.42,
+      "service_finished": 315.42,
+      "end": 315.44,
+      "ground_truth": {
+        "x": 19.095099750943554,
+        "y": -12.390319335863351,
+        "z": -0.005950953623597541,
+        "yaw": 2.6835717284946523
+      },
+      "final_anchor": "H1"
+    },
+    "E1_monitor": {
+      "task_id": "stand_switch_response_2026-11-26_09:E1_monitor:r1",
+      "job_id": "E1_monitor",
+      "robot": "r1",
+      "role": "monitor",
+      "target": {
+        "x": 18.3,
+        "y": -12.0,
+        "yaw": 2.7492525093742777
+      },
+      "anchor": "M1",
+      "begin": 160.89000000000001,
+      "exit": false,
+      "status": "SUCCEEDED",
+      "plan_revision": 2,
+      "navigation_attempts": [
+        {
+          "begin": 161.01,
+          "reason": "approved_once_path",
+          "leg": "service",
+          "nav_kind": "Nav2 ComputePathToPose + FollowPath",
+          "approved_length": 8.234834039401777,
+          "handoff": {
+            "requested_at": 198.84,
+            "near_since": 198.12,
+            "detail": {
+              "x": 18.217458074056168,
+              "y": -11.975106408479052,
+              "yaw": -0.24567337292999664,
+              "tf_age": 0.020000000000010232,
+              "position_error": 0.08621403851652577,
+              "yaw_error": 2.9949258823042744,
+              "speed": 1.7843654741170992e-11,
+              "angular_speed": 0.19222146391277223,
+              "odom_age": 0.020000000000010232,
+              "scan_age": 0.06999999999999318
+            },
+            "reason": "position reached; transfer final yaw to Nav2 Spin"
+          },
+          "status": 5,
+          "end": 198.95000000000002,
+          "heading_alignment": {
+            "begin": 199.29,
+            "target_yaw_delta": 2.918771733713641,
+            "skip": false,
+            "status": 4,
+            "end": 202.51000000000002
+          },
+          "arrival_guard_passed": true
+        }
+      ],
+      "path_checks": [
+        {
+          "at": 161.01,
+          "leg": "service",
+          "status": 4,
+          "length": 8.234834039401777,
+          "direct": 4.521358944903923,
+          "short_leg": false,
+          "limit": 14.450899999999999,
+          "static_prior_length": 8.3006,
+          "endpoint_error": 0.0,
+          "accepted": true
+        }
+      ],
+      "nav_status": 5,
+      "nav_end": 198.95000000000002,
+      "stable_at": 203.35,
+      "stable_since": 202.62,
+      "arrival": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "yaw": 2.789323097715082,
+        "tf_age": 0.030000000000001137,
+        "position_error": 0.08857088348660423,
+        "yaw_error": 0.040070588340804125,
+        "speed": 1.502893955233888e-16,
+        "angular_speed": 1.1152455428689232e-15,
+        "odom_age": 0.030000000000001137,
+        "scan_age": 0.07999999999998408
+      },
+      "arrival_ground_truth": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "z": -0.0052963100716010006,
+        "yaw": 2.789323097715082
+      },
+      "protocol_ack_at": 203.4,
+      "protocol_ack_snapshot": {
+        "run_id": "stand_switch_response_2026-11-26_09",
+        "received_at": 212.03,
+        "tasks": {
+          "E1:verify": {
+            "state": "SUCCEEDED",
+            "revision": 2,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:monitor": {
+            "state": "READY",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r1"
+          },
+          "E1:pickup": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          },
+          "E1:deliver": {
+            "state": "PENDING",
+            "revision": 1,
+            "attempt": 1,
+            "owner": "r2"
+          }
+        }
+      },
+      "start_requested": 203.4,
+      "sent_revision": 1,
+      "service_started": 203.67000000000002,
+      "finish_requested": 318.49,
+      "service_finished": 318.52000000000004,
+      "end": 318.54,
+      "ground_truth": {
+        "x": 18.212097301256165,
+        "y": -11.98914104263071,
+        "z": -0.0052963100716010006,
+        "yaw": 2.789323097715082
+      },
+      "final_anchor": "M1"
+    }
+  },
+  "resource_events": [
+    {
+      "seq": 1,
+      "at": 0.0,
+      "phase": "idle",
+      "owners": {},
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": null,
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 2,
+      "at": 125.22000000000001,
+      "phase": "queued",
+      "owners": {},
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [
+          {
+            "action": "acquire",
+            "robot": "r3",
+            "resource": "TL",
+            "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+            "entry_anchor": "ETL",
+            "clear_anchor": "CTLR3",
+            "expected_hold": 55.0
+          }
+        ],
+        "PW1": []
+      },
+      "request": {
+        "action": "acquire",
+        "robot": "r3",
+        "resource": "TL",
+        "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+        "entry_anchor": "ETL",
+        "clear_anchor": "CTLR3",
+        "expected_hold": 55.0
+      },
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 3,
+      "at": 125.22000000000001,
+      "phase": "granted",
+      "owners": {
+        "TL": {
+          "action": "acquire",
+          "robot": "r3",
+          "resource": "TL",
+          "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+          "entry_anchor": "ETL",
+          "clear_anchor": "CTLR3",
+          "expected_hold": 55.0
+        }
+      },
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": {
+        "action": "acquire",
+        "robot": "r3",
+        "resource": "TL",
+        "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+        "entry_anchor": "ETL",
+        "clear_anchor": "CTLR3",
+        "expected_hold": 55.0
+      },
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 4,
+      "at": 166.24,
+      "phase": "queued",
+      "owners": {
+        "TL": {
+          "action": "acquire",
+          "robot": "r3",
+          "resource": "TL",
+          "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+          "entry_anchor": "ETL",
+          "clear_anchor": "CTLR3",
+          "expected_hold": 55.0
+        }
+      },
+      "queue": {
+        "DL": [],
+        "G1": [
+          {
+            "action": "acquire",
+            "robot": "r2",
+            "resource": "G1",
+            "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+            "entry_anchor": "AG1",
+            "clear_anchor": "CG1",
+            "expected_hold": 53.0
+          }
+        ],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": {
+        "action": "acquire",
+        "robot": "r2",
+        "resource": "G1",
+        "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+        "entry_anchor": "AG1",
+        "clear_anchor": "CG1",
+        "expected_hold": 53.0
+      },
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 5,
+      "at": 166.24,
+      "phase": "granted",
+      "owners": {
+        "TL": {
+          "action": "acquire",
+          "robot": "r3",
+          "resource": "TL",
+          "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3",
+          "entry_anchor": "ETL",
+          "clear_anchor": "CTLR3",
+          "expected_hold": 55.0
+        },
+        "G1": {
+          "action": "acquire",
+          "robot": "r2",
+          "resource": "G1",
+          "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+          "entry_anchor": "AG1",
+          "clear_anchor": "CG1",
+          "expected_hold": 53.0
+        }
+      },
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": {
+        "action": "acquire",
+        "robot": "r2",
+        "resource": "G1",
+        "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+        "entry_anchor": "AG1",
+        "clear_anchor": "CG1",
+        "expected_hold": 53.0
+      },
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 6,
+      "at": 169.51000000000002,
+      "phase": "released",
+      "owners": {
+        "G1": {
+          "action": "acquire",
+          "robot": "r2",
+          "resource": "G1",
+          "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2",
+          "entry_anchor": "AG1",
+          "clear_anchor": "CG1",
+          "expected_hold": 53.0
+        }
+      },
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": {
+        "action": "release",
+        "robot": "r3",
+        "resource": "TL",
+        "lease_id": "stand_switch_response_2026-11-26_09:C0_r3_W1:r3"
+      },
+      "reason": null,
+      "blocked": []
+    },
+    {
+      "seq": 7,
+      "at": 235.86,
+      "phase": "released",
+      "owners": {},
+      "queue": {
+        "DL": [],
+        "G1": [],
+        "PW2": [],
+        "TL": [],
+        "PW1": []
+      },
+      "request": {
+        "action": "release",
+        "robot": "r2",
+        "resource": "G1",
+        "lease_id": "stand_switch_response_2026-11-26_09:E1_pickup:r2"
+      },
+      "reason": null,
+      "blocked": []
+    }
+  ],
+  "cleanup": true,
+  "run": "stand_switch_response_2026-11-26_09",
+  "evidence": {
+    "fixture.json": "52a707fd9498f8c4bdbd693df3da69e2fc3204b690bbb473126c15c52a04d72a",
+    "summary.json": "4e5e1948ce9cf1c9053be642793f96c14a99a30868bb8ef8db676b68b8518311",
+    "trace.jsonl": "a5d313168cb72d7dc00dfde1a4dc53275bc56724f38d587de9074b4c9a5c9c9b",
+    "cleanup.json": "1feda27b5d343ad17450f56d9cad8a3be276f04ea85c9dfe9d99aa09e221a22d"
+  },
+  "priorAttempts": [
+    {
+      "run": "stand_switch_response_2026-11-26_03",
+      "viaV3": false,
+      "anchor": "M1",
+      "stop": 130.54000000000002,
+      "aborts": 3,
+      "pathPassed": true,
+      "evidence": {
+        "fixture.json": "9f406a2d7933b0ecbce081872b430e9703f84d4fbce4fc476b200ef2ef4ec5f0",
+        "summary.json": "37e74c82902f041c1f68bd049b7e022ada82459b30d1e32fe2dbd51324c95bd6",
+        "trace.jsonl": "0e69b8e92dce914dfa27ab951f7e942ca27d169bafca3949f704c715d22cc67b",
+        "cleanup.json": "8271317425ff5e46839f2a6b09097622b0a23d35ac1f5468c4ba802101a71e15"
+      }
+    },
+    {
+      "run": "stand_switch_response_2026-11-26_06",
+      "viaV3": true,
+      "anchor": "V3",
+      "stop": 131.51000000000002,
+      "aborts": 3,
+      "pathPassed": true,
+      "evidence": {
+        "fixture.json": "9b6b0ff261db42aabd91a2256b88b0623e85a0497383ca920668b4101c4fd562",
+        "summary.json": "307094b8c43d5ac2c8c77e030801b50d0f7a2bbe1cccb3d1b1226d1196cd366a",
+        "trace.jsonl": "e96829c1545e8097dbc6775b931e9ecba33dde0c1e091c904d9ad8a41a4397b7",
+        "cleanup.json": "e0f99b2d07cc7d4140b585d52a080d36445c935fffcf38d2ec7279d67163bed6"
+      }
+    }
+  ]
+}

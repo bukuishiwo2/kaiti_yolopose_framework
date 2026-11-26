@@ -26,6 +26,8 @@
 
 R3 进站的 Gazebo 短测已完成。M1 占位与空位均找到全局路径，但在获取 PW2 工位许可前跟踪中止。长队列保留作离线反馈重算与执行边界证据。实际反馈重规划引用已审计的实体床短队列闭环。后续策略配对使用已有执行资格的场景，按共同资格域和预约比较实际交付与巡检恢复。[进站资格对照](../reports/benchmarks/clinic_epw2_qualification_2026-11-26.md)
 
+A 区短队列已完成南侧核验点切换至三机应急服务的闭环。计划在 R3 巡检仍在途时提交，R1 在原 TL 工位实际驶离和释放后才前往 M1。R2 在监护生效后取货并交付。该回合提供受控场景的完整执行证据。[短队列实测](../reports/benchmarks/clinic_stand_switch_response_2026-11-26.md)
+
 参见[路径拒绝反馈重规划](../reports/benchmarks/clinic_feedback_repair_2026-11-26.md)、[在线协同配对](../reports/benchmarks/clinic_online_pair_2026-11-26.md)与[既有床扰动闭环](../reports/benchmarks/clinic_unified_full_loop_recheck_2026-11-17.md)。
 
 ## 实现与验证审计

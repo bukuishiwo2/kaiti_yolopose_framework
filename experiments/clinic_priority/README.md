@@ -130,3 +130,16 @@ OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
 ```
 
 使用空闲 ROS 域和新目录。受控人体占区只在该实验进程内启用。工作台「在线协同配对」读取实测摘要。[实测报告](../../reports/benchmarks/clinic_verify_stand_switch_2026-11-26.md)
+
+## 站位切换后的 A 区三机应急响应
+
+加 `--response` 复用站位选择和正式核验。R3 先接受原 TL 巡检，R1 在南侧完成核验，随后按原工作区 MILP 安排 R1 监护和 R2 取送。响应提交前记录新衔接的 Nav2 查询，核对续行计划并保护 R3 已派发任务的身份和工位。通过的回合用 `--after-patrol` 让 R1 在 TL 巡检驶离和实际释放后再去 M1。完成条件为核验、监护、取送、交付、巡检和租约释放均有回执。
+
+```bash
+source /home/yhc/clinic_planning_ws/support/clinic_runtime/environment.sh
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python \
+  experiments/clinic_priority/verify_stand_switch.py --response --after-patrol --domain 98 \
+  --out /home/yhc/clinic_planning_ws/verification/stand_switch_response_NEW
+```
+
+使用空闲 ROS 域和新输出目录。工作台以 `stand_switch_response_*` 读取此实验。[报告](../../reports/benchmarks/clinic_stand_switch_response_2026-11-26.md)
