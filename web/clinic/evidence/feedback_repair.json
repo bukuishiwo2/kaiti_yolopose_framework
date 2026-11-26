@@ -1,0 +1,925 @@
+{
+  "budget": 5.0,
+  "seed": 17,
+  "cases": [
+    {
+      "run": "full_a6",
+      "witness": {
+        "edge": [
+          "r2",
+          "CPW2B",
+          "ADL"
+        ],
+        "at": 274.02000000000004,
+        "length": 0,
+        "passed": false,
+        "status": 6
+      },
+      "arc": [
+        "r2",
+        "src",
+        "C0_r1_W3"
+      ],
+      "outcome": "MODEL_CANDIDATE",
+      "execution_authorized": false,
+      "rejected": {
+        "status": "OPTIMAL",
+        "first": 0.36197877599624917,
+        "wall": 0.5230102930072462,
+        "objective": 638.2879999999999,
+        "delivery": 498.80999999999995,
+        "delay": 672.5999999999999,
+        "tardiness": {
+          "0": 672.5999999999999,
+          "60": 432.5999999999999,
+          "90": 312.5999999999999,
+          "120": 192.5999999999999
+        },
+        "offsets": {
+          "C0_r1_W3": 135.14999999999998,
+          "C0_r2_W3": 180.14999999999998,
+          "C0_r3_W2": 148.14999999999998,
+          "C0_r3_W3": 209.14999999999998
+        },
+        "owners": {
+          "C0_r1_W3": "r2",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor"
+          ],
+          "r2": [
+            "C0_r1_W3",
+            "C0_r2_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 1,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r2",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 475.15,
+            "finish": 479.15
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 556.15,
+            "finish": 560.15
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 430.15,
+            "finish": 434.15
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 654.15,
+            "finish": 658.15
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 766.15,
+            "finish": 772.15
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.37,
+            "finish": 776.15
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 636.15,
+            "finish": 644.15
+          }
+        ]
+      },
+      "repaired": {
+        "status": "OPTIMAL",
+        "first": 0.003462805994786322,
+        "wall": 0.25280703499447554,
+        "objective": 679.4140000000001,
+        "delivery": 598.0,
+        "delay": 833.98,
+        "tardiness": {
+          "0": 833.98,
+          "60": 593.98,
+          "90": 473.98,
+          "120": 353.98
+        },
+        "offsets": {
+          "C0_r1_W3": 314.34000000000003,
+          "C0_r2_W3": 162.34000000000003,
+          "C0_r3_W2": 148.14999999999998,
+          "C0_r3_W3": 209.14999999999998
+        },
+        "owners": {
+          "C0_r1_W3": "r2",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor"
+          ],
+          "r2": [
+            "C0_r2_W3",
+            "C0_r1_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 1,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r2",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 654.34,
+            "finish": 658.34
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 538.34,
+            "finish": 542.34
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 430.15,
+            "finish": 434.15
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 654.15,
+            "finish": 658.15
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 865.34,
+            "finish": 871.34
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.37,
+            "finish": 875.34
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 735.34,
+            "finish": 743.34
+          }
+        ]
+      },
+      "fixed": {
+        "status": "OPTIMAL",
+        "first": 0.003353014006279409,
+        "wall": 0.08179494600335602,
+        "objective": 700.0640000000001,
+        "delivery": 481.0,
+        "delay": 1008.98,
+        "tardiness": {
+          "0": 1008.98,
+          "60": 768.98,
+          "90": 648.98,
+          "120": 528.98
+        },
+        "offsets": {
+          "C0_r1_W3": 489.34000000000003,
+          "C0_r2_W3": 162.34000000000003,
+          "C0_r3_W2": 148.14999999999998,
+          "C0_r3_W3": 209.14999999999998
+        },
+        "owners": {
+          "C0_r1_W3": "r1",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor",
+            "C0_r1_W3"
+          ],
+          "r2": [
+            "C0_r2_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 0,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r1",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 829.34,
+            "finish": 833.34
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 538.34,
+            "finish": 542.34
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 430.15,
+            "finish": 434.15
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 654.15,
+            "finish": 658.15
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 748.34,
+            "finish": 754.34
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.37,
+            "finish": 758.34
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 618.34,
+            "finish": 626.34
+          }
+        ]
+      },
+      "confirmed": 273.34000000000003,
+      "reservation": [
+        273.34000000000003,
+        513.34
+      ],
+      "prefixes": {
+        "r1": {
+          "jobs": [],
+          "schedule": [],
+          "actual_job": null,
+          "record_task_id": null
+        },
+        "r2": {
+          "jobs": [
+            "C0_r2_W2"
+          ],
+          "schedule": [
+            {
+              "job": "C0_r2_W2",
+              "owner": "r2",
+              "service_finish_forecast": 361.15,
+              "clear_forecast": 407.15,
+              "clear_anchor": "CPW2B"
+            }
+          ],
+          "actual_job": "C0_r2_W2",
+          "record_task_id": "full_a6:C0_r2_W2:r2"
+        },
+        "r3": {
+          "jobs": [],
+          "schedule": [],
+          "actual_job": null,
+          "record_task_id": null
+        }
+      },
+      "preserved": {
+        "snapshot": true,
+        "reservation_ack": true,
+        "initial_rejected_by_new_constraint": true
+      },
+      "source_sha256": {
+        "online_pair_2026-11-26_06/full_a6/response/problem.json": "70ef8de17017c625e05641ef3d9e407d3ab9e00d2a3156535367fe76a9f5e2e0",
+        "online_pair_2026-11-26_06/full_a6/response/solve/result.json": "34a086b5d94acf75453af62c351d5c01fd14674fb42f36a8026818c84301857b",
+        "online_pair_2026-11-26_06/full_a6/result.json": "13a9d960438e0865276ce1e39e3cc3d30fc9681c245d16c17879d455dcd29543"
+      }
+    },
+    {
+      "run": "full_a7",
+      "witness": {
+        "edge": [
+          "r2",
+          "CPW2",
+          "ADL"
+        ],
+        "at": 274.36,
+        "length": 0,
+        "passed": false,
+        "status": 6
+      },
+      "arc": [
+        "r2",
+        "src",
+        "C0_r1_W3"
+      ],
+      "outcome": "MODEL_CANDIDATE",
+      "execution_authorized": false,
+      "rejected": {
+        "status": "OPTIMAL",
+        "first": 0.560338976996718,
+        "wall": 0.8315799330011941,
+        "objective": 632.4979999999998,
+        "delivery": 493.77,
+        "delay": 629.8800000000001,
+        "tardiness": {
+          "0": 629.8800000000001,
+          "60": 389.8800000000001,
+          "90": 269.8800000000001,
+          "120": 149.8800000000001
+        },
+        "offsets": {
+          "C0_r1_W3": 130.47000000000003,
+          "C0_r2_W3": 175.47000000000003,
+          "C0_r3_W2": 131.47000000000003,
+          "C0_r3_W3": 192.47000000000003
+        },
+        "owners": {
+          "C0_r1_W3": "r2",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor"
+          ],
+          "r2": [
+            "C0_r1_W3",
+            "C0_r2_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 1,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r2",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 470.47,
+            "finish": 474.47
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 551.47,
+            "finish": 555.47
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 413.47,
+            "finish": 417.47
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 637.47,
+            "finish": 641.47
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 761.47,
+            "finish": 767.47
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.71,
+            "finish": 771.47
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 631.47,
+            "finish": 639.47
+          }
+        ]
+      },
+      "repaired": {
+        "status": "OPTIMAL",
+        "first": 0.0034125200036214665,
+        "wall": 0.24339662400598172,
+        "objective": 675.9399999999997,
+        "delivery": 598.0,
+        "delay": 801.3400000000001,
+        "tardiness": {
+          "0": 801.3400000000001,
+          "60": 561.3400000000001,
+          "90": 441.34000000000015,
+          "120": 321.34000000000015
+        },
+        "offsets": {
+          "C0_r1_W3": 314.70000000000005,
+          "C0_r2_W3": 162.70000000000005,
+          "C0_r3_W2": 131.47000000000003,
+          "C0_r3_W3": 192.47000000000003
+        },
+        "owners": {
+          "C0_r1_W3": "r2",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor"
+          ],
+          "r2": [
+            "C0_r2_W3",
+            "C0_r1_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 1,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r2",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 654.7,
+            "finish": 658.7
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 538.7,
+            "finish": 542.7
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 413.47,
+            "finish": 417.47
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 637.47,
+            "finish": 641.47
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 865.7,
+            "finish": 871.7
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.71,
+            "finish": 875.7
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 735.7,
+            "finish": 743.7
+          }
+        ]
+      },
+      "fixed": {
+        "status": "OPTIMAL",
+        "first": 0.004507025994826108,
+        "wall": 0.09271025800262578,
+        "objective": 696.5899999999996,
+        "delivery": 481.0,
+        "delay": 976.3400000000001,
+        "tardiness": {
+          "0": 976.3400000000001,
+          "60": 736.3400000000001,
+          "90": 616.3400000000001,
+          "120": 496.34000000000015
+        },
+        "offsets": {
+          "C0_r1_W3": 489.70000000000005,
+          "C0_r2_W3": 162.70000000000005,
+          "C0_r3_W2": 131.47000000000003,
+          "C0_r3_W3": 192.47000000000003
+        },
+        "owners": {
+          "C0_r1_W3": "r1",
+          "C0_r2_W3": "r2",
+          "C0_r3_W2": "r3",
+          "C0_r3_W3": "r3",
+          "E1_deliver": "r2",
+          "E1_monitor": "r1",
+          "E1_pickup": "r2"
+        },
+        "routes": {
+          "r1": [
+            "E1_monitor",
+            "C0_r1_W3"
+          ],
+          "r2": [
+            "C0_r2_W3",
+            "E1_pickup",
+            "E1_deliver"
+          ],
+          "r3": [
+            "C0_r3_W2",
+            "C0_r3_W3"
+          ]
+        },
+        "changes": 0,
+        "predicted": [
+          {
+            "job": "C0_r1_W3",
+            "robot": "r1",
+            "label": "C0_r1_W3",
+            "anchor": "DL",
+            "xy": [
+              21.523795238644688,
+              -19.625899003884484
+            ],
+            "start": 829.7,
+            "finish": 833.7
+          },
+          {
+            "job": "C0_r2_W3",
+            "robot": "r2",
+            "label": "C0_r2_W3",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 538.7,
+            "finish": 542.7
+          },
+          {
+            "job": "C0_r3_W2",
+            "robot": "r3",
+            "label": "C0_r3_W2",
+            "anchor": "PW2",
+            "xy": [
+              17.0,
+              -11.1
+            ],
+            "start": 413.47,
+            "finish": 417.47
+          },
+          {
+            "job": "C0_r3_W3",
+            "robot": "r3",
+            "label": "C0_r3_W3",
+            "anchor": "PW1",
+            "xy": [
+              8.007099726933587,
+              -31.734248682743
+            ],
+            "start": 637.47,
+            "finish": 641.47
+          },
+          {
+            "job": "E1_deliver",
+            "robot": "r2",
+            "label": "E1_deliver",
+            "anchor": "H1",
+            "xy": [
+              19.0,
+              -12.4
+            ],
+            "start": 748.7,
+            "finish": 754.7
+          },
+          {
+            "job": "E1_monitor",
+            "robot": "r1",
+            "label": "E1_monitor",
+            "anchor": "M1",
+            "xy": [
+              18.3,
+              -12.0
+            ],
+            "start": 341.71,
+            "finish": 758.7
+          },
+          {
+            "job": "E1_pickup",
+            "robot": "r2",
+            "label": "E1_pickup",
+            "anchor": "G1",
+            "xy": [
+              22.7,
+              -27.5
+            ],
+            "start": 618.7,
+            "finish": 626.7
+          }
+        ]
+      },
+      "confirmed": 273.70000000000005,
+      "reservation": [
+        273.70000000000005,
+        513.7
+      ],
+      "prefixes": {
+        "r1": {
+          "jobs": [],
+          "schedule": [],
+          "actual_job": null,
+          "record_task_id": null
+        },
+        "r2": {
+          "jobs": [
+            "C0_r2_W2"
+          ],
+          "schedule": [
+            {
+              "job": "C0_r2_W2",
+              "owner": "r2",
+              "service_finish_forecast": 361.47,
+              "clear_forecast": 390.47,
+              "clear_anchor": "CPW2"
+            }
+          ],
+          "actual_job": "C0_r2_W2",
+          "record_task_id": "full_a7:C0_r2_W2:r2"
+        },
+        "r3": {
+          "jobs": [],
+          "schedule": [],
+          "actual_job": null,
+          "record_task_id": null
+        }
+      },
+      "preserved": {
+        "snapshot": true,
+        "reservation_ack": true,
+        "initial_rejected_by_new_constraint": true
+      },
+      "source_sha256": {
+        "online_pair_2026-11-26_07/full_a7/response/problem.json": "a94c86f044a4f939a00633bb13c91167de782b1c0237814571da348f4398793c",
+        "online_pair_2026-11-26_07/full_a7/response/solve/result.json": "f3d48f9e31fea3f3013cbd8c4e6c98f48512bcc1bf9b1e508b713196227a934e",
+        "online_pair_2026-11-26_07/full_a7/result.json": "f8ef89f1e03efb27633de89da2d89215469a85023a376bd3ccc7132c58cbd09b"
+      }
+    }
+  ],
+  "code_sha256": "9b858f810eb6dcb7e3b5f4df238839a8dbae931e2aca353911901fe6277cd512"
+}

@@ -1,0 +1,628 @@
+{
+  "schema": "clinic-online-pair/v1",
+  "matched": false,
+  "conditionsMatched": true,
+  "arms": {
+    "fixed": {
+      "policy": "fixed",
+      "run": "fixed_a7",
+      "passed": false,
+      "reason": "NAV_FAILED",
+      "actual": [
+        {
+          "job": "C0_r1_W1",
+          "robot": "r1",
+          "anchor": "PW2",
+          "label": "常态巡检",
+          "start": 113.25000000000001,
+          "finish": 117.25000000000001,
+          "end": 135.79000000000002,
+          "xy": [
+            17.0,
+            -11.1
+          ]
+        },
+        {
+          "job": "C0_r2_W1",
+          "robot": "r2",
+          "anchor": "DL",
+          "label": "常态巡检",
+          "start": 121.15,
+          "finish": 125.15,
+          "end": 136.26000000000002,
+          "xy": [
+            21.523795238644688,
+            -19.625899003884484
+          ]
+        },
+        {
+          "job": "C0_r3_W1",
+          "robot": "r3",
+          "anchor": "TL",
+          "label": "常态巡检",
+          "start": 163.3,
+          "finish": 167.3,
+          "end": 186.27,
+          "xy": [
+            12.7,
+            -13.6
+          ]
+        },
+        {
+          "job": "C0_r1_W2",
+          "robot": "r1",
+          "anchor": "TL",
+          "label": "常态巡检",
+          "start": 227.00000000000003,
+          "finish": 231.00000000000003,
+          "end": 247.14000000000004,
+          "xy": [
+            12.7,
+            -13.6
+          ]
+        },
+        {
+          "job": "E1_verify",
+          "robot": "r1",
+          "anchor": "V1",
+          "label": "现场核验",
+          "start": 271.40000000000003,
+          "finish": 274.40000000000003,
+          "end": 274.45000000000005,
+          "xy": [
+            14.5,
+            -13.7
+          ]
+        },
+        {
+          "job": "C0_r2_W2",
+          "robot": "r2",
+          "anchor": "PW2",
+          "label": "常态巡检",
+          "start": 334.6,
+          "finish": 338.6,
+          "end": 360.20000000000005,
+          "xy": [
+            17.0,
+            -11.1
+          ]
+        }
+      ],
+      "predicted": [
+        {
+          "job": "C0_r1_W3",
+          "robot": "r1",
+          "anchor": "DL",
+          "label": "常态巡检",
+          "start": 830.4,
+          "finish": 834.4,
+          "xy": [
+            21.523795238644688,
+            -19.625899003884484
+          ]
+        },
+        {
+          "job": "C0_r2_W3",
+          "robot": "r2",
+          "anchor": "G1",
+          "label": "常态巡检",
+          "start": 539.4,
+          "finish": 543.4,
+          "xy": [
+            22.7,
+            -27.5
+          ]
+        },
+        {
+          "job": "C0_r3_W2",
+          "robot": "r3",
+          "anchor": "PW2",
+          "label": "常态巡检",
+          "start": 414.23,
+          "finish": 418.23,
+          "xy": [
+            17.0,
+            -11.1
+          ]
+        },
+        {
+          "job": "C0_r3_W3",
+          "robot": "r3",
+          "anchor": "PW1",
+          "label": "常态巡检",
+          "start": 638.23,
+          "finish": 642.23,
+          "xy": [
+            8.007099726933587,
+            -31.734248682743
+          ]
+        },
+        {
+          "job": "E1_deliver",
+          "robot": "r2",
+          "anchor": "H1",
+          "label": "送达物资",
+          "start": 749.4,
+          "finish": 755.4,
+          "xy": [
+            19.0,
+            -12.4
+          ]
+        },
+        {
+          "job": "E1_monitor",
+          "robot": "r1",
+          "anchor": "M1",
+          "label": "现场监护",
+          "start": 342.45,
+          "finish": 759.4,
+          "xy": [
+            18.3,
+            -12.0
+          ]
+        },
+        {
+          "job": "E1_pickup",
+          "robot": "r2",
+          "anchor": "G1",
+          "label": "领取物资",
+          "start": 619.4,
+          "finish": 627.4,
+          "xy": [
+            22.7,
+            -27.5
+          ]
+        }
+      ],
+      "checks": {
+        "runtime": true,
+        "cleanup": true,
+        "all_tasks_completed": false,
+        "plan_hash": true,
+        "same_saved_plan": true,
+        "validated_plan": true,
+        "registered_domain": true,
+        "archived_qualification": true,
+        "cross_route_preflight": true,
+        "prefix": true,
+        "G1_ack_and_duration": true,
+        "G1_no_lease_during_reservation": true,
+        "actual_service_tokens": true,
+        "confirmed_by_actual_verify_ack": true,
+        "prefix_dispatch_and_finish": true,
+        "qualified_arrival_and_resource_release": true,
+        "executed_plan_owners": false,
+        "monitor_custody_feedback": false
+      },
+      "confirmed": 274.40000000000003,
+      "initialHash": "36fc3521035f863f585d7362e0f9cece45862df874e6e3730a42675595037042",
+      "scenarioHash": "e3957672dc0f0d80ef554a7e958333cf9dc04d8458965659cdfead6ac406e69e",
+      "reservation": [
+        274.40000000000003,
+        514.4000000000001
+      ],
+      "pathWitness": [],
+      "files": {
+        "result.json": "629bf049bcf232ac0e3267bfd31e180e230e745112aa1f55df7700af260ba34a",
+        "trace.jsonl": "76a9c196131e6ab8d56fec9f88d8725979ea8aa139b34023439ef27001aa2b85",
+        "initial.json": "7d0423b24d393c3eeb79771bed420a730e391128f4b1baa9169869c72f9ea75a"
+      },
+      "eligible": {
+        "C0_r1_W3": [
+          "r1",
+          "r2"
+        ],
+        "C0_r2_W3": [
+          "r2"
+        ],
+        "C0_r3_W2": [
+          "r3"
+        ],
+        "C0_r3_W3": [
+          "r3"
+        ],
+        "E1_deliver": [
+          "r2"
+        ],
+        "E1_monitor": [
+          "r1"
+        ],
+        "E1_pickup": [
+          "r2"
+        ]
+      },
+      "changes": {},
+      "terms": {
+        "response": 272.1999999999998,
+        "completion": 58.394999999999996,
+        "normal_wait": 242.22600000000003,
+        "owner": 0.0,
+        "shift": 48.963,
+        "travel": 75.4
+      },
+      "checkpoint": {
+        "r1": [],
+        "r2": [
+          "C0_r2_W2"
+        ],
+        "r3": []
+      },
+      "commit": 274.89000000000004,
+      "newTasks": {
+        "E1_deliver": {
+          "label": "送达物资",
+          "anchor": "H1",
+          "prerequisites": [
+            "E1_pickup"
+          ],
+          "resource": [],
+          "release": 274.40000000000003
+        },
+        "E1_monitor": {
+          "label": "现场监护",
+          "anchor": "M1",
+          "prerequisites": [
+            "E1_verify"
+          ],
+          "resource": [],
+          "release": 274.40000000000003
+        },
+        "E1_pickup": {
+          "label": "领取物资",
+          "anchor": "G1",
+          "prerequisites": [
+            "E1_verify"
+          ],
+          "resource": [
+            "G1"
+          ],
+          "release": 274.40000000000003
+        }
+      },
+      "firstSolution": 0.48785388900432736,
+      "sameSnapshotComparison": {
+        "otherPolicy": "full",
+        "objectiveDelta": -64.06799999999987,
+        "positiveDelayDelta": -346.3399999999999,
+        "deliveryDelta": 12.830000000000041
+      },
+      "predictionDelivery": 480.99999999999994,
+      "confirmationStage": {
+        "r1": {
+          "job": "E1_verify",
+          "leg": "service",
+          "state": "SERVICE_RUNNING"
+        },
+        "r2": {
+          "job": "C0_r2_W2",
+          "leg": "entry",
+          "state": "NAVIGATING"
+        },
+        "r3": {
+          "job": null,
+          "leg": "done",
+          "state": "IDLE"
+        }
+      }
+    },
+    "full": {
+      "policy": "full",
+      "run": "full_a7",
+      "passed": false,
+      "reason": "ValueError(\"Nav2 route qualification failed ['r2', 'CPW2', 'ADL']: {'edge': ['r2', 'CPW2', 'ADL'], 'at': 274.36, 'length': 0, 'passed': False, 'status': 6}\")",
+      "actual": [
+        {
+          "job": "C0_r1_W1",
+          "robot": "r1",
+          "anchor": "PW2",
+          "label": "常态巡检",
+          "start": 113.3,
+          "finish": 117.3,
+          "end": 135.83,
+          "xy": [
+            17.0,
+            -11.1
+          ]
+        },
+        {
+          "job": "C0_r2_W1",
+          "robot": "r2",
+          "anchor": "DL",
+          "label": "常态巡检",
+          "start": 120.75,
+          "finish": 124.75,
+          "end": 135.78,
+          "xy": [
+            21.523795238644688,
+            -19.625899003884484
+          ]
+        },
+        {
+          "job": "C0_r3_W1",
+          "robot": "r3",
+          "anchor": "TL",
+          "label": "常态巡检",
+          "start": 163.3,
+          "finish": 167.3,
+          "end": 185.35,
+          "xy": [
+            12.7,
+            -13.6
+          ]
+        },
+        {
+          "job": "C0_r1_W2",
+          "robot": "r1",
+          "anchor": "TL",
+          "label": "常态巡检",
+          "start": 225.70000000000002,
+          "finish": 229.70000000000002,
+          "end": 246.4,
+          "xy": [
+            12.7,
+            -13.6
+          ]
+        },
+        {
+          "job": "E1_verify",
+          "robot": "r1",
+          "anchor": "V1",
+          "label": "现场核验",
+          "start": 270.70000000000005,
+          "finish": 273.70000000000005,
+          "end": 273.71000000000004,
+          "xy": [
+            14.5,
+            -13.7
+          ]
+        }
+      ],
+      "predicted": [
+        {
+          "job": "C0_r1_W3",
+          "robot": "r2",
+          "anchor": "DL",
+          "label": "常态巡检",
+          "start": 470.47,
+          "finish": 474.47,
+          "xy": [
+            21.523795238644688,
+            -19.625899003884484
+          ]
+        },
+        {
+          "job": "C0_r2_W3",
+          "robot": "r2",
+          "anchor": "G1",
+          "label": "常态巡检",
+          "start": 551.47,
+          "finish": 555.47,
+          "xy": [
+            22.7,
+            -27.5
+          ]
+        },
+        {
+          "job": "C0_r3_W2",
+          "robot": "r3",
+          "anchor": "PW2",
+          "label": "常态巡检",
+          "start": 413.47,
+          "finish": 417.47,
+          "xy": [
+            17.0,
+            -11.1
+          ]
+        },
+        {
+          "job": "C0_r3_W3",
+          "robot": "r3",
+          "anchor": "PW1",
+          "label": "常态巡检",
+          "start": 637.47,
+          "finish": 641.47,
+          "xy": [
+            8.007099726933587,
+            -31.734248682743
+          ]
+        },
+        {
+          "job": "E1_deliver",
+          "robot": "r2",
+          "anchor": "H1",
+          "label": "送达物资",
+          "start": 761.47,
+          "finish": 767.47,
+          "xy": [
+            19.0,
+            -12.4
+          ]
+        },
+        {
+          "job": "E1_monitor",
+          "robot": "r1",
+          "anchor": "M1",
+          "label": "现场监护",
+          "start": 341.71,
+          "finish": 771.47,
+          "xy": [
+            18.3,
+            -12.0
+          ]
+        },
+        {
+          "job": "E1_pickup",
+          "robot": "r2",
+          "anchor": "G1",
+          "label": "领取物资",
+          "start": 631.47,
+          "finish": 639.47,
+          "xy": [
+            22.7,
+            -27.5
+          ]
+        }
+      ],
+      "checks": {
+        "runtime": true,
+        "cleanup": true,
+        "all_tasks_completed": false,
+        "plan_hash": true,
+        "same_saved_plan": false,
+        "validated_plan": true,
+        "registered_domain": true,
+        "archived_qualification": true,
+        "cross_route_preflight": false,
+        "prefix": false,
+        "G1_ack_and_duration": true,
+        "G1_no_lease_during_reservation": true,
+        "actual_service_tokens": true,
+        "confirmed_by_actual_verify_ack": true,
+        "qualified_arrival_and_resource_release": true,
+        "executed_plan_owners": false,
+        "monitor_custody_feedback": false
+      },
+      "confirmed": 273.70000000000005,
+      "initialHash": "36fc3521035f863f585d7362e0f9cece45862df874e6e3730a42675595037042",
+      "scenarioHash": "e3957672dc0f0d80ef554a7e958333cf9dc04d8458965659cdfead6ac406e69e",
+      "reservation": [
+        273.70000000000005,
+        513.7
+      ],
+      "pathWitness": [
+        {
+          "edge": [
+            "r2",
+            "CPW2",
+            "ADL"
+          ],
+          "at": 274.36,
+          "length": 0,
+          "passed": false,
+          "status": 6
+        }
+      ],
+      "files": {
+        "result.json": "f8ef89f1e03efb27633de89da2d89215469a85023a376bd3ccc7132c58cbd09b",
+        "trace.jsonl": "3320a2ea5c8366ff351200eeb2866d720d032c7496d7cde24b9031fcbd0b28e1",
+        "initial.json": "7d0423b24d393c3eeb79771bed420a730e391128f4b1baa9169869c72f9ea75a"
+      },
+      "eligible": {
+        "C0_r1_W3": [
+          "r1",
+          "r2"
+        ],
+        "C0_r2_W3": [
+          "r2"
+        ],
+        "C0_r3_W2": [
+          "r3"
+        ],
+        "C0_r3_W3": [
+          "r3"
+        ],
+        "E1_deliver": [
+          "r2"
+        ],
+        "E1_monitor": [
+          "r1"
+        ],
+        "E1_pickup": [
+          "r2"
+        ]
+      },
+      "changes": {
+        "C0_r1_W3": [
+          "r1",
+          "r2"
+        ]
+      },
+      "terms": {
+        "response": 272.03999999999974,
+        "completion": 49.776,
+        "normal_wait": 207.288,
+        "owner": 2.0,
+        "shift": 31.494000000000007,
+        "travel": 69.9
+      },
+      "checkpoint": {
+        "r1": [],
+        "r2": [
+          "C0_r2_W2"
+        ],
+        "r3": []
+      },
+      "commit": null,
+      "newTasks": {
+        "E1_deliver": {
+          "label": "送达物资",
+          "anchor": "H1",
+          "prerequisites": [
+            "E1_pickup"
+          ],
+          "resource": [],
+          "release": 273.70000000000005
+        },
+        "E1_monitor": {
+          "label": "现场监护",
+          "anchor": "M1",
+          "prerequisites": [
+            "E1_verify"
+          ],
+          "resource": [],
+          "release": 273.70000000000005
+        },
+        "E1_pickup": {
+          "label": "领取物资",
+          "anchor": "G1",
+          "prerequisites": [
+            "E1_verify"
+          ],
+          "resource": [
+            "G1"
+          ],
+          "release": 273.70000000000005
+        }
+      },
+      "firstSolution": 0.560338976996718,
+      "sameSnapshotComparison": {
+        "otherPolicy": "fixed",
+        "objectiveDelta": 64.09199999999976,
+        "positiveDelayDelta": 346.46000000000004,
+        "deliveryDelta": -12.769999999999982
+      },
+      "predictionDelivery": 493.77,
+      "confirmationStage": {
+        "r1": {
+          "job": "E1_verify",
+          "leg": "service",
+          "state": "SERVICE_RUNNING"
+        },
+        "r2": {
+          "job": "C0_r2_W2",
+          "leg": "entry",
+          "state": "NAVIGATING"
+        },
+        "r3": {
+          "job": null,
+          "leg": "done",
+          "state": "IDLE"
+        }
+      }
+    }
+  },
+  "repeats": [
+    {
+      "policy": "fixed",
+      "run": "fixed_b7",
+      "passed": false,
+      "reason": "NAV_FAILED",
+      "failedJobs": [
+        "C0_r3_W2"
+      ],
+      "completed": 6,
+      "sha256": "440ffe6d1a3648585c8d40072f783a1b2d0bb1022f0b68a56afa4e31ef10e325"
+    }
+  ],
+  "candidate": "三机巡检中确认应急事件 · 物资站 G1 预约 240 秒"
+}

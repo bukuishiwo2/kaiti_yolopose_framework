@@ -1,0 +1,33 @@
+#online-pair{font:16px/1.55 "Source Sans 3","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif}
+#online-pair h2{font-size:1.55em}
+#online-pair h3{font-size:1.25em}
+#online-pair .pair-metrics{overflow:auto;margin-block:1rem}
+#online-pair .pair-metrics table{border-collapse:collapse;width:100%;min-width:580px}
+#online-pair th,#online-pair td{padding:.55em .75em;border-bottom:1px solid #d9e1e7;text-align:left;font-size:inherit}
+#online-pair th{background:#eaf1f5}
+#online-pair .pair-graph-scroll{overflow:auto}
+#online-pair .pair-graph{display:grid;grid-template-columns:4rem minmax(30rem,1fr);align-items:center;gap:.35rem .65rem;min-width:580px}
+#online-pair .pair-graph h3{grid-column:1/-1;margin:.75rem 0 0}
+#online-pair .pair-lane,#online-pair .pair-ruler{position:relative;height:2.15rem}
+#online-pair .pair-lane{background:#edf3f6;border-radius:.25rem}
+#online-pair .pair-ruler span{position:absolute;transform:translateX(-50%);font-size:14px}
+#online-pair .pair-ruler span:first-child{transform:none}
+#online-pair .pair-ruler span:last-child{transform:translateX(-100%)}
+#online-pair .pair-bar{position:absolute;top:.23rem;height:1.68rem;min-width:.32rem;padding:0 .25rem;overflow:hidden;background:#205f7c;color:white;border:0;border-radius:.25rem;font:inherit;font-size:14px}
+#online-pair .pair-bar.pair-emergency{background:#9f4828}
+#online-pair .pair-booking,#online-pair .pair-confirmation{height:100%;position:absolute;pointer-events:none}
+#online-pair .pair-booking{background:#bba46a25}
+#online-pair .pair-confirmation{border-left:2px dashed #75603a}
+#online-pair .pair-chart-controls{display:flex;gap:.6em;align-items:center;flex-wrap:wrap}
+#online-pair select{font:inherit}
+#online-pair .pair-task-detail{min-height:1.6em;margin-top:.55rem}
+#online-pair .pair-note{color:#435c66}
+#online-pair .epw-qualification svg{display:block;width:min(100%,440px);height:auto;background:#f7fafb;border:1px solid #d9e1e7}
+#online-pair .epw-qualification svg text{font:14px system-ui,sans-serif;fill:#314d59}
+#online-pair .epw-grid{stroke:#d9e1e7}
+#online-pair .epw-anchor{fill:#314d59}
+#online-pair .epw-occupied{stroke:#205f7c;stroke-width:3;fill:none}
+#online-pair .epw-vacant{stroke:#9f4828;stroke-width:2.5;stroke-dasharray:5 4;fill:none}
+#online-pair circle.epw-occupied{fill:#205f7c}
+#online-pair circle.epw-vacant{fill:#9f4828;stroke-dasharray:none}
+body:has(#online-pair:not([hidden])) :is(#global-clock,#source-drawer,#failure-banner){display:none}

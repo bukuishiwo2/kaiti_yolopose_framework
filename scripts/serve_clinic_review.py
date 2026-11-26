@@ -11,12 +11,16 @@ from urllib.parse import urlsplit, parse_qs
 
 REPO = Path(__file__).resolve().parents[1]
 WEB = REPO / 'web' / 'clinic'
+PUBLISHED = WEB / 'evidence'
 REPORTS = {
     '研究实验目录与任务规划说明': 'docs/clinic_research_experiment_guide.md',
     '第二轮工作台评审': 'docs/reviews/clinic_workbench_explainability_2026-11-24.md',
     '节点与路径来源': 'docs/reviews/clinic_node_path_sources_2026-11-24.md',
     '三次修复诊断': 'docs/reviews/clinic_three_repairs_diagnosis_2026-11-24.md',
     '最新评审': 'docs/reviews/clinic_temporal_logic_adoption_2026-11-23.md',
+    '在线协同配对': 'reports/benchmarks/clinic_online_pair_2026-11-26.md',
+    '路径拒绝反馈重规划': 'reports/benchmarks/clinic_feedback_repair_2026-11-26.md',
+    'EPW2 进站资格对照': 'reports/benchmarks/clinic_epw2_qualification_2026-11-26.md',
     '应急插入四格对照': 'reports/benchmarks/clinic_factorial_2026-11-25.md',
     '动态分配': 'reports/benchmarks/clinic_dynamic_assignment_2026-11-18.md',
     '修复对照': 'reports/benchmarks/clinic_repair_methods_2026-11-18.md',
@@ -41,6 +45,12 @@ def main():
     docs.update({'运行手册': root / 'README_CLINIC_RUNTIME.md', '分级模式': root / 'README_CLINIC_MODES.md'})
     docs['工作台手册'] = WEB / 'README.md'
 
+    def latest(prefix):
+        batches = sorted((root/'verification').glob(f'{prefix}_*/viewer.json'), reverse=True)
+        fallback = PUBLISHED / f'{prefix}.json'
+        selected = batches[0] if batches else fallback
+        return json.loads(selected.read_text()) if selected.is_file() else None
+
     class Handler(BaseHTTPRequestHandler):
         def reply(self, value, mime='application/json; charset=utf-8', status=200):
             body = json.dumps(value, ensure_ascii=False, allow_nan=False).encode() if mime.startswith('application/json') else value
@@ -63,6 +73,12 @@ def main():
                     self.reply({'runs': catalog(root), 'metadata': catalog_metadata(root, descriptors(root)),
                                 'research_catalog': research_catalog(), 'documents': list(docs),
                                 'workspace': str(root), 'read_only': True})
+                elif url.path == '/api/online-pair':
+                    self.reply(latest('online_pair'))
+                elif url.path == '/api/feedback-repair':
+                    self.reply(latest('feedback_repair'))
+                elif url.path == '/api/epw2-qualification':
+                    self.reply(latest('epw2_qualification'))
                 elif url.path == '/api/factorial':
                     name = query.get('name', [''])[0]
                     verification = root / 'verification'
@@ -92,7 +108,7 @@ def main():
                     self.reply(path.read_bytes(), mimetypes.guess_type(path)[0] or 'application/octet-stream')
                 elif url.path == '/api/document':
                     self.reply(docs[query.get('id', [''])[0]].read_bytes(), 'text/plain; charset=utf-8')
-                elif url.path in ('/factorial.html', '/factorial.js', '/factorial.css'):
+                elif url.path in ('/factorial.html', '/factorial.js', '/factorial.css', '/online-pair.js', '/online-pair.css'):
                     path = WEB / url.path[1:]
                     self.reply(path.read_bytes(), mimetypes.guess_type(path)[0] + '; charset=utf-8')
                 elif url.path in ('/review.js', '/review.css', '/platform.js', '/platform.css', '/explain.js', '/explain.css'):
